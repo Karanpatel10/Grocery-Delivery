@@ -1,4 +1,4 @@
-import {createTrasnport} from 'nodemailer'
+import { createTransport } from "nodemailer";
 
 // Create a transporter using SMTP
 const transporter = createTransport({

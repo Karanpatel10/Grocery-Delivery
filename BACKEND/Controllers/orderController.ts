@@ -17,8 +17,8 @@ export const createOrder=async(req:Request,res:Response)=>{
     const productIds=items.map((i:any)=>i.product);
     const products=await prisma.product.findMany({where:{id:{in:productIds}}});
 
-    const productMap:Record<String,<typeof products>[0]>={}
-    products.forEach((p:any)=>(productMap(p.id)=p))
+    const productMap:Record<string,(typeof products)[0]>={}
+    products.forEach((p:any)=>(productMap[p.id]=p))
 
     // check if product in stock
     for(const item of items){
