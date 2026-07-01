@@ -3,7 +3,7 @@ import { prisma } from '../Config/prisma.js';
 
 const admin=async(req:Request,res:Response,next:NextFunction)=>{
     try{
-        const userId=req.user?.id;
+        const userId=req.user!.id;
         if(!userId){
             return res.status(401).json({message:'Unauthroized'});
         }
