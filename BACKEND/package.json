@@ -7,6 +7,7 @@
     "start": "tsx server.ts",
     "postinstall": "npx prisma generate",
     "server": "nodemon --exec tsx server.ts",
+    "seed":"tsx seed.ts",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
