@@ -1,12 +1,22 @@
 import ProductsCard from '../Components/ProductsCard'
 import type {Product} from "../types"
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {dummyProducts,categoriesData} from '../assets/assets'
 import {useSearchParams } from 'react-router-dom'
+import api from '../config/api'
+import toast from 'react-hot-toast';
 
 const Products = () => {
-  const [products]=useState<Product[]>(dummyProducts)
+  const [products,setProducts]=useState<Product[]>([])
 
+  useEffect(()=>{
+    api.get('/products').then((res)=>{
+      console.log("res.data", res.data);
+      setProducts(res.data.products||[])
+    }).catch((error)=>{
+      toast.error(error.response.data.message||error?.message)
+    })
+  },[])
     
     const [searchParams,setSearchParams]=useSearchParams();
     const [sortOption,setSortOption]=useState("Newest")
@@ -40,7 +50,7 @@ const Products = () => {
         <div className='sticky  bg-white top-24 rounded-lg max-w-[15rem] ml-auto shadow-md outline-1 outline-gray-300'>
           <h2 className='bg-app-green text-white px-5 py-5 rounded-t'>Categories</h2>
           <div>
-            {categoriesWithAll.map((cat:any)=>(
+            {categoriesWithAll.map((cat)=>(
               <button key={cat.slug} className={`flex flex-row px-5 py-1 text-gray-600 ${((!category && cat.slug === "All Categories"))||cat.slug === category ? "text-orange-500" : "bg-white hover:text-black"}`} onClick={() =>setSearchParams(cat.slug === "All Categories"? {}: { category: cat.slug })}>
                 {cat.name}
                </button> 
@@ -84,11 +94,11 @@ const Products = () => {
               {/* All product show with filter */}
               {filterProduct.length>0?(
                 <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-15'>
-                {sortProduct.map((prod)=><ProductsCard prod={prod} showDiscountTag={true}/>)}
+                {sortProduct.map((prod)=><ProductsCard prod={prod} showDiscountTag={true} key={prod.id}/>)}
                 </div>
                 ):(
-                  <div className='flex flex-col justify-center items-center gap-3'>
-                      <h1 className='text-2xl font-bold'>No Product found</h1>
+                  <div className='flex flex-col justify-center items-center gap-3 mx-auto my-50'>
+                      <h1 className='text-xl font-light'>No Product found</h1>
                       <button className='bg-app-green text-white rounded-md px-5 py-2 hover:scale-95' onClick={()=>{setPriceRange({ min: 0, max: 500 });setSearchParams({})}}>Clear Filter</button>
                   </div>
               )}   

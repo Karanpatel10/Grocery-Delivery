@@ -2,6 +2,8 @@ import { Link } from "react-router-dom"
 import { heroSectionData } from "../assets/assets"
 import { BikeIcon, Loader2Icon, LockIcon, LockKeyholeOpenIcon, MailIcon, UserIcon } from "lucide-react"
 import { useState } from "react"
+import { useAuth } from "../Context/AuthContext"
+import { toast } from "react-hot-toast"
 
 
 const Login = () => {
@@ -14,13 +16,26 @@ const Login = () => {
   const [isLoginState, setIsLoginState] = useState(true)
   const [pwdvisible, setPwdVisible] = useState(false)
   const Icon = pwdvisible ? LockKeyholeOpenIcon : LockIcon;
+
+  const {login,register}=useAuth();
   
-  
+  const handleSubmit=async(e:React.SubmitEvent)=>{
+    e.preventDefault();
+    setLoading(true);
+    try{
+      if(isLoginState){
+        await login(email, password);
+      } else {
+        await register(name, email, password);
+      }
+    }catch(error:any){
+        toast.error(error.response?.data?.message || error.message );
+    }finally{
+        setLoading(false);
+    }
+  }
 
   return (
-
-    
-
     <div className="min-h-screen flex flex-col lg:flex-row">
       
       {/* Left Side */}
@@ -44,7 +59,7 @@ const Login = () => {
           <div className="flex flex-col w-full max-w-lg  p-15 bg-white rounded-2xl shadow-xl ring-2 ring-app-green/10">
             <h1 className="text-2xl font-semibold text-app-green mb-1">{isLoginState ? "Sign in to your account" : "Create your account"}</h1>
             <p className="text-sm text-app-text-light mb-8">{isLoginState ? "Don't have an account?" : "Already have an account?"}<button onClick={()=>setIsLoginState(!isLoginState)} className='text-orange-500 font-semibold hover:text-orange-600 transition-colors px-2'>{isLoginState?'Create one':'Sign in'}</button></p>
-            <form className="flex flex-col gap-5" onSubmit={(e) => e.preventDefault()}>
+            <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
              {!isLoginState && (
                 <div>
                   <label htmlFor="name">Name:</label>
@@ -69,7 +84,7 @@ const Login = () => {
                   </div>         
                 </div>
                 <button type="submit" disabled={loading} className="bg-orange-500 text-white py-5 mt-4 rounded-xl hover:bg-orange-600 transition-colors">
-                  {loading? <Loader2Icon className="animate-spin" /> : isLoginState ? "Login" : "Create Account"}
+                  {loading? <Loader2Icon className="animate-spin mx-auto" /> : isLoginState ? "Login" : "Create Account"}
                 </button>
           </form>
           </div>

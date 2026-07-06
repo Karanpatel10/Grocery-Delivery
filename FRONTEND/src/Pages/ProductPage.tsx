@@ -36,7 +36,7 @@ const ProductPage = () => {
   },[id,navigate])
 
   return (
-    <div className='max-w-7xl mx-auto py-20'>
+    <div className='max-w-7xl mx-auto py-20 px-10'>
       <button onClick={()=>navigate(-1)} className='flex gap-5 hover:text-app-green hover:scale-95 pb-10'>
         <MoveLeft />Back
        </button> 

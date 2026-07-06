@@ -1,9 +1,23 @@
 import ProductsCard from '../Components/ProductsCard' 
 import {ZapIcon } from "lucide-react";
-import {dummyProducts} from '../assets/assets'
+import { useEffect, useState } from 'react';
+import api from '../config/api';
+import toast from 'react-hot-toast';
+import type { Product } from '../types';
 
 const FlashDeals = () => {
+ const [products,setProducts]=useState<Product[]>([])
 
+  useEffect(()=>{
+      api.get('/products/flash-deals')
+      .then((res)=>{
+        console.log(res.data.products)
+        setProducts(res.data.products)
+      })
+      .catch((error)=>{
+          toast.error(error.response.data.message||error?.message)
+      }) 
+  },[])
   
   return (
     <section>
@@ -13,7 +27,7 @@ const FlashDeals = () => {
        </div> 
        <div className='flex flex-wrap gap-15 justify-center items-center container mx-auto py-20'>
        {
-       dummyProducts.map((prod)=> <ProductsCard prod={prod} showDiscountTag={false}/>)
+          products.map((prod)=> <ProductsCard prod={prod} showDiscountTag={false} key={prod.id}/>)
       }
        </div>
     </section>

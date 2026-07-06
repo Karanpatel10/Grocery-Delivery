@@ -15,8 +15,9 @@ export const getFlashDeals=async (req:Request,res:Response) => {
 // GET/api/products
 
 export const getProducts=async (req:Request,res:Response) => {
-    const {category,search,minPrice,maxPrice,sort}=req.query;
-
+    // const {category,search,minPrice,maxPrice,sort}=req.query;
+    const products=await prisma.product.findMany();
+    res.json({products});
 }
 
 // GET/api/products/:id

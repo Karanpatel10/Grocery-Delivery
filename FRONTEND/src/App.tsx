@@ -25,7 +25,7 @@ import DeliveryDashboard from "./Pages/Delivery/DeliveryDashboard"
 const App = () => {
   return (
     <>
-      <Toaster position="top-right" toastOptions={{duration:3000,style:{background:'#1B3022',color:'#fff',borderRadius:'12px',fontSize:'14px'}}} />
+      <Toaster position="top-right" toastOptions={{duration:4000,style:{background:'#1B3022',color:'#fff',borderRadius:'12px',fontSize:'14px'}}} />
 
       <Routes>
         {/* Auth Page - no Navbar/Footer*/}

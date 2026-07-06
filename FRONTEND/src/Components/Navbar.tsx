@@ -2,9 +2,10 @@ import { ArrowRight, BikeIcon, MapPin, Menu, Package, SearchIcon, Shield, Shoppi
 import React, { useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../Context/CartContext";
+import {useAuth} from "../Context/AuthContext"
 
 const Navbar =()    => {
-     const user:any={name:'Karan',email:'karan@example.com',isAdmin:true}
+     const {user,logout}=useAuth();
      const  {cartCount,isCartOpen,setIsCartOpen} = useCart();
      const [seachQuary,setSearchQuery] = useState('');
      const [userMenuOpen,setUserMenuOpen] = useState(false);
@@ -21,6 +22,7 @@ const Navbar =()    => {
      }
 
      const handleLogout=()=>{
+        logout();
         setUserMenuOpen(false);
         navigate('/');
      }
@@ -38,7 +40,7 @@ const Navbar =()    => {
         {name:'Addresses',path:'/addresses',icon:<MapPin/>},
         {name:'Products',path:'/products',icon:<Package/>},
         {name:'Deals',path:'/deals',icon:<ArrowRight/>},
-        {name:'Admin Panel',path:'/admin',icon:<Shield/>},
+        ...(user?.isAdmin?[{name:'Admin Panel',path:'/admin',icon:<Shield/>}]:[]),
         {name:'Logout',path:'#',icon:<SquareArrowRightExit/>,onClick:handleLogout}
      ];
 
@@ -115,7 +117,7 @@ const Navbar =()    => {
                        </button>
                     ) : (
                         <Link to="/login">
-                            <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors">Login</button>
+                            <button className="bg-app-green text-white px-4 py-2 rounded hover:bg-green-700 transition-colors">Login</button>
                         </Link>
                     )}
 
@@ -123,11 +125,11 @@ const Navbar =()    => {
                         user && userMenuOpen && (
                             <div className="absolute top-14 right-1 bg-white shadow-xl  py-2 rounded-md w-52" onClick={(e)=>{e.stopPropagation(); setUserMenuOpen(false)}}>
                                 <div className="border border-app-border rounded-md p-4 mb-2 text-sm text-gray-600">
-                                    <span className="font-bold">{user.name}</span> <br/> {user.email}
+                                    <span className="font-bold">{(user.name).split(" ").map((w)=>(w.charAt(0).toUpperCase()+w.slice(1))).join(" ")}</span> <br/> {user.email}
                                  </div>   
                                 {subMenuData.map((item) => (
                                     item.onClick ? (
-                                        <button key={item.name} className="gap-3 items-center flex flex-row py-2 px-4 hover:bg-gray-100 text-gray-600 hover:text-orange-600 cursor-pointer w-full" onClick={item.onClick}>
+                                        <button key={item.name} className="gap-3 items-center flex flex-row py-2 px-4 hover:bg-gray-100 text-gray-600 hover:text-red-600 cursor-pointer w-full" onClick={item.onClick}>
                                             {item.icon} {item.name}
                                         </button>
                                     ):(

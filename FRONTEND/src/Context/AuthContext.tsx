@@ -1,0 +1,96 @@
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import type { User } from "../types";
+import { useNavigate } from "react-router";
+import api from "../config/api";
+import { toast } from "react-hot-toast";
+
+interface AuthContextType{
+    user:User |null;
+    token:string|null;
+    login:(email:string,password:string) => void;
+    register:(name:string,email:string,password:string) => void;
+    logout:() => void;
+    updateUser:(userData:Partial<User>) => void;
+}
+
+const AuthContext=createContext<AuthContextType|undefined>(undefined);
+
+export function AuthProvider({children}:{children:ReactNode}){
+
+    const navigate=useNavigate();
+    const [user,setUser]=useState<User | null>(null);
+    const [token,setToken]=useState<string|null>(null);
+
+    useEffect(()=>{
+       const savedToken=localStorage.getItem("auth_token");
+       const savedUser=localStorage.getItem("auth_user");
+       
+       if(savedToken && savedUser){
+            setToken(savedToken);
+            setUser(JSON.parse(savedUser));
+       }
+    },[])
+    
+// login control
+
+    const login =async(email:string,password:string)=>{
+            try{
+                const {data}=await api.post("/auth/login",{email,password});
+                setUser(data.user);
+                setToken(data.token);
+                localStorage.setItem("auth_token",data.token);
+                localStorage.setItem("auth_user",JSON.stringify(data.user));
+                toast.success("Login successful");
+                navigate("/");
+            }catch(error:any){
+                toast.error(error.response?.data?.message || error.message );
+            }
+    }
+
+//Register control
+
+    const register=async(name:string,email:string,password:string)=>{
+        try{
+            const {data}=await api.post("/auth/register",{name,email,password});
+            setUser(data.user);
+            setToken(data.token);
+            localStorage.setItem("auth_token",data.token);
+            localStorage.setItem("auth_user",JSON.stringify(data.user));
+            toast.success("Registration successful");
+            navigate("/");
+        }catch(error:any){
+            toast.error(error.response?.data?.message || error.message );
+        }
+    }
+
+// logout control
+
+    const logout=()=>{
+            setUser(null);
+            setToken(null);
+            localStorage.removeItem("auth_token");
+            localStorage.removeItem("auth_user");
+    }   
+
+//update user control
+
+    const updateUser=(userData:Partial<User>)=>{
+         if(user){
+            const updatedUser={...user,...userData};
+            setUser(updatedUser);
+            localStorage.setItem("auth_user",JSON.stringify(updatedUser));
+         }   
+    }
+
+    return(
+        <AuthContext.Provider value={{user,token,login,register,logout,updateUser}}>
+            {children}
+        </AuthContext.Provider>
+    )
+}
+
+export function useAuth(){
+    const context=useContext(AuthContext);
+    if(!context) throw new Error("useAuth must be used within an AuthProvider");
+    return context;
+}
