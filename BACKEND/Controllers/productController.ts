@@ -9,7 +9,7 @@ export const getFlashDeals=async (req:Request,res:Response) => {
         const discountPercentage=p.originalPrice && p.price ? Math.round(((p.originalPrice-p.price)/p.originalPrice)*100) : 0;
         return {...p,discountPercentage};
     })
-    res.json({products:productwithDiscount.slice(0,10)});
+    res.json({products:productwithDiscount});
 }
 
 // GET/api/products
@@ -24,7 +24,6 @@ export const getProducts=async (req:Request,res:Response) => {
 
 export const getProductById=async (req:Request,res:Response) => {
     const product=await prisma.product.findUnique({where:{id:req.params.id as string}});
-
     if(!product){
         return res.status(404).json({message:"Product not found"});
     }

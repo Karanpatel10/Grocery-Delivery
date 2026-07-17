@@ -87,17 +87,21 @@ export const createOrder=async(req:Request,res:Response)=>{
 // GET/api/orders
 
 export const getUserOrders=async(req:Request,res:Response)=>{
+   try{
     const {status}=req.query;
+        const where:any={userId:req.user!.id,NOT:[{paymentMethod:"card",isPaid:false}]};
 
-    const where:any={userId:req.user!.id,NOT:[{paymentMethod:"card",isPaid:"false"}]};
+        if(status && status!=="all"){
+            where.status=status;
+        }
 
-    if(status && status!=="all"){
-        where.status=status;
-    }
+        const orders=await prisma.order.findMany({where,include:{deliveryPartner:{select:{name:true,phone:true}}},orderBy:{createdAt:"desc"}});
 
-    const orders=await prisma.order.findMany({where,include:{deliveryPartner:{select:{name:true,phone:true}}},orderBy:{createdAt:"desc"}});
-
-    res.status(200).json({message:"User orders fetched successfully",orders})
+        res.status(200).json({message:"User orders fetched successfully",orders})
+   }catch(error){
+    console.log(error);
+    res.status(500).json(error);
+   }
 }
 
 // Get single order

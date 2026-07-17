@@ -1,16 +1,21 @@
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import type { Address } from '../types'
 import { dummyAddressData } from '../assets/assets'
 import { Check, MapPin, Pencil, PlusIcon, Trash2, X } from 'lucide-react'
+import api from '../config/api'
+import toast from 'react-hot-toast'
+import { useAuth } from '../Context/AuthContext'
 
 const Addresses = () => {
-  const [address,setAddress]=useState(dummyAddressData)
+  const [address, setAddress] = useState<Address[]>([]);
   const [showForm,setShowForm]=useState(false)
   const [editId,setEditId]=useState<string|null>(null)
   const [form,setForm]=useState({label:"",address:"",city:"",state:"",zip:"",isDefault:false})
+  const {updateUser}=useAuth()
 
   const resetForm=()=>{
     setForm({label:"",address:"",city:"",state:"",zip:"",isDefault:false})
+    setEditId(null);
     setShowForm(false)
   }
 
@@ -18,11 +23,88 @@ const Addresses = () => {
     setForm({label:add.label,address:add.address,city:add.city,state:add.state,zip:add.zip,isDefault:add.isDefault})
   }
 
-  
+  const getLocation=(retries=3):Promise<{lat:number,lng:number}>=>{
+    return new Promise((resolve,reject)=>{
+        if(!navigator.geolocation){
+          reject(new Error("Geolocation not supported"));
+          return;
+        }
+
+        const attempt=()=>{
+          navigator.geolocation.getCurrentPosition(
+            (position)=>{
+              resolve({
+                lat:position.coords.latitude,
+                lng:position.coords.longitude
+              })
+            },(error:any)=>{
+              if(retries>0){
+                retries--;
+                setTimeout(attempt,1000)
+              }else{
+                reject(new Error(error.message ||"Failed to get location after retries"))
+              }
+            },{
+              enableHighAccuracy:false,
+              timeout:15000,
+              maximumAge:60000,
+            }
+          )
+        };
+        attempt()
+    })
+  }
+
+  const handleSubmit=async(e:React.SubmitEvent)=>{
+    e.preventDefault();
+
+    try{
+       const coords=await getLocation()||null;
+      const payload={...form};
+
+      if(editId){
+        const {data}=await api.put(`/addresses/${editId}`,payload);
+        console.log(data);
+        setAddress(data.addressess || []);
+         updateUser({ addresses: data.addressess });
+        toast.success("Address Updated")
+      }else{
+         const {data}=await api.post(`/addresses`,payload);
+         console.log(data)
+        setAddress(data.addressess || []);
+        updateUser({ addresses: data.addressess });
+        toast.success("Address added")
+      }
+      resetForm();
+    }catch(error:any){
+        toast.error(error.response?.data?.message||error.message||"Failed")
+    }
+  }
+
+  const handleDelete=async(id:string)=>{
+    try{
+      console.log(id);
+          const {data}=await api.delete(`/addresses/${id}`) 
+          setAddress(data.addressess || []);
+           updateUser({ addresses: data.addressess });
+          toast.success("Deleted Address Successfully")
+    }catch(error){
+     toast.error(error.response?.data?.message||error.message||"Failed")
+    }
+  }
+
+  useEffect(()=>{
+    api.get("/addresses").then((res)=>{
+      console.log("res.data", res.data);
+      setAddress(res.data.addressess||[])
+    }).catch((error)=>{
+      toast.error(error.response?.data?.message||error.message||"Failed to fetch addresses")
+    })     
+  },[])
 
   return (
     <div className='min-h-screen bg-app-cream'>
-      <div className='max-w-7xl mx-auto py-20'>
+      <div className='max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8'>
         {/* header */}
         <div className='flex justify-between py-10'>
           <h1 className='text-app-green text-2xl'>My Address</h1>
@@ -35,7 +117,7 @@ const Addresses = () => {
           <>
           <div className='fixed inset-0 bg-black/40 z-50 items-center justify-center' />
           <div className='fixed inset-0 flex items-center justify-center p-4 z-50 ' onClick={()=>setShowForm(false)}>
-           <form onClick={(e) => e.stopPropagation()} className='max-w-lg rounded-2xl bg-white w-full p-8 space-y-5'>
+           <form  onSubmit={handleSubmit} onClick={(e) => e.stopPropagation()} className='max-w-lg rounded-2xl bg-white w-full p-8 space-y-5'>
             <div> 
               <X className='ml-auto cursor-pointer' onClick={()=>setShowForm(false)}/>
               <h1 className='text-app-green text-xl font-medium'>{editId ? 'Edit Address' : 'Add New Address'}</h1>
@@ -70,7 +152,7 @@ const Addresses = () => {
                  </div>
             </div>
           
-            <button className='bg-app-green text-white rounded-lg py-2 w-full' onClick={()=>{setShowForm(false);resetForm()}}>Submit</button>
+            <button type='submit' className='bg-app-green text-white rounded-lg py-2 w-full'>Submit</button>
           </form>
         </div>
         </>
@@ -79,18 +161,18 @@ const Addresses = () => {
         {/* Address list */}
         <div className='space-y-15'>
           {address.map((addr)=>(
-            <div key={addr._id} className='flex flex-row gap-5 bg-white p-5 rounded-lg text-md outline-1 outline-gray-200'>
+            <div key={addr.id} className='flex flex-row gap-5 bg-white p-5 rounded-lg text-md outline-1 outline-gray-200'>
               <MapPin/>
               <div className='flex flex-col'>
-                <p className='space-x-5 flex items-center'><span className='text-app-green font-bold text-lg'>{addr.label}</span>{(addr.isDefault) && <span className='bg-app-green text-white py-1 px-3 rounded-md inline-flex items-center gap-2 text-sm'><Check className='w-4 h-4'/> Default</span>}</p>
-                <span>{addr.address}&nbsp;{addr.city}</span>
-                <span>{addr.state}&nbsp;{addr.zip}</span>
-                </div>
-                <div className='ml-auto flex gap-10'>
-                  <button className='text-app-green hover:text-app-green-dark' onClick={()=>{setEditId(addr._id); setShowForm(true); setForm(addr);}}>
+                  <p className='space-x-5 flex items-center'><span className='text-app-green font-bold text-lg'>{addr.label}</span>{(addr.isDefault) && <span className='bg-app-green text-white py-1 px-3 rounded-md inline-flex items-center gap-2 text-sm'><Check className='w-4 h-4'/> Default</span>}</p>
+                  <span>{addr.address}&nbsp;{addr.city}</span>
+                  <span>{addr.state}&nbsp;{addr.zip}</span>
+              </div>
+                <div className='ml-auto flex items-center justify-center gap-10'>
+                  <button className='rounded-full hover:bg-yellow-600 hover:text-white transition-color p-2' onClick={()=>{setEditId(addr.id); setShowForm(true); setForm(addr);}}>
                     <Pencil/>
                   </button>
-                  <button className='text-app-red hover:text-app-red-dark'>
+                  <button className='text-app-error rounded-full hover:bg-app-error hover:text-white transition-color p-2' onClick={()=>handleDelete(addr.id)}>
                     <Trash2/>
                   </button>
                 </div>

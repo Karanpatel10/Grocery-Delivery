@@ -27,7 +27,7 @@ const CardSidebar=()=>{
                     <div className='flex items-center gap-2'>
                         <ShoppingBagIcon className="size-5"/>
                         <h2 className="text-lg font-medium">Your Cart</h2>
-                        <span className="px-2 py-0.5 text-xs font-semibold bg-app-cream rounded-full">{cartCount} items</span>
+                        <span className="px-2 py-0.5 text-xs font-semibold bg-orange-400 text-white rounded-full">{cartCount} items</span>
                     </div>
                     <button onClick={()=>setIsCartOpen(false)} className=" p-2 rounded-xl hover:bg-app-cream transition-color"><XIcon/></button>
                 </div>  
@@ -39,7 +39,7 @@ const CardSidebar=()=>{
                     ) : (
                         <ul className="space-y-4">
                             {items.map((item) => (
-                                <li key={item.product._id} className="flex bg-app-cream/60 rounded-xl gap-4">
+                                <li key={item.product.id} className="flex bg-app-cream/60 rounded-xl gap-4">
                                     <img src={item.product.image} alt={item.product.name} className="size-25 object-cover rounded-lg shrink-0"/>
                                     <div className="flex-1 p-2 flex flex-col justify-between">
                                         <h4 className="font-semibold truncate text-sm">{item.product.name}</h4>
@@ -47,14 +47,14 @@ const CardSidebar=()=>{
                                         
                                         {/* Add & remove product */}
                                         <div className='inline-flex justify-between items-end w-full mt-2'>
-                                            <div className="flex items-center justify-between gap-2">
-                                                <button onClick={()=>updateQuantity(item.product._id,item.quantity-1)} className="p-2 rounded-xl text-app-text-light hover:bg-app-light transition-color"><MinusIcon/></button>
+                                            <div className="flex items-center justify-between gap-4 shadow-2xl outline outline-gray-300 rounded-full p-1">
+                                                <button onClick={()=>updateQuantity(item.product.id,item.quantity-1)} className="p-1 text-app-text-light bg-gray-100 rounded-full transition-all duration-200 active:scale-85 active:bg-gray-300"><MinusIcon/></button>
                                                 <span className="font-medium">{item.quantity}</span>
-                                                <button onClick={()=>updateQuantity(item.product._id,item.quantity+1)} className="p-2 rounded-xl text-app-text-light hover:bg-app-light transition-color"><PlusIcon/></button>
+                                                <button onClick={()=>updateQuantity(item.product.id,item.quantity+1)} className="p-1 text-app-text-light bg-gray-100 rounded-full transition-all duration-200 active:scale-85 active:bg-gray-300"><PlusIcon/></button>
                                             </div>
                                             <div className='flex items-center gap-2'>
                                                 <span className='text-md font-bold'>{currency}{(item.product.price * item.quantity).toFixed(2)}</span>
-                                                <button onClick={()=>removeFromCart(item.product._id)} className="p-2 rounded-xl hover:text-app-error transition-color"><Trash2Icon/></button>
+                                                <button onClick={()=>removeFromCart(item.product.id)} className="p-1 text-app-error rounded-xl hover:bg-app-error hover:text-white transition-color"><Trash2Icon/></button>
                                             </div>   
                                          </div>
                                     </div>

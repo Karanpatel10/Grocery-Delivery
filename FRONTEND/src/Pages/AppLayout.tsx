@@ -7,7 +7,7 @@ import CardSidebar from '../Components/CardSidebar'
 const AppLayout = () => {
   return (
     <>
-      <Banner/>
+      {/* <Banner/> */}
       <Navbar/>
       <main className='min-h-screen'>
         <Outlet/>

@@ -1,5 +1,6 @@
 import { TruckIcon, LeafIcon, ClockIcon, ShieldCheckIcon, MapPinIcon, PhoneIcon, MailIcon } from "lucide-react";
 import { SiFacebook, SiX, SiInstagram } from "@icons-pack/react-simple-icons";
+import groceryMain from "./groceryFullMain.png"
 import hero_bg from "./hero_bg.jpeg";
 import delivery_truck from "./delivery_truck.svg";
 import fruits_vegetables from "./fruits_vegetables.png";
@@ -14,11 +15,31 @@ import baby_care from "./baby_care.png";
 import meat_seafood from "./meat_seafood.png";
 import googleapp from "./googleplay.png";
 import appleapp from "./appstore.png"
+// image imports for brand logos
+import amullogo from "./BrandLogo/amul.jpg"
+import ariellogo from "./BrandLogo/ariel.jpeg"
+import balajilogo from "./BrandLogo/balaji.png"
+import bikajilogo from "./BrandLogo/bikaji.jpg"
+import Godrejlogo from "./BrandLogo/Godrej.jpg"
+import nestlelogo from "./BrandLogo/nestle.png"
+import pepsilogo from "./BrandLogo/pepsi.jpg"
+import parlelogo from "./BrandLogo/parle.jpg"
+import surfExcellogo from "./BrandLogo/SurfExcel.webp"
+import himalayalogo from "./BrandLogo/himalya.png"
+import indiaGatelogo from "./BrandLogo/india_gate.png"
+import waghBakrilogo from "./BrandLogo/wagh_bakri.png"
+import maggiLogo from "./BrandLogo/maggi.png"
+import laysLogo from "./BrandLogo/lays.png"
+import chinglogo from "./BrandLogo/ching.jpg"
+import britannialogo from "./BrandLogo/britannia.png"
 
 export const assets = {
     delivery_truck,
     hero_bg,
+    groceryMain
 };
+
+export const brandLogo={amullogo,ariellogo,balajilogo,bikajilogo,Godrejlogo,nestlelogo,pepsilogo,parlelogo,surfExcellogo,himalayalogo,indiaGatelogo,waghBakrilogo,maggiLogo,laysLogo,chinglogo,britannialogo};
 
 export const categoriesData = [
     { slug: "fruits-vegetables", name: "Fruits & Vegetables", image: fruits_vegetables },
@@ -77,8 +98,8 @@ export const footerData = {
             title: "Customer Service",
             links: [
                 { label: "My Account", to: "#" },
-                { label: "Order History", to: "#" },
-                { label: "Addresses", to: "#" },
+                { label: "FAQ's", to: "/FAQ" },
+                { label: "Addresses", to: "/addresses" },
                 { label: "Help Center", href: "#" },
             ],
         },

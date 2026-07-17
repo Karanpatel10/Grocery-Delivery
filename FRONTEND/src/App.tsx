@@ -21,11 +21,14 @@ import AdminDeliveryPartners from "./Pages/Admin/AdminDeliveryPartners"
 import DeliveryLogin from "./Pages/Delivery/DeliveryLogin"
 import DeliveryLayout from "./Pages/Delivery/DeliveryLayout"
 import DeliveryDashboard from "./Pages/Delivery/DeliveryDashboard"
+import FAQ from "./Pages/FAQ"
+import ContactUs from "./Pages/ContactUs"
+import About from "./Pages/About"
 
 const App = () => {
   return (
     <>
-      <Toaster position="top-right" toastOptions={{duration:4000,style:{background:'#1B3022',color:'#fff',borderRadius:'12px',fontSize:'14px'}}} />
+      <Toaster position="top-right" toastOptions={{duration:3000,style:{background:'#1B3022',color:'#fff',borderRadius:'12px',fontSize:'16px'}}} />
 
       <Routes>
         {/* Auth Page - no Navbar/Footer*/}
@@ -38,6 +41,9 @@ const App = () => {
             <Route path="products/:id" element={<ProductPage />} />
             <Route path="search" element={<SearchResults />} />
             <Route path="deals" element={<FlashDeals/>} />
+            <Route path="FAQ" element={<FAQ/>}/>
+            <Route path="Contact" element={<ContactUs/>}/>
+            <Route path='About' element={<About/>}/>
 
             <Route element={<ProtectedRoute/>}>
               <Route path='checkout' element={<Checkout/>}/>

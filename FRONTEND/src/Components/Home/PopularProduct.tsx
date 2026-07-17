@@ -1,40 +1,75 @@
 import { MoveRightIcon } from "lucide-react";
-import { useState } from "react";
-import { Link} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import ProductsCard from "../ProductsCard";
-import {dummyProducts} from '../../assets/assets'
-import type {Product} from "../../types"
+import type { Product } from "../../types";
+import { toast } from "react-hot-toast";
+import api from "../../config/api";
 
-const PopularProduct=()=>{
-     const [products]=useState<Product[]>(dummyProducts)
+const PopularProduct = () => {
+  const [products, setProducts] = useState<Product[]>([]);
 
-    return(
-        <section className="my-20">
-         <div className="max-w-7xl mx-auto">
+  useEffect(() => {
+    api
+      .get("/products")
+      .then((res) => {
+        setProducts(res.data.products || []);
+      })
+      .catch((error) => {
+        toast.error(error.response?.data?.message || error.message);
+      });
+  }, []);
 
-            <div className="flex items-center justify-between mb-10">
-                <div>
-                    <h2 className="text-3xl font-bold text-gray-900">Popular Products</h2>
-                    <p className="text-gray-600">Top-rated products this session</p>
-                </div>
-            <Link to='/products' className="text-app-orange hover:text-app-orange-dark flex items-center gap-4 cursor-pointer ">
-                View All <MoveRightIcon />
-            </Link>    
-            </div>
+  return (
+    <section className="py-20">
+      <div className="max-w-7xl mx-auto px-5">
 
-            
-                <div className="flex flex-wrap gap-5 justify-between py-8">
-                    {(products.length > 0)? (
-                        products.slice(0,8).map((prod)=><ProductsCard prod={prod} showDiscountTag={false}/>)
-                        
-                    ) : (
-                        <p>No popular products available.</p>
-                    )}
-                </div>
-            
+        {/* Header */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12">
+          <div>
+            <span className="inline-block bg-orange-100 text-orange-600 font-semibold px-4 py-1 rounded-full text-sm mb-3">
+              Popular Picks
+            </span>
+
+            <h2 className="text-4xl font-bold text-gray-900">
+              Best Selling Products
+            </h2>
+
+            <p className="text-gray-500 mt-2 text-lg">
+              Discover our customers' favorite groceries at great prices.
+            </p>
+          </div>
+
+          <Link
+            to="/products"
+            className="group inline-flex items-center gap-2 border border-orange-500 text-orange-500 px-6 py-3 rounded-full hover:bg-orange-500 hover:text-white transition"
+          >
+            View All
+            <MoveRightIcon className="transition-transform group-hover:translate-x-1" />
+          </Link>
         </div>
-        </section>
-    )
-}
 
-export default PopularProduct
+        {/* Products */}
+        {products.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
+            {products.slice(0, 8).map((prod) => (
+              <ProductsCard
+                key={prod.id}
+                prod={prod}
+                showDiscountTag={false}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="flex justify-center items-center py-20">
+            <p className="text-gray-500 text-lg">
+              No popular products available.
+            </p>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};
+
+export default PopularProduct;

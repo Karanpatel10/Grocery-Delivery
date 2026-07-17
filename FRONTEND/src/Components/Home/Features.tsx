@@ -2,24 +2,45 @@ import { heroSectionData } from "../../assets/assets";
 
 const Features = () => {
   return (
-    <section className=" bg-white border border-gray-300 shadow-lg rounded-xl mt-20 mb-10">  
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 grid grid-cols-2 md:grid-cols-4 gap-12 rounded-lg p-10 ">    
-        {
-            heroSectionData.hero_features.map((feature, index) => (
-                <div key={index} className="flex flex-row items-center md:justify-center gap-6">
-                    <div>
-                        <feature.icon/>
-                     </div>    
-                    <div>
-                        <h3 className="text-xl font-bold text-gray-900">{feature.title}</h3>
-                        <p className="text-gray-600">{feature.desc}</p>
-                    </div>
-                </div>
-            ))
-        }             
-        </div>
-    </section>
-  )
-}   
+    <section className="max-w-7xl mx-auto px-5 my-20">
+      <div className="rounded-3xl bg-white/80 backdrop-blur-lg border border-white shadow-2xl p-8 md:p-12">
 
-export default Features
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+          {heroSectionData.hero_features.map((feature, index) => {
+            const Icon = feature.icon;
+
+            return (
+              <div
+                key={index}
+                className="group flex items-center gap-5 rounded-2xl bg-green-50 p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+              >
+
+                {/* Icon */}
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-orange-100 text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition">
+                  <Icon className="h-7 w-7" />
+                </div>
+
+                {/* Text */}
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900">
+                    {feature.title}
+                  </h3>
+
+                  <p className="mt-1 text-sm text-gray-500 leading-5">
+                    {feature.desc}
+                  </p>
+                </div>
+
+              </div>
+            );
+          })}
+
+        </div>
+
+      </div>
+    </section>
+  );
+};
+
+export default Features;

@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Product,CartItem } from "../types";
 
+const currency=import.meta.env.VITE_CURRENCY_SYMBOL||"$";
 
 // Define the shape of the cart context
 interface CartContextType {
@@ -34,9 +35,9 @@ export function CartProvider({children}:{children:ReactNode}){
     // Add product in cart
     const addToCart=(product:Product,quantity=1)=>{
         setItems((prev)=>{
-            const existing=prev.find((item)=>item.product._id === product._id)
+            const existing=prev.find((item)=>item.product.id === product.id)
             if(existing){
-                return prev.map((item)=>(item.product._id ===product._id?{...item,quantity:item.quantity+quantity}:item))
+                return prev.map((item)=>(item.product.id ===product.id?{...item,quantity:item.quantity+quantity}:item))
             }
             return[...prev,{product,quantity}]
         })
@@ -46,7 +47,7 @@ export function CartProvider({children}:{children:ReactNode}){
     // remove from cart
 
     const removeFromCart=(productId:string)=>{
-        setItems((prev)=>prev.filter((item)=>item.product._id!==productId))
+        setItems((prev)=>prev.filter((item)=>item.product.id!==productId))
         }
 
     // update Cart
@@ -56,7 +57,7 @@ export function CartProvider({children}:{children:ReactNode}){
             removeFromCart(productId);
             return;
         }
-        setItems((prev)=>prev.map((item)=>(item.product._id === productId?{...item,quantity}:item)))
+        setItems((prev)=>prev.map((item)=>(item.product.id === productId?{...item,quantity}:item)))
     }
 
     // Clear Cart

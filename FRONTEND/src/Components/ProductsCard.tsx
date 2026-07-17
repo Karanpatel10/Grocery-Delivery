@@ -10,43 +10,120 @@ const ProductsCard = ({prod,showDiscountTag}:{prod:Product;showDiscountTag:boole
     const currency=import.meta.env.VITE_CURRENCY_SYMBOL || "$";
     const navigate=useNavigate()
     const {items,addToCart,updateQuantity}=useCart();
-
-    const cartItem = items.find(item => item.product._id === prod._id);
+    const cartItem = items.find(item => item.product.id === prod.id);
     const quantity = cartItem?.quantity || 0;
 
     
   return (
        
-              <div key={prod._id} className="rounded-xl bg-white p-4 w-60 h-auto group shadow-md outline-1 outline-gray-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer transition duration-300" onClick={()=>navigate(`/products/${prod._id}`)}>
-                {prod.discount>0 && <div className='inline-block gap-3 bg-app-orange text-white py-1 px-2 rounded-xl text-sm'>{prod.discount}% OFF</div>}
-                <div className="h-52 flex items-center justify-center overflow-hidden"><img src={prod.image} alt={prod.name} className="w-full h-full object-contain group-hover:scale-115 transition"/></div>
-                    <div className="p-2 flex flex-col gap-2 relative">
-                                    {showDiscountTag && (<div className='flex  absolute -top-6 right-1'>
-                                    {quantity === 0?<button  onClick={(e)=>{e.stopPropagation();addToCart(prod,1)}}><CirclePlus className='text-white fill-orange-500 cursor-pointer'/></button>
-                                            :<div className="flex items-center  gap-2">
-                                                    <button onClick={(e)=> {e.stopPropagation();updateQuantity(cartItem!.product._id,cartItem!.quantity-1)}}><CircleMinus className='fill-red-800 text-white'/></button>
-                                                    <span className="font-medium">{quantity}</span>
-                                                    <button onClick={(e)=> {e.stopPropagation();updateQuantity(cartItem!.product._id,cartItem!.quantity+1)}} ><CirclePlus className='text-white fill-green-800'/></button>
-                                            </div>}
-                                     </div>) }      
-                                    <h3 className="text-md font-medium text-gray-900">{prod.name}</h3>
-                                    {prod.rating > 0 && (
-                                        <p className='inline-flex gap-2 text-sm items-center'>
-                                            <Star className='fill-yellow-500 stroke-yellow-500 size-4'/>
-                                            {prod.rating}&nbsp;({prod.reviewCount})
-                                        </p>
-                                    )}
-                                     { prod.discount > 0 && (
-                                        <div className='inline-flex justify-between'>
-                                            <p>
-                                                <span className='text-lg text-gray-900'>{currency}{prod.price.toFixed(1)}</span>/
-                                                <span className='text-gray-500 text-[12px]'>{prod.unit}</span>
-                                                <span className='text-gray-500 font-semibold text-md ml-3 line-through'>{currency}{prod.originalPrice.toFixed(1)}</span>
-                                            </p>
-                                        
-                                    </div>)}
-                    </div>
-                </div> 
+  <div key={prod.id}
+  onClick={() => navigate(`/products/${prod.id}`)}
+  className="relative w-64 rounded-2xl bg-white shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer overflow-hidden border border-gray-300">
+  {/* Discount Badge */}
+  
+    <div className="absolute top-3 left-3 z-20 inline-flex flex-row gap-2">
+        {prod.discountPercentage > 0 && (
+          <div className=" bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+            {prod.discountPercentage}% OFF
+          </div>
+        )}
+        {prod.isOrganic && (
+          <div className=" bg-app-green-light text-white text-xs font-semibold px-3 py-1 rounded-full">
+            Organic
+          </div>
+        )}
+      </div>
+
+
+
+  
+
+  {/* Image */}
+  <div className="h-56 bg-gray-100 flex items-center justify-center p-5">
+    <img
+      src={prod.image}
+      alt={prod.name}
+      className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+    />
+  </div>
+
+  {/* Content */}
+  <div className="p-4 space-y-1 relative">
+
+    {/* Add to Cart */}
+    {showDiscountTag && (
+      <div className="absolute -top-8 right-4 bg-white rounded-full shadow-lg p-1 flex justify-center item-center">
+        {quantity === 0 ? (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              addToCart(prod, 1);
+            }}
+          >
+            <CirclePlus className="size-8 text-white fill-app-orange transition-all duration-200 active:scale-95 active:fill-app-orange-dark" />
+          </button>
+        ) : (
+          <div className="flex items-center justify-center gap-2 bg-white rounded-full px-2 py-1 shadow">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                updateQuantity(cartItem!.product.id, cartItem!.quantity - 1);
+              }}
+            >
+              <CircleMinus className="size-8 fill-red-600 text-white transition-all duration-200 active:scale-95 active:fill-red-700" />
+            </button>
+
+            <span className="font-semibold text-lg w-6 text-center">
+              {quantity}
+            </span>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                updateQuantity(cartItem!.product.id, cartItem!.quantity + 1);
+              }}
+            >
+              <CirclePlus className="size-8 fill-green-600 text-white transition-all duration-200 active:scale-95 active:fill-green-700" />
+            </button>
+          </div>
+        )}
+      </div>
+    )}
+
+    {/* Product Name */}
+    <h3 className="text-lg font-semibold text-gray-800 h-12 group-hover:text-orange-500 transition-colors">
+      {prod.name}
+    </h3>
+
+    {/* Rating */}
+    {prod.rating > 0 && (
+      <div className="inline-flex items-center gap-1 bg-yellow-50 text-yellow-700 px-2 py-1 rounded-full text-sm">
+        <Star className="size-4 fill-yellow-400 stroke-yellow-400" />
+        <span>{prod.rating}</span>
+        <span className="text-gray-500">({prod.reviewCount})</span>
+      </div>
+    )}
+
+    {/* Price */}
+    <div className="flex items-end justify-between">
+
+        <div className="flex items-end gap-2">
+          <span className="text-2xl font-bold text-green-800">
+            {currency}
+            {prod.price.toFixed(2)}
+          </span>
+
+          {prod.discountPercentage > 0 && (
+            <span className="text-sm text-gray-400 line-through">
+              {currency}
+              {prod.originalPrice.toFixed(2)}
+            </span>
+          )}
+          <p className="text-sm text-gray-500">/&nbsp;{prod.unit}</p>
+        </div>
+    </div>
+  </div>
+</div>
     
   )
 }

@@ -8,19 +8,20 @@ import CheckoutAddress from '../Checkout/CheckoutAddress';
 import CheckoutPayment from '../Checkout/CheckoutPayment';
 import CheckoutReview from '../Checkout/CheckoutReview';
 import type { Address } from '../types';
-
-
+import api from '../config/api'
+import toast from 'react-hot-toast'
+import { useAuth } from '../Context/AuthContext'
 
 const Checkout = () => {
 
   const navigate=useNavigate()
   const currency=import.meta.env.VITE_CURRENCY_SYMBOL||'$';
 
-  const {items,cartTotal}=useCart()
-  const {user}={user:{addresses:dummyAddressData}}
+  const {items,cartTotal,clearCart}=useCart();
+  const {user}=useAuth();
 
   const [address,setAddress]=useState<Address>({
-    _id:"",label:"Home",address:"",city:"",state:"",zip:"",isDefault:false,lat:0,lng:0
+    id:"",label:"Home",address:"",city:"",state:"",zip:"",isDefault:false,lat:0,lng:0
   });
 
   const [paymentMethod,setPaymentMethod]=useState('card');
@@ -37,13 +38,34 @@ const Checkout = () => {
   ]
 
   const handlePlaceOrder=async()=>{
+    try{
+      const orderData={
+        items:items.map((item)=>({
+          product:item.product.id,
+          quantity:item.quantity,
+        })),
+        shippingAddress:address,
+        paymentMethod
+      }
+
+      const {data}=await api.post('/orders',orderData)
+      console.log(data);
+      if(data.url){
+        window.location.href=data.url;
+        return;
+      }
+      clearCart();
+      toast.success("Order Placed Successfully");
+    }catch(error){
+      toast.error(error.response?.data?.message||error.message);
+    }
     navigate('/orders')
   }
 
   useState(()=>{
     if(user?.addresses?.length){
       const defAddr=user.addresses.find((a)=>a.isDefault)||setAddress(user.addresses[0]);
-        setAddress({_id:defAddr?._id,label:defAddr?.label,address:defAddr?.address,city:defAddr?.city,state:defAddr?.state,zip:defAddr?.zip,isDefault:defAddr?.isDefault,lat:defAddr?.lat,lng:defAddr?.lng})
+        setAddress({id:defAddr?.id,label:defAddr?.label,address:defAddr?.address,city:defAddr?.city,state:defAddr?.state,zip:defAddr?.zip,isDefault:defAddr?.isDefault,lat:defAddr?.lat,lng:defAddr?.lng})
     }
   })
 

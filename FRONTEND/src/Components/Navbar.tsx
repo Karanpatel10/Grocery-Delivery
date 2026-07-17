@@ -1,6 +1,6 @@
 import { ArrowRight, BikeIcon, MapPin, Menu, Package, SearchIcon, Shield, ShoppingCartIcon, SquareArrowRightExit } from "lucide-react";
-import React, { useState} from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState} from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "../Context/CartContext";
 import {useAuth} from "../Context/AuthContext"
 
@@ -9,7 +9,8 @@ const Navbar =()    => {
      const  {cartCount,isCartOpen,setIsCartOpen} = useCart();
      const [seachQuary,setSearchQuery] = useState('');
      const [userMenuOpen,setUserMenuOpen] = useState(false);
-
+     const [scrolled,setScrolled]=useState(false);
+     const isHomePage = useLocation().pathname === '/';   
      
      const navigate =useNavigate();
 
@@ -44,15 +45,29 @@ const Navbar =()    => {
         {name:'Logout',path:'#',icon:<SquareArrowRightExit/>,onClick:handleLogout}
      ];
 
+     useEffect(()=>{
+        const handlescroll=()=>{
+            setScrolled(window.scrollY>50)
+        };
+
+        window.addEventListener("scroll",handlescroll);
+
+        return()=>{
+            window.removeEventListener("scroll",handlescroll);
+        };
+     },[])
      
 
     return (
-        <nav className="w-full h-16 bg-white flex items-center justify-between px-6 shadow-md sticky top-0 z-50 border-b border-app-border">
+        <nav className={`w-full h-16 flex items-center justify-between px-6  fixed top-0 z-50   ${isHomePage && !scrolled ?  "bg-transparent text-white":"bg-white text-gray-800 border-b border-app-border shadow-md"} transition-colors`}>
 
             {/* Logo */}
-            <Link to="/">
-                <div className="text-2xl font-bold text-green-600 inline-flex items-center gap-2 cursor-pointer">
-                    <BikeIcon className="size-8"/> InstaCart
+           <Link to="/">
+                <div className="flex items-center gap-2 text-2xl font-bold">
+                    <BikeIcon className="size-8 text-green-600"/>
+                    <span className="bg-gradient-to-r from-green-600 to-orange-500 bg-clip-text text-transparent">
+                    InstaCart
+                    </span>
                 </div>
             </Link>
 
@@ -60,20 +75,20 @@ const Navbar =()    => {
             <ul className="hidden md:flex space-x-10">
                {linkData.map((link) => (
                     <li key={link.name}>
-                         <Link to={link.path} className="text-gray-600 hover:text-green-600 cursor-pointer outline-none">
+                         <Link to={link.path} className="cursor-pointer outline-none transition-colors hover:text-green-400 ">
                              {link.name}
                         </Link>
                     </li>
                 ))}
             </ul>
-
+npm
             
 
             
             <div className="flex items-center space-x-5">
                 {/* Search */}
                 <form className="hidden md:flex gap-3 items-center" onSubmit={handleSearch}>
-                    <SearchIcon className="text-gray-400 size-6"/>
+                    <SearchIcon className="size-6"/>
                     <input
                         type="text"
                         placeholder="Search for groceries..."
@@ -86,7 +101,7 @@ const Navbar =()    => {
                 {/* Cart */}
                 <button className="cursor-pointer" onClick={()=>setIsCartOpen(!isCartOpen)}>
                     <div>
-                    <ShoppingCartIcon className="text-gray-600 size-7  relative" />
+                    <ShoppingCartIcon className="size-7  relative" />
                     {cartCount > 0 && (
                         <span className="absolute top-1 translate-x-3/4 bg-app-orange text-white p-1 w-5 h-5 text-sm flex justify-center items-center rounded-full">{cartCount}</span>
                     )}
@@ -121,26 +136,42 @@ const Navbar =()    => {
                         </Link>
                     )}
 
-                    {
+                     {
                         user && userMenuOpen && (
-                            <div className="absolute top-14 right-1 bg-white shadow-xl  py-2 rounded-md w-52" onClick={(e)=>{e.stopPropagation(); setUserMenuOpen(false)}}>
-                                <div className="border border-app-border rounded-md p-4 mb-2 text-sm text-gray-600">
-                                    <span className="font-bold">{(user.name).split(" ").map((w)=>(w.charAt(0).toUpperCase()+w.slice(1))).join(" ")}</span> <br/> {user.email}
-                                 </div>   
+                            <div className="absolute right-0 top-14 z-50 w-64 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl animate-in fade-in zoom-in-95 duration-200" onClick={(e)=>{e.stopPropagation(); setUserMenuOpen(false)}}>
+                                <div className="border-b border-gray-100 bg-gradient-to-r from-orange-50 to-white p-5">
+                                <div className="flex items-center gap-3">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-500 text-lg font-bold text-white">
+                                        {user.name.charAt(0).toUpperCase()}
+                                    </div>
+
+                                    <div className="overflow-hidden">
+                                        <h3 className="truncate font-semibold text-gray-800">
+                                        {user.name.split(" ").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")}
+                                        </h3>
+
+                                        <p className="truncate text-sm text-gray-500">
+                                        {user.email}
+                                        </p>
+                                    </div>
+                                    </div>
+                                </div>
                                 {subMenuData.map((item) => (
                                     item.onClick ? (
-                                        <button key={item.name} className="gap-3 items-center flex flex-row py-2 px-4 hover:bg-gray-100 text-gray-600 hover:text-red-600 cursor-pointer w-full" onClick={item.onClick}>
+                                        <button key={item.name} className=" transition-all duration-200 gap-3 items-center flex flex-row py-3 px-5 hover:bg-gray-100 text-gray-600 hover:text-red-600 cursor-pointer w-full" onClick={item.onClick}>
                                             {item.icon} {item.name}
                                         </button>
                                     ):(
-                                        <Link to={item.path || '#'} key={item.name} className="gap-3 items-center flex flex-row py-2 px-4 hover:bg-gray-100 text-gray-600 hover:text-orange-600 cursor-pointer">
+                                        <Link to={item.path || '#'} key={item.name} className="transition-all duration-200 gap-3 items-center flex flex-row py-3 px-5 hover:bg-gray-100 text-gray-600 hover:text-orange-600 cursor-pointer">
                                             {item.icon} {item.name}
                                         </Link>
                                     )
                                 ))}
                             </div>
                         )
-                    }
+                    } 
+
+
                     </div>
             </div>
         </nav>

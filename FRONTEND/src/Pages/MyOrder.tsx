@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import type {Order} from "../types";
 import {dummyDashboardOrdersData,statusColors} from '../assets/assets'
 import { Package,Calendar1,ChevronRight} from 'lucide-react';
+import api from '../config/api'
 
 const MyOrder = () => {
 
@@ -12,15 +13,17 @@ const MyOrder = () => {
 
 
   const fetchOrders = async () => {
-     setOrders(dummyDashboardOrdersData);
+    const {data}=await api.get("/orders");
+    console.log(data);
+     setOrders(data.orders);
   };
 
   useEffect(() => {
     fetchOrders();
-  }, []);
+  },[]);
 
   return (
-    <div className='bg-app-cream p-10 min-h-screen'>
+    <div className='bg-app-cream py-25 min-h-screen'>
        <div className='mx-auto max-w-7xl'>
         <h1 className="text-3xl font-bold text-app-green">My Orders</h1>
         <div className="mt-6">

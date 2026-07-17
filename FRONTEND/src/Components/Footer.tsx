@@ -5,6 +5,7 @@ import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import XIcon from '@mui/icons-material/X';
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import { Link } from 'react-router-dom';
 
 
 const Footer = () => {
@@ -17,8 +18,8 @@ const Footer = () => {
                     <h1 className='flex flex-row gap-3 text-3xl items-center'><BikeIcon className='size-10'/>{footerData.brand.name}</h1>
                     <p className='text-white/60'>{footerData.brand.description}</p>
                     <div className='flex flex-row gap-3'>
-                        {[[FacebookRoundedIcon,"hover:text-blue-500"],[InstagramIcon,"hover:text-pink-500"],[XIcon,"hover:text-black"],[YouTubeIcon,"hover:text-red-500"]].map(([Icons,colors],idx)=>(
-                        <span key={idx} className={`inline-flex p-2 bg-white/10 cursor-pointer hover:scale-110 hover:bg-white transition-all ${colors}`}><Icons/></span>
+                        {[[FacebookRoundedIcon,"hover:text-blue-500","https://www.facebook.com/"],[InstagramIcon,"hover:text-pink-500","https://www.instagram.com/?hl=en"],[XIcon,"hover:text-black","https://x.com/"],[YouTubeIcon,"hover:text-red-500","https://www.youtube.com/"]].map(([Icons,colors,link],idx)=>(
+                        <a href={link} target='_blank' key={idx}><span  className={`inline-flex p-2 bg-white/10 cursor-pointer hover:scale-110 hover:bg-white transition-all duration-200 ${colors}`}><Icons/></span></a>
                     ))}
                     </div>
                 </div>
@@ -32,7 +33,7 @@ const Footer = () => {
                                 {
                                     section.links.map((sdata)=>(
                                         <ul>
-                                            <li className='text-white/60 hover:text-white cursor-pointer'>{sdata.label}</li>
+                                            <Link to={sdata.to}><li className='text-white/60 hover:text-white cursor-pointer'>{sdata.label}</li></Link>
                                         </ul>    
                                     ))
                                 }
