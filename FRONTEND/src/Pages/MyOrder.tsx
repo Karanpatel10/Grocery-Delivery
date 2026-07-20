@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import type {Order} from "../types";
 import {dummyDashboardOrdersData,statusColors} from '../assets/assets'
 import { Package,Calendar1,ChevronRight} from 'lucide-react';
-import api from '../config/api'
+import api from '../config/api';
+
 
 const MyOrder = () => {
 
@@ -50,11 +51,11 @@ const MyOrder = () => {
                         <div className='space-y-5 my-10'>
                             {orders.filter(order =>activeTab === 'all'||order.status.toLowerCase()===activeTab.toLowerCase()).map((order)=>(
                                 // order id,date & status
-                                <Link key={order._id} to={`${order._id}`} className='flex flex-col'>
+                                <Link key={order.id} to={`${order.id}`} className='flex flex-col'>
                                     <div className='flex justify-between bg-white p-7'>
                                         {/* left */}
                                         <div className='flex flex-col gap-3'>
-                                            <p>Order #{order._id.slice(-8).toUpperCase()}</p>
+                                            <p>Order #{order.id.slice(-8).toUpperCase()}</p>
                                             <div className='inline-flex gap-3 text-app-text-light text-sm'>
                                                 <Calendar1 className='size-5'/>
                                                 <span>{new Date(order.createdAt).toLocaleDateString("en-US", {month: "short",day: "numeric",year: "numeric",})}</span>

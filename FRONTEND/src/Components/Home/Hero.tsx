@@ -33,12 +33,10 @@ const Hero = () => {
     </p>
 
     <div className="mt-8 flex flex-wrap gap-4">
-      <Link
-        to="/products"
-        className="bg-orange-500 hover:bg-orange-600 transition-colors px-8 py-4 rounded-full font-semibold flex items-center gap-2"
-      >
-        Shop Now
-        <MoveRight />
+      <Link to="/products">
+        <button  className="bg-orange-500 hover:bg-orange-600 transition-colors px-8 py-4 rounded-full font-semibold flex items-center gap-2 active:scale-90 duration-150 transition-transform">
+        Shop Now <MoveRight />
+        </button>
       </Link>
     </div>
   </div>

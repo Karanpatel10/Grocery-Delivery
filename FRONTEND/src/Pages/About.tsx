@@ -64,11 +64,12 @@ const About = () => {
           </p>
 
           <Link
-            to="/products"
-            className="mt-10 inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 font-semibold text-green-700 shadow-lg transition hover:scale-105"
+            to="/products" 
           >
+            <button className="mt-10 inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 font-semibold text-green-700 shadow-lg transition-transform duration-150 active:scale-95">
             Shop Now
             <ArrowRight size={18} />
+            </button>
           </Link>
         </div>
       </section>
@@ -226,11 +227,11 @@ const About = () => {
           </p>
 
           <Link
-            to="/products"
-            className="mt-10 inline-flex items-center gap-2 rounded-xl bg-gray-200 px-8 py-4 font-semibold text-green-700 transition hover:scale-105"
-          >
+            to="/products">
+            <buttton className="mt-10 inline-flex items-center gap-2 rounded-xl bg-gray-200 px-8 py-4 font-semibold text-green-700 transition-transform duration-150 active:scale-90">
             Start Shopping
             <ArrowRight size={18} />
+            </buttton>
           </Link>
 
         </div>

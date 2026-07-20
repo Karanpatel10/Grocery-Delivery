@@ -81,7 +81,7 @@ const Navbar =()    => {
                     </li>
                 ))}
             </ul>
-npm
+
             
 
             
@@ -99,9 +99,9 @@ npm
                 </form>
 
                 {/* Cart */}
-                <button className="cursor-pointer" onClick={()=>setIsCartOpen(!isCartOpen)}>
+                <button className="cursor-pointer group" onClick={()=>setIsCartOpen(!isCartOpen)}>
                     <div>
-                    <ShoppingCartIcon className="size-7  relative" />
+                    <ShoppingCartIcon className="size-7  relative group-active:scale-90" />
                     {cartCount > 0 && (
                         <span className="absolute top-1 translate-x-3/4 bg-app-orange text-white p-1 w-5 h-5 text-sm flex justify-center items-center rounded-full">{cartCount}</span>
                     )}
@@ -132,7 +132,7 @@ npm
                        </button>
                     ) : (
                         <Link to="/login">
-                            <button className="bg-app-green text-white px-4 py-2 rounded hover:bg-green-700 transition-colors">Login</button>
+                            <button className="bg-app-green text-white active:scale-90 duration-150 transition-transform px-4 py-2 rounded hover:bg-green-700 transition-colors">Login</button>
                         </Link>
                     )}
 

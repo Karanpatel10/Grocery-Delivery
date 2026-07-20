@@ -12,7 +12,6 @@ const Products = () => {
 
   useEffect(()=>{
     api.get('/products').then((res)=>{
-      console.log("res.data", res.data);
       setProducts(res.data.products||[])
     }).catch((error)=>{
       toast.error(error.response.data.message||error?.message)
@@ -147,7 +146,7 @@ const Products = () => {
           setPriceRange({min: 0,max: 500,});
           setSearchParams({});
         }}
-        className="mt-5 w-full rounded-xl bg-app-green py-3 text-sm font-semibold text-white transition hover:bg-app-green-light"
+        className="mt-5 w-full rounded-xl bg-app-green py-3 text-sm font-semibold text-white transition-transform duration-150 active:scale-90 active:bg-app-green-light"
       >
         Clear Filters
       </button>
@@ -248,7 +247,7 @@ const Products = () => {
 
 
       <button
-        className="mt-6 rounded-xl bg-app-green px-6 py-3 text-white font-medium transition hover:bg-app-green-light hover:scale-95"
+        className="mt-6 rounded-xl bg-app-green px-6 py-3 text-white font-medium transition active:bg-app-green-light transition-transform duration-150 active:scale-95"
         onClick={() => {
           setPriceRange({min: 0,max: 500,});
           setSearchParams({});

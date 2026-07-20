@@ -83,7 +83,7 @@ const Login = () => {
                     <input type={pwdvisible ? "text" : "password"} id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="w-full pl-11 pr-4 py-3 bg-white rounded-xl border not-focus:border-app-border transition-all" required />
                   </div>         
                 </div>
-                <button type="submit" disabled={loading} className="bg-orange-500 text-white py-5 mt-4 rounded-xl hover:bg-orange-600 transition-colors">
+                <button type="submit" disabled={loading} className="bg-orange-500 text-white py-5 mt-4 rounded-xl active:scale-95 transition-transform duration-150 hover:bg-orange-600 transition-colors">
                   {loading? <Loader2Icon className="animate-spin mx-auto" /> : isLoginState ? "Login" : "Create Account"}
                 </button>
           </form>

@@ -21,11 +21,11 @@ const HomeCategories = () => {
             </p>
           </div>
            <div className="flex gap-3">
-              <button className="category-prev flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm hover:bg-orange-500 hover:text-white transition">
+              <button className="category-prev flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm hover:bg-orange-500 hover:text-white transition-transform duration-150 active:scale-90">
                 <ChevronLeft size={20} />
               </button>
 
-              <button className="category-next flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm hover:bg-orange-500 hover:text-white transition">
+              <button className="category-next flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm hover:bg-orange-500 hover:text-white transition-transform duration-150 active:scale-90">
                 <ChevronRight size={20} />
               </button>
           </div>

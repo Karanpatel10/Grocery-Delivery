@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import type { Address } from '../types'
-import { dummyAddressData } from '../assets/assets'
-import { Check, MapPin, Pencil, PlusIcon, Trash2, X } from 'lucide-react'
+// import { dummyAddressData } from '../assets/assets'
+import { Check, MapPin, Pencil, PlusIcon, Trash2, X ,Loader2Icon} from 'lucide-react'
 import api from '../config/api'
 import toast from 'react-hot-toast'
 import { useAuth } from '../Context/AuthContext'
 
 const Addresses = () => {
+  
+  const [loading,setLoading]=useState(false);
   const [address, setAddress] = useState<Address[]>([]);
   const [showForm,setShowForm]=useState(false)
   const [editId,setEditId]=useState<string|null>(null)
@@ -23,6 +25,7 @@ const Addresses = () => {
     setForm({label:add.label,address:add.address,city:add.city,state:add.state,zip:add.zip,isDefault:add.isDefault})
   }
 
+  // Location latitude & longitude get
   const getLocation=(retries=3):Promise<{lat:number,lng:number}>=>{
     return new Promise((resolve,reject)=>{
         if(!navigator.geolocation){
@@ -37,7 +40,7 @@ const Addresses = () => {
                 lat:position.coords.latitude,
                 lng:position.coords.longitude
               })
-            },(error:any)=>{
+            },(error)=>{
               if(retries>0){
                 retries--;
                 setTimeout(attempt,1000)
@@ -55,33 +58,49 @@ const Addresses = () => {
     })
   }
 
+
+  // Edit and new Address added
   const handleSubmit=async(e:React.SubmitEvent)=>{
     e.preventDefault();
 
+    if(!editId && address.length>=4){
+            toast.error("Max limit 4 Address Reach.");
+            return;
+       }
+
+    if(form.label === "Home"||form.label ==="Work"){
+      const exists = address.some((item) => item.label === form.label);
+        if(exists){
+          toast.error(`${form.label} already address exits`)
+          return;
+        }
+    }
+    setLoading(true);
     try{
-       const coords=await getLocation()||null;
-      const payload={...form};
+       const coords=await getLocation()??null;
+      const payload={...form,...coords};
 
       if(editId){
         const {data}=await api.put(`/addresses/${editId}`,payload);
-        console.log(data);
         setAddress(data.addressess || []);
          updateUser({ addresses: data.addressess });
         toast.success("Address Updated")
-      }else{
+      }else{     
          const {data}=await api.post(`/addresses`,payload);
-         console.log(data)
-        setAddress(data.addressess || []);
-        updateUser({ addresses: data.addressess });
+        setAddress(prev=>[...prev,data.address]);
+        updateUser({ addresses: [...address, data.address] });
         toast.success("Address added")
       }
       resetForm();
-    }catch(error:any){
+    }catch(error){
         toast.error(error.response?.data?.message||error.message||"Failed")
+    }finally{
+      setLoading(false);
     }
   }
 
   const handleDelete=async(id:string)=>{
+    setLoading(true);
     try{
       console.log(id);
           const {data}=await api.delete(`/addresses/${id}`) 
@@ -90,6 +109,8 @@ const Addresses = () => {
           toast.success("Deleted Address Successfully")
     }catch(error){
      toast.error(error.response?.data?.message||error.message||"Failed")
+    }finally{
+      setLoading(false);
     }
   }
 
@@ -108,7 +129,7 @@ const Addresses = () => {
         {/* header */}
         <div className='flex justify-between py-10'>
           <h1 className='text-app-green text-2xl'>My Address</h1>
-          <button onClick={()=>setShowForm(true)} className='inline-flex gap-3 py-2 px-5 rounded-lg bg-app-green text-white'><PlusIcon/>Add Address</button>
+          <button onClick={()=>{resetForm();setShowForm(true);}} className='inline-flex gap-3 py-2 px-5 rounded-lg bg-app-green text-white transition-transform duration-150 active:scale-90 active:bg-app-green-light'><PlusIcon/>Add Address</button>
         </div> 
 
         {/* Form model */}
@@ -119,12 +140,17 @@ const Addresses = () => {
           <div className='fixed inset-0 flex items-center justify-center p-4 z-50 ' onClick={()=>setShowForm(false)}>
            <form  onSubmit={handleSubmit} onClick={(e) => e.stopPropagation()} className='max-w-lg rounded-2xl bg-white w-full p-8 space-y-5'>
             <div> 
-              <X className='ml-auto cursor-pointer' onClick={()=>setShowForm(false)}/>
+              <X className='ml-auto cursor-pointer' onClick={()=>{setShowForm(false); resetForm()}}/>
               <h1 className='text-app-green text-xl font-medium'>{editId ? 'Edit Address' : 'Add New Address'}</h1>
            </div>
             <div className='grid gap-1'>
-              <label>Label:</label>
-              <input type='text' className='border border-app-border focus:border-app-green p-2 rounded-sm' placeholder='Homw, work,etc..' value={form.label} onChange={(e)=>setForm({...form,label:e.target.value})} required/>
+              <label>Label:</label> 
+              <select className='border border-app-border focus:border-app-green p-2 rounded-sm' value={form.label} onChange={(e)=>setForm({...form,label:e.target.value})} required>
+                <option value="" disabled>Select Label</option>
+                <option value='Home' >Home</option>
+                <option value='Work'>Work</option>
+                <option value='Other'>Other</option>
+              </select>
             </div>
             <div className='grid gap-1'>
                   <label>Street Address:</label>
@@ -152,16 +178,16 @@ const Addresses = () => {
                  </div>
             </div>
           
-            <button type='submit' className='bg-app-green text-white rounded-lg py-2 w-full'>Submit</button>
+            <button type='submit' className='bg-app-green text-white rounded-lg py-2 w-full transition-transform duration-150 active:scale-90 active:bg-app-green-light'>{loading?<Loader2Icon className='animate-spin mx-auto'/>:"Submit"}</button>
           </form>
         </div>
         </>
          )}
 
         {/* Address list */}
-        <div className='space-y-15'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-15'>
           {address.map((addr)=>(
-            <div key={addr.id} className='flex flex-row gap-5 bg-white p-5 rounded-lg text-md outline-1 outline-gray-200'>
+            <div key={addr.id} className='flex flex-row shadow-lg gap-5 bg-white p-5 rounded-lg text-md outline outline-gray-200'>
               <MapPin/>
               <div className='flex flex-col'>
                   <p className='space-x-5 flex items-center'><span className='text-app-green font-bold text-lg'>{addr.label}</span>{(addr.isDefault) && <span className='bg-app-green text-white py-1 px-3 rounded-md inline-flex items-center gap-2 text-sm'><Check className='w-4 h-4'/> Default</span>}</p>

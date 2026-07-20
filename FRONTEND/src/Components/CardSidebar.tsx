@@ -81,7 +81,7 @@ const CardSidebar=()=>{
                         <span className='text-lg font-bold'>Total</span>
                         <span className='text-lg font-bold'>{currency}{grandTotal.toFixed(2)}</span>
                     </div>
-                    <button onClick={()=>{navigate("/checkout");setIsCartOpen(false)}} className='w-full bg-app-orange text-white py-3 rounded-md hover:bg-app-green/90 transition-color inline-flex gap-5 justify-center'>Proceed to Checkout<MoveRight/></button>
+                    <button onClick={()=>{navigate("/checkout");setIsCartOpen(false)}} className='w-full bg-app-orange text-white py-3 rounded-md hover:bg-app-green/90 transition-color duration-150 active:scale-95 inline-flex gap-5 justify-center'>Proceed to Checkout<MoveRight/></button>
                 </div>}
             </div>
         </>

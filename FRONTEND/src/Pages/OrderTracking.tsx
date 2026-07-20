@@ -1,4 +1,3 @@
-import React from 'react'
 import {useState,useEffect} from 'react'
 import { useParams,useNavigate} from "react-router-dom";
 import type { Order } from "../types";
@@ -7,6 +6,7 @@ import { ArrowLeft,PhoneCall,MapPin  } from 'lucide-react';
 import OrderOTP from '../Components/OrderTracking/OrderOTP'
 import LiveMap from '../Components/OrderTracking/LiveMap'
 import OrderTimeLine from '../Components/OrderTracking/OrderTimeLine'
+import api from '../config/api';
 
 
 const OrderTracking = () => {
@@ -17,9 +17,45 @@ const OrderTracking = () => {
   const[order,setOrder]=useState<Order | null>(null);
   const[liveLocation,setLivelocation]=useState<{lat:number,lng:number} | null>(null);
 
+  const fetchOrder = async () => {
+    try {
+      const { data } = await api.get(`/orders/${id}`);
+      setOrder(data.order);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(()=>{
+    if(id){
+      fetchOrder();
+    }
       setOrder(dummyDashboardOrdersData.find((o)=>o._id === id)as any)
   },[id])
+
+  // live location every 10 seconds
+  useEffect(()=>{
+    if(!order ||["Delivered","Canclled","Placed"].includes(order.status)) return;
+
+    const fetchLocation=async()=>{
+      try{
+        const {data}=await api.get(`/orders/${id}/location`);
+        if(data?.livelocation?.lat && data?.livelocation?.lng && data.livelocationn?.updatedAt){
+          setLivelocation({lat:data.livelocation.lat,lng:data.livelocation.lng})
+        }
+        // also update if status change then update
+        if(data.status && data.status !== data.status){
+          setOrder((prev)=>prev?{...prev,status:data.status}:prev)
+        }
+      }catch(error){
+        console.log(error)
+      }
+    }  
+
+    fetchLocation();
+    const interval=setInterval(fetchLocation,1000);
+    return(()=>clearInterval(interval))
+  },[id,order?.status])
 
   return (
     <div className='bg-app-cream'>
@@ -32,7 +68,7 @@ const OrderTracking = () => {
                   </button> 
                 </div>
                 <div>
-                  <h1 className='text-2xl font-bold text-app-dark'>Order #{order?._id.slice(-8).toUpperCase() || 'Order Tracking'}</h1>
+                  <h1 className='text-2xl font-bold text-app-dark'>Order #{order?.id.slice(-8).toUpperCase() || 'Order Tracking'}</h1>
                   <div className='flex flex-row justify-between gap-2'>
                       <p className='text-app-text-light'>Placed on {new Date(order?.createdAt).toLocaleDateString("en-US",{year: 'numeric', month: 'long', day: 'numeric'})}</p>
                       <p className={`${statusColors[order?.status]} p-3 rounded-lg`}>

@@ -88,15 +88,17 @@ export const createOrder=async(req:Request,res:Response)=>{
 
 export const getUserOrders=async(req:Request,res:Response)=>{
    try{
+    console.log("Step 1");
+    console.log(req.user);
     const {status}=req.query;
         const where:any={userId:req.user!.id,NOT:[{paymentMethod:"card",isPaid:false}]};
-
+    console.log("Step 2", where);
         if(status && status!=="all"){
             where.status=status;
         }
-
+ 
         const orders=await prisma.order.findMany({where,include:{deliveryPartner:{select:{name:true,phone:true}}},orderBy:{createdAt:"desc"}});
-
+    console.log("Step 3", orders);
         res.status(200).json({message:"User orders fetched successfully",orders})
    }catch(error){
     console.log(error);
