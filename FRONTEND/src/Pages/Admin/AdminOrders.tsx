@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import type { DeliveryPartner } from "../../types";
 // import Loading from "../../components/Loading";
 import { dummyDashboardOrdersData, dummyDeliveryPartnerData } from "../../assets/assets";
+import api from "../../config/api";
 
 export default function AdminOrders() {
 
@@ -16,18 +17,20 @@ export default function AdminOrders() {
     const [selectedPartner, setSelectedPartner] = useState("");
 
     const fetchOrders = async () => {
+        const {data}=await api.get(`/orders/all`);
+        console.log(data);
         setOrders(dummyDashboardOrdersData)
         setTimeout(() => setLoading(false), 1000)
     };
 
-    const fetchPartners = async () => {
-        setPartners(dummyDeliveryPartnerData as any)
-        setTimeout(() => setLoading(false), 1000)
-    };
+    // const fetchPartners = async () => {
+    //     setPartners(dummyDeliveryPartnerData as any)
+    //     setTimeout(() => setLoading(false), 1000)
+    // };
 
     useEffect(() => {
         fetchOrders();
-        fetchPartners();
+        // fetchPartners();
     }, []);
 
     const handleStatusChange = async (id: string, newStatus: string) => {
