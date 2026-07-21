@@ -17,10 +17,15 @@ export default function AdminOrders() {
     const [selectedPartner, setSelectedPartner] = useState("");
 
     const fetchOrders = async () => {
+        try{
         const {data}=await api.get(`/orders/all`);
         console.log(data);
-        setOrders(dummyDashboardOrdersData)
-        setTimeout(() => setLoading(false), 1000)
+        setOrders(data.orders)
+        }catch(error:any){
+            console.log(error.response?.data?.message||error.message)
+        }finally{
+            setLoading(false);
+        }
     };
 
     // const fetchPartners = async () => {
@@ -83,7 +88,7 @@ export default function AdminOrders() {
                                 orders.map((order: any) => (
                                     <tr key={order._id} className="hover:bg-zinc-50/50 transition-colors">
                                         <td className="px-6 py-4">
-                                            <p className="font-semibold text-zinc-900">#{order._id.slice(-6)}</p>
+                                            <p className="font-semibold text-zinc-900">#{order.id?.slice(-6)}</p>
                                             <p className="text-xs text-zinc-500">{new Date(order.createdAt).toLocaleString()}</p>
                                         </td>
                                         <td className="px-6 py-4">

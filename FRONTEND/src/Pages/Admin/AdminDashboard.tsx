@@ -21,17 +21,11 @@ export default function AdminDashboard() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchStats = async () => {
-            try {
-                const { data } = await api.get('/admin/stats');
-                setStats(data);
-            } catch (error) {
-                console.error("Error fetching admin stats:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchStats();
+                api.get('/admin/stats')
+                .then((res)=>setStats(res.data))
+                .catch ((e)=>console.log(e.message)) 
+                .finally (()=>  setLoading(false))
+       
     }, []);
 
 
@@ -54,7 +48,7 @@ export default function AdminDashboard() {
                     <div key={card.label} className="bg-white rounded-2xl p-5 border border-app-border flex justify-between gap-3">
                         <div>
                             <p className="text-2xl font-semibold text-zinc-900">{card.value}</p>
-                            <p className="text-sm text-app-text-light">{card.label}</p>
+                            <p className="text-md text-app-text-light">{card.label}</p>
                         </div>
                         <div className={`size-10 rounded-xl flex-center bg-orange-50 text-orange-600`}>
                             <card.icon className="size-5" />

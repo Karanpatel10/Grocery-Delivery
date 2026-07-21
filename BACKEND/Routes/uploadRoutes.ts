@@ -10,11 +10,11 @@ const upload=multer({storage})
 uploadRouter.post('/',auth,upload.single('image'),async(req,res)=>{
     try{
         if(!req.file){
-            res.status(400).json({message:'No image file provided'})
+           return res.status(400).json({message:'No image file provided'})
         }
 
         const b64=Buffer.from(req.file.buffer).toString("base64");
-        const dataURI="data:"+req.file?.mimetype+";base64,"+b64;
+        const dataURI=`data:${req.file?.mimetype};base64,${b64}`;
 
         const result=await cloudinary.uploader.upload(dataURI,{folder:"grocery-delivery",resource_type:'auto'})
         res.json({url:result.secure_url})

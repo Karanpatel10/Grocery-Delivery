@@ -1,17 +1,20 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, data, useNavigate } from "react-router-dom";
 import { ArrowLeftIcon } from "lucide-react";
 import { categoriesData, dummyProducts } from "../../assets/assets";
 // import Loading from "../../components/Loading";
+import api from "../../config/api"
+import toast from "react-hot-toast";
 
 export default function AdminProductForm() {
     const { id } = useParams();
     const isEdit = Boolean(id);
+    const navigate=useNavigate()
 
     const [loading, setLoading] = useState(isEdit);
     const [saving, setSaving] = useState(false);
     const [imageFile, setImageFile] = useState<File | null>(null);
-
+    
     const [formData, setFormData] = useState({
         name: "",
         description: "",
@@ -24,20 +27,78 @@ export default function AdminProductForm() {
         isOrganic: false,
     });
 
-    useEffect(() => {
+    useEffect(() => {     
         const fetchData = async () => {
-            if (isEdit) {
-                setFormData(() => dummyProducts.find((p) => p._id === id) as any)
+            try{
+                    if (isEdit) {
+                        const {data}=await api.get(`/products/${id}`);
+                        const p=data;
+                        setFormData({
+                            name: p.name,
+                            description: p.description,
+                            price: p.price.toString(),
+                            originalPrice: p.originalPrice?p.originalPrice.toString():"",
+                            image: p.image,
+                            category: p.category,
+                            unit: p.unit,
+                            stock: p.stock.toString(),
+                            isOrganic:p.isOrganic,
+                        });
+                    }
             }
-            setLoading(false)
-        };
+            catch(error:any){
+                console.log(error.message);
+            }finally{
+                setLoading(false);
+            }
+    }
         fetchData();
     }, [id, isEdit]);
 
     const handleSubmit = async (e: React.SubmitEvent) => {
         e.preventDefault();
+        setSaving(true);
+        try{
+           
+            let finalImageUrl=formData.image;
 
-    };
+            if(imageFile){
+                const formDataUpload=new FormData();
+                formDataUpload.append("image",imageFile);
+                const {data}=await api.post("/upload",formDataUpload);
+                finalImageUrl=data.url;
+            }
+
+            if(!finalImageUrl){
+                toast.error("Please upload a product image");
+                setSaving(false);
+                return
+            }
+
+            const payload = {
+                    ...formData,
+                    price: Number(formData.price),
+                    originalPrice: formData.originalPrice?Number(formData.originalPrice):0,
+                    image: formData.image,
+                    stock:Number(formData.stock)
+                };
+
+            if(isEdit){   
+                await api.put(`/products/${id}`,payload);
+                console.log(payload);
+                toast.success("Product Updated successfully")
+            }else{
+                await api.post(`/products`,payload)
+                console.log(payload);
+                toast.success("Product add successfully")
+            }
+            navigate('/admin/products')
+        }catch(error){
+            console.log(error);
+        }finally{
+            setSaving(false)
+        }
+    }   
 
     return (
         <>
@@ -48,9 +109,10 @@ export default function AdminProductForm() {
                     </Link>
                     <h2 className="text-xl font-semibold text-zinc-900">{isEdit ? "Edit Product" : "New Product"}</h2>
                 </div>
-                {loading ? (
-                    <Loading />
-                ) : (
+                {/* {loading ? ( */}
+                     {/* <Loading /> */}
+                {/* ) : */}
+                 (
                     <form onSubmit={handleSubmit} className="p-6 space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
@@ -107,8 +169,9 @@ export default function AdminProductForm() {
                             </button>
                         </div>
                     </form>
-                )}
+                {/* )} */}
             </div>
         </>
     );
 }
+
