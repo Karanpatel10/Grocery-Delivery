@@ -79,7 +79,7 @@ export default function AdminProductForm() {
                     ...formData,
                     price: Number(formData.price),
                     originalPrice: formData.originalPrice?Number(formData.originalPrice):0,
-                    image: formData.image,
+                    image: finalImageUrl,
                     stock:Number(formData.stock)
                 };
 
@@ -93,8 +93,8 @@ export default function AdminProductForm() {
                 toast.success("Product add successfully")
             }
             navigate('/admin/products')
-        }catch(error){
-            console.log(error);
+        }catch(error:any){
+            console.log(error?.response?.data||error?.message);
         }finally{
             setSaving(false)
         }
