@@ -20,9 +20,7 @@ uploadRouter.post('/',auth,upload.single('image'),async(req,res)=>{
         res.json({url:result.secure_url})
 
     }catch(error:any){
-        console.error("Full error:", error);
-    console.error("Message:", error.message);
-    console.error("HTTP Code:", error.http_code);
+        console.log(error.message);
         res.status(500).json({message:error.message})
     }
 })
