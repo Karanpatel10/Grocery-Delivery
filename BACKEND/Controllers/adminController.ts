@@ -42,6 +42,7 @@ export const createDeliveryPartner=async(req:Request,res:Response)=>{
 
 export const updateDeliveryPartner=async(req:Request,res:Response)=>{
     const { id } = req.params;
+    console.log(id);
     const {name,email,phone,vehicleType,isActive}=req.body;
 
     const data:any={};
