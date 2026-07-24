@@ -50,10 +50,10 @@ export const updateDeliveryPartner=async(req:Request,res:Response)=>{
     if(email) data.email=email;
     if(phone) data.phone=phone;
     if(vehicleType) data.vehicleType=vehicleType;
-    if(typeof isActive === 'boolean') data.isActive=isActive;
+    data.isActive=isActive;
 
     try{
-        const partner=await prisma.deliveryPartner.update({where:{id:req.user!.id as string},data});
+        const partner=await prisma.deliveryPartner.update({where:{id},data});
         res.json({partner})
     }catch(error:any){
         console.log(error.message)
