@@ -54,7 +54,7 @@ export const updateDeliveryPartner=async(req:Request,res:Response)=>{
     try{
         const partner=await prisma.deliveryPartner.update({where:{id:req.user!.id as string},data});
         res.json({partner})
-    }catch(error:an){
+    }catch(error:any){
         console.log(error.message)
         res.status(404).json({message:"Partner not found"})
     }
