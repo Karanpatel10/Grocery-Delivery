@@ -13,7 +13,8 @@ import toast from 'react-hot-toast';
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Navigation } from "swiper/modules";
-// import { ArrowUpRight } from "lucide-react";
+import Loading from '../Components/Loading.tsx';
+
 
 const ProductPage = () => {
 
@@ -21,6 +22,7 @@ const ProductPage = () => {
   const {id}=useParams();
   const navigate=useNavigate()
   const {isCartOpen,setIsCartOpen,addToCart,items,updateQuantity}=useCart()
+  const [loading,setLoading]=useState(true);
 
   
 
@@ -31,20 +33,22 @@ const ProductPage = () => {
 
   useEffect(()=>{
     window.scrollTo(0,0);
-    api.get(`/products/${id}`).then((res)=>{
-      setProduct(res.data)
-      console.log("products:",res.data);
-    }).catch((error)=>{
+    const fetchData=async()=>{
+       try{
+      const productRes=await api.get(`/products/${id}`)
+      setProduct(productRes.data)
+      const relatedRes=await  api.get('/products')
+      setRelatedProducts(relatedRes.data.products.filter((p)=>p.id !== id))
+    }catch(error:any){
       toast.error(error.response.data.message||error?.message)
-    })
-
-    api.get('/products').then((res)=>{
-        setRelatedProducts(res.data.products.filter((p)=>p.id !== id))
-    }).catch((error)=>{
-      toast.error(error.response.data.message||error?.message)
-    })
-
+    }finally{
+      setLoading(false)
+    }
+    }
+    fetchData()
   },[id,navigate])
+
+  if(loading) return <Loading/>
 
   return (
     <div className='max-w-7xl mx-auto py-35'>
@@ -92,7 +96,7 @@ const ProductPage = () => {
         </div>
        {/* Review Section */}
            {
-            product?.reviewCount>0 && <DummyReviewsSection product={product}/>
+            product?.reviewCount>=0 && <DummyReviewsSection product={product}/>
           } 
        {/* Related Products section */}
        <div className='py-10'>

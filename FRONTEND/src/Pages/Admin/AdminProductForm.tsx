@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link, data, useNavigate } from "react-router-dom";
 import { ArrowLeftIcon } from "lucide-react";
 import { categoriesData, dummyProducts } from "../../assets/assets";
-// import Loading from "../../components/Loading";
+import Loading from "../../Components/Loading";
 import api from "../../config/api"
 import toast from "react-hot-toast";
 
@@ -24,6 +24,7 @@ export default function AdminProductForm() {
         category: "",
         unit: "",
         stock: "",
+        rating:"",
         isOrganic: false,
     });
 
@@ -42,6 +43,7 @@ export default function AdminProductForm() {
                             category: p.category,
                             unit: p.unit,
                             stock: p.stock.toString(),
+                            rating:p.rating.toString(),
                             isOrganic:p.isOrganic,
                         });
                     }
@@ -80,6 +82,7 @@ export default function AdminProductForm() {
                     price: Number(formData.price),
                     originalPrice: formData.originalPrice?Number(formData.originalPrice):0,
                     image: finalImageUrl,
+                    rating:0,
                     stock:Number(formData.stock)
                 };
 
@@ -109,9 +112,9 @@ export default function AdminProductForm() {
                     </Link>
                     <h2 className="text-xl font-semibold text-zinc-900">{isEdit ? "Edit Product" : "New Product"}</h2>
                 </div>
-                {/* {loading ? ( */}
-                     {/* <Loading /> */}
-                {/* ) : */}
+                {loading ? (
+                     <Loading /> 
+                 ) : 
                  (
                     <form onSubmit={handleSubmit} className="p-6 space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -169,7 +172,7 @@ export default function AdminProductForm() {
                             </button>
                         </div>
                     </form>
-                {/* )} */}
+                 )} 
             </div>
         </>
     );

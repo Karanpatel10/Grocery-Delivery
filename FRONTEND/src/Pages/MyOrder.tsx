@@ -4,6 +4,7 @@ import type {Order} from "../types";
 import {dummyDashboardOrdersData,statusColors} from '../assets/assets'
 import { Package,Calendar1,ChevronRight} from 'lucide-react';
 import api from '../config/api';
+import Loading from '../Components/Loading';
 
 
 const MyOrder = () => {
@@ -11,17 +12,26 @@ const MyOrder = () => {
   const currency=import.meta.env.VITE_CURRENCY_SYMBOL||"$";
   const [orders,setOrders] = useState<Order[]>([]);
   const [activeTab,setActiveTab]=useState('all');
+  const [loading,setLoading]=useState(true);
 
 
   const fetchOrders = async () => {
+    try{
     const {data}=await api.get("/orders");
     console.log(data);
      setOrders(data.orders);
+    }catch(error){
+        console.log(error.message);
+    }finally{
+        setLoading(false);
+    }
   };
 
   useEffect(() => {
     fetchOrders();
   },[]);
+
+  if(loading) return <Loading/>
 
   return (
     <div className='bg-app-cream py-25 min-h-screen'>

@@ -4,21 +4,24 @@ import { useEffect, useState } from 'react';
 import api from '../config/api';
 import toast from 'react-hot-toast';
 import type { Product } from '../types';
+import Loading from '../Components/Loading';
 
 const FlashDeals = () => {
  const [products,setProducts]=useState<Product[]>([])
+ const [loading,setLoaidng]=useState(true)
 
   useEffect(()=>{
       api.get('/products/flash-deals')
       .then((res)=>{
-        console.log(res.data.products)
         setProducts(res.data.products)
       })
       .catch((error)=>{
           toast.error(error.response.data.message||error?.message)
-      }) 
+      }).finally(()=>setLoaidng(false)) 
   },[])
   
+  if(loading) return <Loading/>;
+
   return (
     <section>
       <div className='bg-linear-to-r from-app-orange to-app-orange-dark flex justify-center items-center text-center text-white flex-col gap-2 py-20'>

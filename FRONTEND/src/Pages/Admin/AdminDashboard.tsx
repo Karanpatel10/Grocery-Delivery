@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { PackageIcon, UsersIcon, ShoppingBagIcon, AlertTriangleIcon } from "lucide-react";
-// import Loading from "../../components/Loading";
+import Loading from "../../Components/Loading";
 import { statusColors } from "../../assets/assets";
 import api from "../../config/api"
 
@@ -38,7 +38,7 @@ export default function AdminDashboard() {
         ]
         : [];
 
-    // if (loading) return <Loading />
+    if (loading) return <Loading />
 
     return (
         <div className="space-y-6">

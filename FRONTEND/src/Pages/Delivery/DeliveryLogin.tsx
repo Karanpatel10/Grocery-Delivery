@@ -9,6 +9,11 @@ export default function DeliveryLogin() {
 
     const handleSubmit = async (e: React.SubmitEvent) => {
         e.preventDefault();
+        try{
+
+        }catch(error:any){
+            console.log(error.message)
+        }
 
     };
 

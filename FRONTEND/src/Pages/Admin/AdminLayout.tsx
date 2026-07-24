@@ -1,6 +1,6 @@
 import { NavLink, Outlet,Navigate } from "react-router-dom";
 import { PlusIcon, PackageSearchIcon, ShoppingBagIcon, LogOutIcon, BarChart3Icon, ShieldIcon, Truck } from "lucide-react";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../Components/Navbar";
 import {useAuth} from "../../Context/AuthContext"
 
 export default function AdminLayout() {

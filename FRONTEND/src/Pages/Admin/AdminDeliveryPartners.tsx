@@ -3,6 +3,8 @@ import { PlusIcon, XIcon, TruckIcon, PhoneIcon, MailIcon } from "lucide-react";
 import type { DeliveryPartner } from "../../types";
 // import Loading from "../../components/Loading";
 import { dummyDeliveryPartnerData } from "../../assets/assets";
+import api from "../../config/api";
+import toast from 'react-hot-toast'
 
 export default function AdminDeliveryPartners() {
     const [partners, setPartners] = useState<DeliveryPartner[]>([]);
@@ -12,8 +14,15 @@ export default function AdminDeliveryPartners() {
     const [form, setForm] = useState({ name: "", email: "", password: "", phone: "", vehicleType: "bike" });
 
     const fetchPartners = async () => {
-        setPartners(dummyDeliveryPartnerData as any)
-        setTimeout(() => setLoading(false), 1000)
+        try{
+            const {data}=await api.get('/admin/delivery-partners');
+            setPartners(data.partner)
+            console.log(data);
+        }catch(error:any){
+            console.log(error.message)
+        }
+        // setPartners(dummyDeliveryPartnerData as any)
+        // setTimeout(() => setLoading(false), 1000)
     };
 
     useEffect(() => {
@@ -22,11 +31,28 @@ export default function AdminDeliveryPartners() {
 
     const handleSubmit = async (e: React.SubmitEvent) => {
         e.preventDefault();
-
+        try{
+            const {data}=await api.post("/admin/delivery-partners",form);
+            toast.success("Partner onborde succcessfully");
+            setShowForm(false);
+            setForm({ name: "", email: "", password: "", phone: "", vehicleType: "bike" })
+            console.log(data);
+            fetchPartners();
+        }catch(error:any){
+            console.log(error.message);
+        }finally{
+            setLoading(false)
+        }
     };
 
     const toggleActive = async (id: string, isActive: boolean) => {
-        console.log(id, isActive);
+      try{
+        await api.put(`/admin/delivery-partners/${id}`,{isActive:!isActive});
+        toast.success(isActive?'Deactived Delivery Partner':'Actived Delivery Partner');
+        fetchPartners();
+      }catch(error:any){
+        console.log(error.message);
+      }
     };
 
     // if (loading) return <Loading />;
@@ -69,7 +95,7 @@ export default function AdminDeliveryPartners() {
                                 <p className="flex items-center gap-2"><MailIcon className="w-3.5 h-3.5 text-zinc-400" /> {p.email}</p>
                                 <p className="flex items-center gap-2"><PhoneIcon className="w-3.5 h-3.5 text-zinc-400" /> {p.phone}</p>
                             </div>
-                            <button onClick={() => toggleActive(p._id, p.isActive)} className={`w-full py-2 text-xs font-medium rounded-lg transition-colors ${p.isActive ? "bg-red-50 text-red-600 hover:bg-red-100" : "bg-green-50 text-green-600 hover:bg-green-100"}`}>
+                            <button onClick={() => toggleActive(p.id, p.isActive)} className={`w-full py-2 text-xs font-medium rounded-lg transition-colors ${p.isActive ? "bg-red-50 text-red-600 hover:bg-red-100" : "bg-green-50 text-green-600 hover:bg-green-100"}`}>
                                 {p.isActive ? "Deactivate" : "Activate"}
                             </button>
                         </div>
