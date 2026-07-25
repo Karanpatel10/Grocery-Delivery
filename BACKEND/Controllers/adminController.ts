@@ -77,7 +77,7 @@ export const assignDeliveryPartner=async(req:Request,res:Response)=>{
             history.push({status:"Assigned",note:`Assigned to ${partner!.name}`,timestamp:new Date()})
         }
 
-        await prisma.order.update({where:{id:order!.id},data:{deliveryPartnerId:partner!.id, deliveryOtp: otp,,status,statusHistory:history}})
+        await prisma.order.update({where:{id:order!.id},data:{deliveryPartnerId:partner!.id, deliveryOtp: otp,status,statusHistory:history}})
 
         res.json({message:`Order assigned to ${partner!.name} successfully`,order})
     }
