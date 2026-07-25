@@ -3,8 +3,9 @@ import { TruckIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import type { DeliveryPartner } from "../../types";
 // import Loading from "../../components/Loading";
-import { dummyDashboardOrdersData, dummyDeliveryPartnerData } from "../../assets/assets";
+// import { dummyDashboardOrdersData, dummyDeliveryPartnerData } from "../../assets/assets";
 import api from "../../config/api";
+import Loading from "../../Components/Loading";
 
 export default function AdminOrders() {
 
@@ -19,7 +20,6 @@ export default function AdminOrders() {
     const fetchOrders = async () => {
         try{
         const {data}=await api.get(`/orders/all`);
-        console.log(data);
         setOrders(data.orders)
         }catch(error:any){
             console.log(error.response?.data?.message||error.message)
@@ -28,25 +28,50 @@ export default function AdminOrders() {
         }
     };
 
-    // const fetchPartners = async () => {
-    //     setPartners(dummyDeliveryPartnerData as any)
-    //     setTimeout(() => setLoading(false), 1000)
-    // };
+    const fetchPartners = async () => {
+        try{
+        const {data}=await api.get('/admin/delivery-partners');
+        setPartners(data.partner.filter((p:DeliveryPartner)=>p.isActive))
+        }catch(error){
+            console.log(error.message);
+            toast.error(error.response?.data?.message||"Failed to fetch delivery Partner")
+        }
+        
+    };
 
     useEffect(() => {
         fetchOrders();
-        // fetchPartners();
+        fetchPartners();
     }, []);
 
     const handleStatusChange = async (id: string, newStatus: string) => {
-        console.log(id, newStatus);
+        setLoading(true)
+       try{
+            const {data}=await api.put(`/orders/${id}/status`,{status:newStatus});
+            toast.success('order status updated')
+            fetchOrders();
+       }catch(error){
+        console.log(error.log);
+        toast.error(error.response?.data?.message||"Failed to assign status")
+       }finally{
+        setLoading(false)
+       }
     };
 
     const handleAssign = async () => {
         if (!assignModal || !selectedPartner) return;
-        toast.success("Delivery partner assigned!");
-        setAssignModal(null);
-        setSelectedPartner("");
+       try{
+            const {data}=await api.put(`admin/orders/${assignModal}/assign`,{partnerId:selectedPartner});
+            setAssignModal(null)
+            setSelectedPartner("")
+            console.log(data);
+            fetchOrders();
+       }catch(error){
+        console.log(error.message);
+        toast.error(error.response?.data?.message||"Failed to assign partner")
+       }finally{
+        setLoading(false)
+       }
     };
 
     const statusOptions = ["Placed", "Confirmed", "Assigned", "Packed", "Out for Delivery", "Delivered", "Cancelled"];
@@ -60,7 +85,7 @@ export default function AdminOrders() {
         Cancelled: "bg-red-100 text-red-800",
     };
 
-    // if (loading) return <Loading />
+    if (loading) return <Loading />
 
     return (
         <>
@@ -86,7 +111,7 @@ export default function AdminOrders() {
                                 </tr>
                             ) : (
                                 orders.map((order: any) => (
-                                    <tr key={order._id} className="hover:bg-zinc-50/50 transition-colors">
+                                    <tr key={order.id} className="hover:bg-zinc-50/50 transition-colors">
                                         <td className="px-6 py-4">
                                             <p className="font-semibold text-zinc-900">#{order.id?.slice(-6)}</p>
                                             <p className="text-xs text-zinc-500">{new Date(order.createdAt).toLocaleString()}</p>
@@ -108,7 +133,7 @@ export default function AdminOrders() {
                                                     </div>
                                                 </div>
                                             ) : (
-                                                <button onClick={() => { setAssignModal(order._id); setSelectedPartner(""); }} className="px-3 py-1.5 text-xs font-medium bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 transition-colors flex items-center gap-1">
+                                                <button onClick={() => { setAssignModal(order.id); setSelectedPartner(""); }} className="px-3 py-1.5 text-xs font-medium bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 transition-colors flex items-center gap-1">
                                                     <TruckIcon className="size-3" /> Assign
                                                 </button>
                                             )}
@@ -116,7 +141,7 @@ export default function AdminOrders() {
                                         <td className="px-6 py-4">
                                             <select
                                                 value={order.status}
-                                                onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                                                onChange={(e) => handleStatusChange(order.id, e.target.value)}
                                                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold border-r-8 border-transparent outline-none cursor-pointer leading-tight ${statusColors[order.status] || "bg-zinc-100 text-zinc-800"}`}
                                             >
                                                 {statusOptions.map((s) => (<option key={s} value={s}>{s}</option>))}
@@ -142,8 +167,8 @@ export default function AdminOrders() {
                             ) : (
                                 <div className="space-y-2 mb-5 max-h-60 overflow-y-auto">
                                     {partners.map((p) => (
-                                        <label key={p._id} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${selectedPartner === p._id ? "border-app-green bg-app-green/5" : "border-app-border hover:bg-app-cream"}`}>
-                                            <input type="radio" name="partner" value={p._id} checked={selectedPartner === p._id} onChange={() => setSelectedPartner(p._id)} className="text-app-green" />
+                                        <label key={p.id} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${selectedPartner === p.id ? "border-app-green bg-app-green/5" : "border-app-border hover:bg-app-cream"}`}>
+                                            <input type="radio" name="partner" value={p.id} checked={selectedPartner === p.id} onChange={() => setSelectedPartner(p.id)} className="text-app-green" />
                                             <div className="size-8 rounded-full bg-app-green flex-center">
                                                 <span className="text-white text-xs font-semibold">{p.name.charAt(0)}</span>
                                             </div>

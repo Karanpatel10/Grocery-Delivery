@@ -65,13 +65,9 @@ export const updateDeliveryPartner=async(req:Request,res:Response)=>{
 
 export const assignDeliveryPartner=async(req:Request,res:Response)=>{
         const {partnerId}=req.body;
-
         const order=await prisma.order.findUnique({where:{id:req.params.id as string}})
-
         const partner=await prisma.deliveryPartner.findUnique({where:{id:partnerId}})
-
         const otp=String(Math.floor(100000*Math.random()*900000).toString())
-
         let status=order!.status;
 
         const history:any[]=Array.isArray(order!.statusHistory)?order!.statusHistory:[];
@@ -81,7 +77,7 @@ export const assignDeliveryPartner=async(req:Request,res:Response)=>{
             history.push({status:"Assigned",note:`Assigned to ${partner!.name}`,timestamp:new Date()})
         }
 
-        await prisma.order.update({where:{id:order!.id},data:{deliveryPartnerId:partner!.id,otp,status,statusHistory:history}})
+        await prisma.order.update({where:{id:order!.id},data:{deliveryPartnerId:partner!.id, deliveryOtp: otp,,status,statusHistory:history}})
 
         res.json({message:`Order assigned to ${partner!.name} successfully`,order})
     }
