@@ -15,9 +15,9 @@ const PopularProduct = () => {
       .then((res) => {
         setProducts(res.data.products || []);
       })
-      .catch((error) => {
+      .catch((error:any) => {
         toast.error(error.response?.data?.message || error.message);
-      });
+      })
   }, []);
 
   return (

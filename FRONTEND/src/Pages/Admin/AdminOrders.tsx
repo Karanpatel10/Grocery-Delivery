@@ -5,36 +5,42 @@ import type { DeliveryPartner } from "../../types";
 // import Loading from "../../components/Loading";
 // import { dummyDashboardOrdersData, dummyDeliveryPartnerData } from "../../assets/assets";
 import api from "../../config/api";
-import Loading from "../../Components/Loading";
+// import Loading from "../../Components/Loading";
+import { useLoading } from "../../Context/LoadingContext";
 
 export default function AdminOrders() {
 
     const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "$";
-
+    const {setLoading}=useLoading();
     const [orders, setOrders] = useState<any[]>([]);
     const [partners, setPartners] = useState<DeliveryPartner[]>([]);
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
     const [assignModal, setAssignModal] = useState<string | null>(null);
     const [selectedPartner, setSelectedPartner] = useState("");
 
     const fetchOrders = async () => {
+        setLoading(true)
         try{
         const {data}=await api.get(`/orders/all`);
         setOrders(data.orders)
         }catch(error:any){
-            console.log(error.response?.data?.message||error.message)
+            console.log(error.message)
+            toast.error(error.response?.data?.message||error.message)
         }finally{
             setLoading(false);
         }
     };
 
     const fetchPartners = async () => {
+        setLoading(true)
         try{
         const {data}=await api.get('/admin/delivery-partners');
         setPartners(data.partner.filter((p:DeliveryPartner)=>p.isActive))
         }catch(error){
             console.log(error.message);
             toast.error(error.response?.data?.message||"Failed to fetch delivery Partner")
+        }finally{
+            setLoading(false)
         }
         
     };
@@ -60,13 +66,14 @@ export default function AdminOrders() {
 
     const handleAssign = async () => {
         if (!assignModal || !selectedPartner) return;
+        setLoading(true);
        try{
             const {data}=await api.put(`admin/orders/${assignModal}/assign`,{partnerId:selectedPartner});
             setAssignModal(null)
             setSelectedPartner("")
             console.log(data);
             fetchOrders();
-       }catch(error){
+       }catch(error:any){
         console.log(error.message);
         toast.error(error.response?.data?.message||"Failed to assign partner")
        }finally{
@@ -85,7 +92,7 @@ export default function AdminOrders() {
         Cancelled: "bg-red-100 text-red-800",
     };
 
-    if (loading) return <Loading />
+    // if (loading) return <Loading />
 
     return (
         <>

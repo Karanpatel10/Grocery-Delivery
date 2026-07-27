@@ -5,21 +5,25 @@ import type { DeliveryPartner } from "../../types";
 import { dummyDeliveryPartnerData } from "../../assets/assets";
 import api from "../../config/api";
 import toast from 'react-hot-toast'
+import { useLoading } from "../../Context/LoadingContext";
 
 export default function AdminDeliveryPartners() {
     const [partners, setPartners] = useState<DeliveryPartner[]>([]);
-    const [loading, setLoading] = useState(true);
+    const {setLoading}=useLoading();
+    // const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [saving, setSaving] = useState(false);
     const [form, setForm] = useState({ name: "", email: "", password: "", phone: "", vehicleType: "bike" });
 
     const fetchPartners = async () => {
+        setLoading(true);
         try{
             const {data}=await api.get('/admin/delivery-partners');
             setPartners(data.partner)
-            console.log(data);
         }catch(error:any){
             console.log(error.message)
+        }finally{
+            setLoading(false)
         }
         // setPartners(dummyDeliveryPartnerData as any)
         // setTimeout(() => setLoading(false), 1000)

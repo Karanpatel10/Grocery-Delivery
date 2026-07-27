@@ -3,15 +3,29 @@ import type { Product } from '../types';
 import { Link, useSearchParams } from 'react-router-dom';
 import {dummyProducts } from '../assets/assets';
 import ProductsCard from '../Components/ProductsCard';
+import { useLoading } from '../Context/LoadingContext';
+import api from '../config/api';
 
 const SearchResults = () => {
-
+  const {setLoading}=useLoading(); 
   const [products,setProducts]=useState<Product[]>([])
   const [searchParams]=useSearchParams()
   const query=searchParams.get('q')||'';
 
   useEffect(()=>{
-    setProducts(dummyProducts.filter((product: Product)=>product.name.toLowerCase().includes(query.toLowerCase())));
+    const fetchProducts=async()=>{
+      setLoading(true,"content")
+      try{
+        const {data}=await api.get('/products');
+        console.log(data);
+      setProducts(data.products.filter((product: Product)=>product.name.toLowerCase().includes(query.toLowerCase())));
+      }catch(error:any){
+        console.log(error.message)
+      }finally{
+        setLoading(false)
+      }
+    }
+    fetchProducts()
   },[query])
 
   return (
@@ -30,7 +44,7 @@ const SearchResults = () => {
             </div>)
            :(
               products.map((product: Product) => (
-                <ProductsCard key={product._id} prod={product} showDiscountTag={true}/>
+                <ProductsCard key={product.id} prod={product} showDiscountTag={true}/>
               ))
           )}
           </div>

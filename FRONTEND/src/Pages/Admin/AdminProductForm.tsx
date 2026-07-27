@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link, data, useNavigate } from "react-router-dom";
 import { ArrowLeftIcon } from "lucide-react";
 import { categoriesData, dummyProducts } from "../../assets/assets";
-import Loading from "../../Components/Loading";
+// import Loading from "../../Components/Loading";
 import api from "../../config/api"
 import toast from "react-hot-toast";
 

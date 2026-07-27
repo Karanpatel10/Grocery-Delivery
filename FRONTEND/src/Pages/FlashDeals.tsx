@@ -4,23 +4,26 @@ import { useEffect, useState } from 'react';
 import api from '../config/api';
 import toast from 'react-hot-toast';
 import type { Product } from '../types';
-import Loading from '../Components/Loading';
+// import Loading from '../Components/Loading';
+import { useLoading } from "../Context/LoadingContext";
 
 const FlashDeals = () => {
  const [products,setProducts]=useState<Product[]>([])
- const [loading,setLoaidng]=useState(true)
+//  const [loading,setLoaidng]=useState(true)
+const {setLoading}=useLoading();
 
   useEffect(()=>{
+      setLoading(true);
       api.get('/products/flash-deals')
       .then((res)=>{
         setProducts(res.data.products)
       })
       .catch((error)=>{
           toast.error(error.response.data.message||error?.message)
-      }).finally(()=>setLoaidng(false)) 
+      }).finally(()=>setLoading(false)) 
   },[])
   
-  if(loading) return <Loading/>;
+  // if(loading) return <Loading/>;
 
   return (
     <section>

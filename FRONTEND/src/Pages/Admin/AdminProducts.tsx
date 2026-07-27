@@ -6,18 +6,19 @@ import type { Product } from "../../types";
 import { dummyProducts } from "../../assets/assets";
 import api from '../../config/api'
 import toast from "react-hot-toast";
+import { useLoading } from "../../Context/LoadingContext";
 
 export default function AdminProducts() {
 
     const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "$";
-
+    const {setLoading}=useLoading();
     const [products, setProducts] = useState<Product[]>([]);
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
 
     const fetchProducts = async () => {
+        setLoading(true);
         try{
         const {data}=await api.get('/products');
-        console.log(data);
         setProducts(data.products);
         }catch(error:any){
             console.log(error.message)

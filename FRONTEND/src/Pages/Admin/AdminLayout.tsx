@@ -2,9 +2,12 @@ import { NavLink, Outlet,Navigate } from "react-router-dom";
 import { PlusIcon, PackageSearchIcon, ShoppingBagIcon, LogOutIcon, BarChart3Icon, ShieldIcon, Truck } from "lucide-react";
 import Navbar from "../../Components/Navbar";
 import {useAuth} from "../../Context/AuthContext"
+import {useLoading} from "../../Context/LoadingContext"
+import Loading from "../../Components/Loading"
 
 export default function AdminLayout() {
     const {user}=useAuth();
+    const {loading}=useLoading();
 
     const AdminLinkData = [
         { to: "/admin", label: "Dashboard", icon: BarChart3Icon },
@@ -24,7 +27,7 @@ export default function AdminLayout() {
             </div>
             <div className="flex flex-col h-full lg:flex-row gap-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-25 animate-fade-in">
                 {/* Admin Sidebar */}
-                <aside className="w-full lg:w-64 shrink-0 h-fit bg-white rounded-2xl p-4 border border-app-border">
+                <aside className="w-full lg:w-64 shrink-0 h-fit bg-white rounded-2xl p-4 border border-app-border z-90">
                     <div className="pb-4 mb-4 border-b border-app-border">
                         <h2 className="text-lg font-semibold text-app-green flex items-center gap-2 px-2">
                             <ShieldIcon className="size-7 text-green-900" /> Admin Panel
@@ -48,6 +51,7 @@ export default function AdminLayout() {
                     </nav>
                 </aside>
                 <main className="flex-1 overflow-y-auto no-scrollbar pb-20">
+                    {loading && <Loading variant="content"/>}
                     <Outlet />
                 </main>
             </div>

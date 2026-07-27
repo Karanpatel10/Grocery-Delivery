@@ -3,16 +3,32 @@ import { LogOutIcon, TruckIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { DeliveryPartner } from "../../types";
 import { dummyDeliveryPartnerData } from "../../assets/assets";
+import toast from "react-hot-toast";
+import api from "../../config/api";
 
 export default function DeliveryLayout() {
     const navigate = useNavigate();
     const [partner, setPartner] = useState<DeliveryPartner | null>(null);
 
     useEffect(() => {
-        setPartner(dummyDeliveryPartnerData[0] as DeliveryPartner);
+        api.get('/delivery/my-deliveries').then((res)=>{
+            const saved=localStorage.getItem('delivery_partner');
+            const token=localStorage.getItem('delivery_token');
+            if(!saved || !token){
+                navigate('/delivery/login')
+                return
+            }
+            setPartner(JSON.parse(saved));
+        }).catch((error:any)=>{
+            toast.error(error.response.data.message||error?.message)
+        })
+        // setPartner(dummyDeliveryPartnerData[0] as DeliveryPartner);
     }, [navigate]);
 
     const handleLogout = () => {
+        localStorage.removeItem('delivery_partner');
+        localStorage.removeItem('delivery_token');
+        setPartner(null);
         navigate("/delivery/login");
     };
 

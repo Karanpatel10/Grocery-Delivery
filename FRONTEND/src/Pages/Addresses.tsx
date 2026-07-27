@@ -5,11 +5,12 @@ import { Check, MapPin, Pencil, PlusIcon, Trash2, X ,Loader2Icon} from 'lucide-r
 import api from '../config/api'
 import toast from 'react-hot-toast'
 import { useAuth } from '../Context/AuthContext'
-import Loading from '../Components/Loading'
+import { useLoading } from "../Context/LoadingContext";
 
 const Addresses = () => {
   
-  const [loading,setLoading]=useState(true);
+  const {setLoading}=useLoading();
+  // const [loading,setLoading]=useState(true);
   const [address, setAddress] = useState<Address[]>([]);
   const [showForm,setShowForm]=useState(false)
   const [editId,setEditId]=useState<string|null>(null)
@@ -92,14 +93,13 @@ const Addresses = () => {
         toast.success("Address added")
       }
       resetForm();
-    }catch(error){
+    }catch(error:any){
         toast.error(error.response?.data?.message||error.message||"Failed")
-    }finally{
-      setLoading(false);
     }
   }
 
   const handleDelete=async(id:string)=>{
+    setLoading(true,"content");
     try{
       console.log(id);
           const {data}=await api.delete(`/addresses/${id}`) 
@@ -114,6 +114,7 @@ const Addresses = () => {
   }
 
   useEffect(()=>{
+    setLoading(true,"content")
     api.get("/addresses").then((res)=>{
       setAddress(res.data.addressess||[])
     }).catch((error)=>{
@@ -121,7 +122,7 @@ const Addresses = () => {
     }).finally(()=>setLoading(false))     
   },[])
 
-  if(loading) return <Loading/>;
+  // if(loading) return <Loading/>;
 
   return (
     <div className='min-h-screen bg-app-cream'>

@@ -18,10 +18,10 @@ const CardSidebar=()=>{
     return(
         <>
             {/* overlay */}
-            <div onClick={()=>setIsCartOpen(false)} className='fixed inset-0 bg-black/50 z-50 transition-opacity'/>
+            <div onClick={()=>setIsCartOpen(false)} className='fixed inset-0 bg-black/50 z-90 transition-opacity'/>
 
             {/*CardSidebar*/}
-            <div className='flex flex-col fixed w-full h-full max-w-md bg-white z-50 right-0 top-0 animate-in slide-in-from-right duration-300'>
+            <div className='flex flex-col fixed w-full h-full max-w-md bg-white z-90 right-0 top-0 animate-in slide-in-from-right duration-300'>
                 {/* Cart Header */}
                 <div className='flex items-center justify-between p-4 border-b border-app-border'>
                     <div className='flex items-center gap-2'>

@@ -6,13 +6,16 @@ import {useSearchParams } from 'react-router-dom'
 import api from '../config/api'
 import toast from 'react-hot-toast';
 import { SlidersHorizontal } from "lucide-react";
-import Loading from '../Components/Loading'
+// import Loading from '../Components/Loading'
+import { useLoading } from "../Context/LoadingContext";
 
 const Products = () => {
   const [products,setProducts]=useState<Product[]>([])
-  const [loading,setLoading]=useState(true);
+  // const [loading,setLoading]=useState(true);
+  const {setLoading}=useLoading();
 
   useEffect(()=>{
+    setLoading(true)
     api.get('/products').then((res)=>{
       setProducts(res.data.products||[])
     }).catch((error)=>{
@@ -44,7 +47,7 @@ const Products = () => {
       }
     })
 
-   if(loading) return <Loading/>
+  //  if(loading) return <Loading/>
 
   return (
     <div className="min-h-screen bg-gray-50 py-16">

@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { PackageIcon, UsersIcon, ShoppingBagIcon, AlertTriangleIcon } from "lucide-react";
-import Loading from "../../Components/Loading";
+// import Loading from "../../Components/Loading";
 import { statusColors } from "../../assets/assets";
 import api from "../../config/api"
+import {useLoading} from "../../Context/LoadingContext"
 
 interface Stats {
     totalOrders: number;
@@ -18,9 +19,11 @@ export default function AdminDashboard() {
     const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "$";
 
     const [stats, setStats] = useState<Stats | null>(null);
-    const [loading, setLoading] = useState(true);
+    const {setLoading}=useLoading()
+    // const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+                setLoading(true);
                 api.get('/admin/stats')
                 .then((res)=>setStats(res.data))
                 .catch ((e)=>console.log(e.message)) 
@@ -38,7 +41,7 @@ export default function AdminDashboard() {
         ]
         : [];
 
-    if (loading) return <Loading />
+    // if (loading) return <Loading />
 
     return (
         <div className="space-y-6">

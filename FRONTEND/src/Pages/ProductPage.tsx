@@ -13,7 +13,8 @@ import toast from 'react-hot-toast';
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Navigation } from "swiper/modules";
-import Loading from '../Components/Loading.tsx';
+// import Loading from '../Components/Loading.tsx';
+import { useLoading } from "../Context/LoadingContext";
 
 
 const ProductPage = () => {
@@ -22,8 +23,8 @@ const ProductPage = () => {
   const {id}=useParams();
   const navigate=useNavigate()
   const {isCartOpen,setIsCartOpen,addToCart,items,updateQuantity}=useCart()
-  const [loading,setLoading]=useState(true);
-
+  // const [loading,setLoading]=useState(true);
+  const {setLoading}=useLoading();
   
 
   const [product,setProduct]=useState<Product|null>(null);
@@ -32,6 +33,7 @@ const ProductPage = () => {
    const cartItem = items.find(item => item.product.id === product?.id);
 
   useEffect(()=>{
+    setLoading(true,"content")
     window.scrollTo(0,0);
     const fetchData=async()=>{
        try{
@@ -48,7 +50,7 @@ const ProductPage = () => {
     fetchData()
   },[id,navigate])
 
-  if(loading) return <Loading/>
+  // if(loading) return <Loading/>
 
   return (
     <div className='max-w-7xl mx-auto py-35'>
