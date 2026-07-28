@@ -11,16 +11,19 @@ export default function DeliveryLayout() {
     const [partner, setPartner] = useState<DeliveryPartner | null>(null);
 
     useEffect(() => {
-        api.get('/delivery/my-deliveries').then((res)=>{
-            const saved=localStorage.getItem('delivery_partner');
-            const token=localStorage.getItem('delivery_token');
+
+         const saved=localStorage.getItem("delivery_partner");
+         const token=localStorage.getItem("delivery_token");
             if(!saved || !token){
                 navigate('/delivery/login')
                 return
             }
+        console.log(saved,token);
+        api.get('/delivery/my-deliveries').then((res)=>{
             setPartner(JSON.parse(saved));
         }).catch((error:any)=>{
-            toast.error(error.response.data.message||error?.message)
+            console.log(error.response?.data);
+            toast.error(error.response?.data.message||error?.message);
         })
         // setPartner(dummyDeliveryPartnerData[0] as DeliveryPartner);
     }, [navigate]);
