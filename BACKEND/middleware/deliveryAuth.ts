@@ -4,8 +4,8 @@ import { prisma } from '../Config/prisma.js';
 
 const deliveryAuth=async(req:Request,res:Response,next:NextFunction)=>{
     try{
-        const authHeader=req.header.authorization;
-        if(!authHeader||authHeader.startsWith("Bearer ")){
+        const authHeader=req.headers.authorization;
+        if(!authHeader||!authHeader.startsWith("Bearer ")){
             return res.status(401).json({message:"no token provided"})
         }
 
@@ -18,7 +18,7 @@ const deliveryAuth=async(req:Request,res:Response,next:NextFunction)=>{
 
         const partner=await prisma.deliveryPartner.findUnique({where:{id:decode.id}})
 
-        if(!partner || partner.isActive){
+        if(!partner || !partner.isActive){
             return res.status(403).json({message:"Account is deactivated"})
         }
         req.partner=partner;

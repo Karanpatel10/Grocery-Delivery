@@ -91,7 +91,7 @@ export const footerData = {
                 { label: "All Products", to: "/products" },
                 { label: "Flash Deals", to: "/deals" },
                 { label: "Track Order", to: "/orders" },
-                { label: "Delivery Partner", to: "/delivery" },
+                { label: "Delivery Partner", to: "/delivery/login" },
             ],
         },
         {
