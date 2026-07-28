@@ -15,21 +15,21 @@ export const loginPartner=async(req:Request,res:Response)=>{
         if(!email || !password){
             return res.status(400).json({message:"Please provide email and password"})
         }
-
         const partner=await prisma.deliveryPartner.findUnique({where:{email:email.toLowerCase()}})
 
         if(!partner){
             return res.status(401).json({message:"invalid email or passoword"})
         }
-
         const isMatch=await bcrypt.compare(password,partner.password);
+
         if (!isMatch) {
             return res.status(401).json({ message: "Invalid email or password"});
         }
         const token=generateToken(partner.id);
-
+        console.log('console token',token);
         const {password:_,...partnerData}=partner;
         res.json({partner:partnerData,token})    
+        console.log('console partner',partner);
 }
 
 // Get assigned deliveries
