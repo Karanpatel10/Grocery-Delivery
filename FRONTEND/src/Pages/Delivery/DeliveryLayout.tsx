@@ -5,9 +5,12 @@ import type { DeliveryPartner } from "../../types";
 import { dummyDeliveryPartnerData } from "../../assets/assets";
 import toast from "react-hot-toast";
 import api from "../../config/api";
+import Loading from "../../Components/Loading";
+import { useLoading } from "../../Context/LoadingContext";
 
 export default function DeliveryLayout() {
     const navigate = useNavigate();
+    const {loading}=useLoading();
     const [partner, setPartner] = useState<DeliveryPartner | null>(null);
 
     useEffect(() => {
@@ -57,6 +60,7 @@ export default function DeliveryLayout() {
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col lg:flex-row gap-6">
                 <main className="flex-1 min-w-0">
+                    {loading && <Loading variant="content"/>}
                     <Outlet />
                 </main>
             </div>

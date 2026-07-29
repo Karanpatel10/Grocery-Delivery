@@ -177,7 +177,7 @@ const autoAssignOrders=inngest.createFunction({
 
         // Generate 6-digit OTP
         const otp=Math.floor(100000+Math.random()*900000).toString();
-
+        console.log("generated otp:",otp);
         const history=(Array.isArray(order.statusHistory)?order.statusHistory:[]) as any[];
         history.push({status:'Assigned',note:`Auto-assigned to ${availableRider.name}`,timestamp:new Date()})
 

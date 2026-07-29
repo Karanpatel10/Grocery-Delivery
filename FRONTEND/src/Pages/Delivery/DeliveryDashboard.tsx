@@ -6,11 +6,15 @@ import DeliveryOrderCard from "../../components/DeliveryTracking/DeliveryOrderCa
 // import Loading from "../../components/Loading";
 import type { Order } from "../../types";
 import { dummyDashboardOrdersData } from "../../assets/assets";
+import api from '../../config/api'
+import { useLoading } from "../../Context/LoadingContext";
+import toast from "react-hot-toast";
 
 export default function DeliveryDashboard() {
 
     const [orders, setOrders] = useState<Order[]>([]);
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
+    const {setLoading}=useLoading()
     const [tab, setTab] = useState<"active" | "completed">("active");
     const [tracking, setTracking] = useState(false);
 
@@ -25,8 +29,18 @@ export default function DeliveryDashboard() {
 
     const fetchOrders = async () => {
         setLoading(true);
-        setOrders(dummyDashboardOrdersData as any);
-        setLoading(false);
+        try{
+            const {data}=await api.get(`/delivery/my-deliveries?status=${tab}`)
+            setOrders(data.orders)
+            console.log(data);
+        }catch(error:any){
+            console.log(error?.message);
+            toast.error(error.response?.data?.error||error?.message||"error to fetch order data")
+        }finally{
+            setLoading(false);
+        }
+        // setOrders(dummyDashboardOrdersData as any);
+        
     };
 
     useEffect(() => {
@@ -35,26 +49,61 @@ export default function DeliveryDashboard() {
 
     const handleUpdateStatus = async (orderId: string, status: string) => {
         console.log(orderId, status);
+        setLoading(true)
+        try{
+            const{data}=await api.put(`/delivery/my-deliveries/${orderId}/status`,{status})
+            console.log(data);
+            fetchOrders();
+            toast.success('order status successfully')
+        }catch(error:any){
+            console.log(error.message)
+            toast.error(error?.response?.data.message||error.message||'Failed to update status')
+        }finally{
+            setLoading(false)
+        }
     };
 
     const handleComplete = async () => {
         if (!otpModal || !otp) return;
         setSubmitting(true);
-        setTimeout(() => {
-            setSubmitting(false);
-            setOtpModal(null);
+        try{
+            const {data}=await api.put(`delivery/my-deliveries/${otpModal}/complete`,{otp})
+            console.log(data)
+            toast.success("Order Completed successfully")
+            setOtpModal(null)
             setOtp("");
-        }, 1000);
+            fetchOrders();
+        }catch(error){
+            console.log(error.message);
+            toast.error(error?.response?.data.message||error.message||'failed to complete order')
+        }finally{
+            setSubmitting(false);
+        }
+        // setTimeout(() => {
+        //     setSubmitting(false);
+        //     setOtpModal(null);
+        //     setOtp("");
+        // }, 1000);       
     };
 
     const handleCancel = async () => {
         if (!cancelModal) return;
         setSubmitting(true);
-        setTimeout(() => {
-            setSubmitting(false);
+        try{
+            const {data}=await api.put(`delivery/my-deliveries/${cancelModal}/cancel`,{cancelReason})
+            setCancelModal(data.order.id);
+            setCancelReason(data.order.reason);
+            console.log(data);
             setCancelModal(null);
             setCancelReason("");
-        }, 1000);
+            fetchOrders();
+        }catch(error:any){
+            console.log(error.message)
+            toast.error(error?.response?.data.message||error.message||'Failed to cancle order')
+        }finally{
+            setSubmitting(false);
+        }
+        
     }
 
     return (
@@ -75,11 +124,11 @@ export default function DeliveryDashboard() {
             </div>
 
             {/* Orders */}
-            {loading ? (
-                <>
-                </>
-                // <Loading />
-            ) : orders.length === 0 ? (
+            {/* {loading ? ( */}
+            
+                 {/* <Loading /> */}
+             {/* ) :  */}
+           { orders.length === 0 ? (
                 <div className="text-center py-16 bg-white rounded-2xl border border-app-border">
                     <PackageIcon className="size-12 text-app-border mx-auto mb-3" />
                     <p className="text-lg font-semibold text-zinc-900 mb-1">No {tab} deliveries</p>
@@ -87,9 +136,10 @@ export default function DeliveryDashboard() {
                 </div>
             ) : (
                 <div className="space-y-4">
-                    {orders.map((order) => <DeliveryOrderCard key={order._id} order={order} tab={tab} handleUpdateStatus={handleUpdateStatus} setOtpModal={setOtpModal} setCancelModal={setCancelModal} />)}
+                    {orders.map((order) => <DeliveryOrderCard key={order.id} order={order} tab={tab} handleUpdateStatus={handleUpdateStatus} setOtpModal={setOtpModal} setCancelModal={setCancelModal} />)}
                 </div>
-            )}
+            )
+             } 
 
             {/* OTP Modal */}
             {otpModal && <OtpModal setOtpModal={setOtpModal} otp={otp} setOtp={setOtp} handleComplete={handleComplete} submitting={submitting} />}
