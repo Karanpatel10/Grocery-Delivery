@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PackageIcon, NavigationIcon } from "lucide-react";
 import OtpModal from "../../components/DeliveryTracking/OtpModal";
 import CancelModal from "../../components/DeliveryTracking/CancelModal";
@@ -26,6 +26,7 @@ export default function DeliveryDashboard() {
     // Cancel modal
     const [cancelModal, setCancelModal] = useState<string | null>(null);
     const [cancelReason, setCancelReason] = useState("");
+    const watchIdRef=useRef<number|null>(null)
 
     const fetchOrders = async () => {
         setLoading(true);
@@ -47,6 +48,46 @@ export default function DeliveryDashboard() {
         fetchOrders();
     }, [tab]);
 
+    // send location every 10s for active deliveries
+    useEffect(()=>{
+        const activeOrders=orders.filter((o)=>["Assigned","Packed","Out for Delivery"].includes(o.status));
+        if(activeOrders.length ===0 || !tracking){
+            if(watchIdRef.current !== null){
+                navigator.geolocation.clearWatch(watchIdRef.current);
+                watchIdRef.current=null; 
+            }
+             return;
+        }
+
+        const sendLocation=async(pos:GeolocationPosition)=>{
+            const {latitude:lat,longitude:lng}=pos.coords;
+            try{
+                    await Promise.all(    
+                        activeOrders.map((order)=>{
+                        api.put(`/delivery/my-deliveries/${order.id}/location`,{lat,lng}) 
+                }))
+            }catch(error){
+                console.log(error)
+            }
+        }
+
+        watchIdRef.current=navigator.geolocation.watchPosition(sendLocation,(err)=>{console.error(err)},{enableHighAccuracy:true,maximumAge:10000,})
+
+        // Also send on interval for more consistent updates
+        const interval=setInterval(()=>{
+            navigator.geolocation.getCurrentPosition(sendLocation,()=>{},{enableHighAccuracy:true,})
+        },10000)
+
+        return()=>{
+            if(watchIdRef.current !== null){
+                navigator.geolocation.clearWatch(watchIdRef.current);
+                watchIdRef.current=null;
+            }
+            clearInterval(interval)
+        }
+    },[orders,tracking])
+
+
     const handleUpdateStatus = async (orderId: string, status: string) => {
         console.log(orderId, status);
         setLoading(true)
@@ -64,7 +105,7 @@ export default function DeliveryDashboard() {
     };
 
     const handleComplete = async () => {
-        if (!otpModal || !otp) return;
+        // if (!otpModal || !otp) return;
         setSubmitting(true);
         try{
             const {data}=await api.put(`delivery/my-deliveries/${otpModal}/complete`,{otp})

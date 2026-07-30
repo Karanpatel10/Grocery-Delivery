@@ -64,8 +64,9 @@ export const getDeliveryDetail=async(req:Request,res:Response)=>{
 
 export const completeDelivery=async(req:Request,res:Response)=>{
     const {otp}=req.body;
+    console.log("from otp from frontend",otp)
     const order=await prisma.order.findFirst({where:{id:req.params.id as string,deliveryPartnerId:req.partner!.id}})
-
+    console.log("find order and otp",order)
     if(!order || order.status === "Canclled" || order.status === "Delivered"){
         return res.status(400).json({message:"Invalid Request"})
     }
