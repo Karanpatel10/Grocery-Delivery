@@ -80,7 +80,12 @@ export const createOrder=async(req:Request,res:Response)=>{
     for(const item of orderItems){
         await inngest.send({name:"inventory/stock.updated",data:{productId:item.product}})
     }
-    await inngest.send({name:'order/placed',data:{orderId:order.id}})
+        try{
+            await inngest.send({name:'order/placed',data:{orderId:order.id}})
+            console.log("Inngest send result:", result);
+        } catch (err) {
+        console.error("Inngest send failed:", err);
+        }
 }
 
 // Get user Order Data
