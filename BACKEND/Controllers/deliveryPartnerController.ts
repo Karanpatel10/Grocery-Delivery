@@ -129,3 +129,17 @@ export const updateLocation=async(req:Request,res:Response)=>{
     
     res.json({sucess:true})
 }
+
+// Rider Account controller
+// PUT/api/delivery/my-deliveries/:id/status
+export const deliveryPartnerAccount=async(req:Request,res:Response)=>{
+    const {id}=req.params;
+    const {isActive}=req.body;
+    try{
+    const partner=await prisma.deliveryPartner.update({where:{id},data:{isActive}})
+    res.json({partner})
+    }catch(error:any){
+        console.log(error.message)
+        res.status(404).json({message:"Partner not found"})
+    }
+}

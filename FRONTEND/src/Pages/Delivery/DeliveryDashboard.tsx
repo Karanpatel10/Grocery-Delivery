@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { PackageIcon, NavigationIcon } from "lucide-react";
+import { PackageIcon, NavigationIcon, Dot } from "lucide-react";
 import OtpModal from "../../components/DeliveryTracking/OtpModal";
 import CancelModal from "../../components/DeliveryTracking/CancelModal";
 import DeliveryOrderCard from "../../components/DeliveryTracking/DeliveryOrderCard";
@@ -40,8 +40,6 @@ export default function DeliveryDashboard() {
         }finally{
             setLoading(false);
         }
-        // setOrders(dummyDashboardOrdersData as any);
-        
     };
 
     useEffect(() => {
@@ -87,6 +85,14 @@ export default function DeliveryDashboard() {
         }
     },[orders,tracking])
 
+    const toggleActive=async(id:string,isActive:boolen)=>{
+        try{
+            await api.put(`delivery/my-deliveries${id}`,{isActive:!isActive})
+             toast.success(isActive?'Offline Delivery Partner':'Online Delivery Partner');
+        }catch(error:any){  
+            console.log(error.message);
+        }
+    }
 
     const handleUpdateStatus = async (orderId: string, status: string) => {
         console.log(orderId, status);
@@ -119,12 +125,7 @@ export default function DeliveryDashboard() {
             toast.error(error?.response?.data.message||error.message||'failed to complete order')
         }finally{
             setSubmitting(false);
-        }
-        // setTimeout(() => {
-        //     setSubmitting(false);
-        //     setOtpModal(null);
-        //     setOtp("");
-        // }, 1000);       
+        }   
     };
 
     const handleCancel = async () => {
@@ -143,9 +144,9 @@ export default function DeliveryDashboard() {
             toast.error(error?.response?.data.message||error.message||'Failed to cancle order')
         }finally{
             setSubmitting(false);
-        }
-        
+        }    
     }
+
 
     return (
         <div className="space-y-6">
@@ -156,7 +157,15 @@ export default function DeliveryDashboard() {
                         {t === "active" ? "Active" : "Completed"}
                     </button>
                 ))}
-                <div className="ml-auto">
+                <div className="ml-auto flex gap-10">
+                  <button onClick={()=>toggleActive(id,isActive)} className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all
+                        ${isActive? "bg-green-50 text-green-700 ring-1 ring-green-200": "bg-red-50 text-red-700 ring-1 ring-red-200"}`}>
+                        <span className="relative flex h-3 w-3">
+                        <span className={`absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping ${isActive ? "bg-green-500" : "bg-red-500"}`}/>
+                        <span className={`relative inline-flex h-3 w-3 rounded-full ${ isActive ? "bg-green-500" : "bg-red-500"}`}/></span>
+                        {isActive ? "Online" : "Offline"}
+                    </button>
+
                     <button onClick={() => setTracking((prev) => !prev)} className={`px-4 py-2 text-sm font-medium rounded-xl transition-colors flex items-center gap-1.5 ${tracking ? "bg-green-600 text-white" : "bg-white text-zinc-600 border border-app-border hover:bg-app-cream"}`}>
                         <NavigationIcon className={`w-3.5 h-3.5 ${tracking ? "animate-pulse" : ""}`} />
                         {tracking ? "Sharing Location" : "Share Location"}
