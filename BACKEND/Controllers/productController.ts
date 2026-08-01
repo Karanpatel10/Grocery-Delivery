@@ -45,9 +45,9 @@ export const updateProduct=async (req:Request,res:Response) => {
     res.json({product});
 }
 
-// DELETE/api/products/:id
+// PATCH/api/products/:id
 
-export const deleteProduct=async (req:Request,res:Response) => {
-    const product=await prisma.product.delete({where:{id:req.params.id as string}});
+export const OutofOrderProduct=async (req:Request,res:Response) => {
+    const product=await prisma.product.update({where:{id:req.params.id as string},data:{stock:0}});
     res.json({message:"Product deleted successfully"});
 }

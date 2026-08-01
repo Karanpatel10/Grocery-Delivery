@@ -1,5 +1,5 @@
 import express from "express";
-import { createProduct, deleteProduct, getFlashDeals, getProductById, getProducts, updateProduct } from "../Controllers/productController.js";
+import { createProduct, OutofOrderProduct, getFlashDeals, getProductById, getProducts, updateProduct } from "../Controllers/productController.js";
 import auth from "../middleware/auth.js";
 import admin from "../middleware/admin.js";
 
@@ -10,6 +10,6 @@ productRouter.get("/",getProducts);
 productRouter.get("/:id",getProductById);
 productRouter.post("/",auth,admin,createProduct);
 productRouter.put("/:id",auth,admin,updateProduct);
-productRouter.delete("/:id",auth,admin,deleteProduct);
+productRouter.patch("/:id",auth,admin,OutofOrderProduct);
 
 export default productRouter;

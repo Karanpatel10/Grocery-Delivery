@@ -18,6 +18,7 @@ const Products = () => {
     setLoading(true)
     api.get('/products').then((res)=>{
       setProducts(res.data.products||[])
+      console.log(res.data.products);
     }).catch((error)=>{
       toast.error(error.response.data.message||error?.message)
     }).finally(()=>setLoading(false))
