@@ -17,15 +17,19 @@ export default function DeliveryLogin() {
         try{
             const {data}=await api.post(`delivery/login`,{email,password})
             console.log(data)
-            if(data.id && data.token){
-            localStorage.setItem("delivery_token",data.token);
-            localStorage.setItem("delivery_partner",JSON.stringify(data.partner));
-            toast.success("Login successfully");
+            if(data.token && data.partner){
+                localStorage.setItem("delivery_token",data.token);
+                localStorage.setItem("delivery_partner",JSON.stringify(data.partner));
             }
+            toast.success("Login successfully");
             navigate('/delivery')
         }catch(error:any){
             console.log(error.message);
+            localStorage.removeItem("delivery_token");
+            localStorage.removeItem("delivery_partner");
             toast.error(error.response?.data?.message||error.message)
+            // setEmail("");
+            // setPassword("");
         }finally{
             setLoading(false)
         }
@@ -35,7 +39,7 @@ export default function DeliveryLogin() {
         if(localStorage.getItem("delivery_token")){
             navigate('/delivery');
         }
-    },[])
+    },[navigate])
 
     return (
         <div className="min-h-screen flex">

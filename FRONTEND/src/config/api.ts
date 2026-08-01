@@ -27,7 +27,7 @@ api.interceptors.request.use((config)=>{
 api.interceptors.response.use(
     (response)=>response,
     (error)=>{
-        if(error.response && error.response?.status === 401){
+        if(error.response && (error.response?.code === "INVALID_TOKEN" || error.response?.code === "ACCESS_DENIED" || error.response?.code === "ACCOUNT_DEACTIVATED")){
 
              if(window.location.pathname.startsWith("/delivery")){
                 localStorage.removeItem("delivery_token");

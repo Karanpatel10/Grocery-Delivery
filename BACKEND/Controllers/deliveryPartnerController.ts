@@ -18,16 +18,16 @@ export const loginPartner=async(req:Request,res:Response)=>{
         const partner=await prisma.deliveryPartner.findUnique({where:{email:email.toLowerCase()}})
 
         if(!partner){
-            return res.status(401).json({message:"invalid email or passoword"})
+            return res.status(401).json({code:'INVALID_CREDENTIALS',message:"invalid email or passoword"})
         }
         const isMatch=await bcrypt.compare(password,partner.password);
 
         if (!isMatch) {
-            return res.status(401).json({ message: "Invalid email or password"});
+            return res.status(401).json({ code: 'INVALID_CREDENTIALS', message: "Invalid email or password"});
         }
 
         if(!partner?.isActive){
-            return res.status(403).json({message:"Account is deactivated"})
+            return res.status(403).json({code:'ACCOUNT_DEACTIVATED',message:"Account is deactivated"})
         }
 
         const token=generateToken(partner.id);
