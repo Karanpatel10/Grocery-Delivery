@@ -64,7 +64,7 @@ const ProductPage = () => {
             <div className='bg-white relative'>
               {product?.discount > 0 && <div className='inline-flex gap-3 bg-app-orange text-white py-1 px-2 rounded-xl text-sm absolute left-4 top-4'>{product?.discount}% OFF</div>}
               {product?.isOrganic == true && <div className='inline-flex gap-3 bg-app-green text-white py-1 px-2 rounded-xl text-sm absolute left-22 top-4'><Leaf className='size-5'/>Organic</div>}
-              <img src={product?.image} alt={product?.name} className='mx-auto'/>
+              <img src={product?.image} alt={product?.name} className='mx-auto hover:scale-110 transition-transform duration-300'/>
             </div>
             {/* Right side */}
             <div className='flex flex-col gap-5'>

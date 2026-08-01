@@ -17,17 +17,9 @@ const Newsletter = () => {
       >
 
         {/* Decorative shapes */}
-        <div className="
-          absolute -right-20 -top-20
-          h-64 w-64 rounded-full
-          bg-app-green/90
-        "/>
+        <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-app-green/90"/>
 
-        <div className="
-          absolute -bottom-24 -left-20
-          h-72 w-72 rounded-full
-          bg-app-orange/90
-        "/>
+        <div className="absolute -bottom-24 -left-20 h-72 w-72 rounded-full bg-app-orange/90"/>
 
 
         <div className="relative z-10 flex flex-col items-center text-center">
@@ -35,38 +27,19 @@ const Newsletter = () => {
 
           {/* Icon */}
           <div
-            className="
-              flex h-24 w-24 items-center justify-center
-              rounded-full
-              bg-white
-              border-4 border-app-orange/40
-              shadow-md
-            "
-          >
-            <MailIcon 
-              className="h-11 w-11"
-            />
+            className="flex h-24 w-24 items-center justify-center rounded-full bg-white border-4 border-app-orange/40 shadow-md">
+            <MailIcon className="h-11 w-11"/>
           </div>
 
 
           {/* Title */}
           <h2
-            className="
-              mt-8
-              text-3xl md:text-5xl
-              font-medium text-gray-800">
+            className="mt-8 text-3xl md:text-5xl font-medium text-gray-800">
             Subscribe to Our Newsletter
           </h2>
 
 
-          <p
-            className="
-              mt-5 max-w-xl
-              text-lg
-              text-gray-600
-              leading-relaxed
-            "
-          >
+          <p className="mt-5 max-w-xl text-lg text-gray-600 leading-relaxed">
             Stay updated with fresh arrivals, seasonal offers,
             exclusive discounts, and healthy grocery tips.
           </p>

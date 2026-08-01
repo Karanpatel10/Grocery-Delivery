@@ -25,6 +25,11 @@ export const loginPartner=async(req:Request,res:Response)=>{
         if (!isMatch) {
             return res.status(401).json({ message: "Invalid email or password"});
         }
+
+        if(!partner?.isActive){
+            return res.status(403).json({message:"Account is deactivated"})
+        }
+
         const token=generateToken(partner.id);
         console.log('console token',token);
         const {password:_,...partnerData}=partner;

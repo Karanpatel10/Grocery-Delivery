@@ -13,11 +13,11 @@ const Features = () => {
             return (
               <div
                 key={index}
-                className="group flex items-center gap-5 rounded-2xl bg-green-50 p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                className="group flex items-center gap-5 rounded-2xl bg-app-cream-dark p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
               >
 
                 {/* Icon */}
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-orange-100 text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition">
+                <div className="flex h-14 w-14 shrink-0 items-center outline-4 outline-white justify-center rounded-full bg-orange-100 text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition">
                   <Icon className="h-7 w-7" />
                 </div>
 

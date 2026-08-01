@@ -17,9 +17,11 @@ export default function DeliveryLogin() {
         try{
             const {data}=await api.post(`delivery/login`,{email,password})
             console.log(data)
+            if(data.id && data.token){
             localStorage.setItem("delivery_token",data.token);
             localStorage.setItem("delivery_partner",JSON.stringify(data.partner));
             toast.success("Login successfully");
+            }
             navigate('/delivery')
         }catch(error:any){
             console.log(error.message);

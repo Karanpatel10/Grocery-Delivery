@@ -18,7 +18,7 @@ const ProductsCard = ({prod,showDiscountTag}:{prod:Product;showDiscountTag:boole
        
   <div key={prod.id}
   onClick={() => navigate(`/products/${prod.id}`)}
-  className="relative w-64 rounded-2xl bg-white shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer overflow-hidden border border-gray-300">
+  className="relative group w-64 rounded-2xl bg-white shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer overflow-hidden border border-gray-300">
   {/* Discount Badge */}
   
     <div className="absolute top-3 left-3 z-20 inline-flex flex-row gap-2">

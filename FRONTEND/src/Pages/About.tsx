@@ -115,8 +115,8 @@ const About = () => {
       {/* Mission & Vision */}
       <section className="mx-auto grid max-w-6xl gap-8 px-6 md:grid-cols-2">
 
-        <div className="rounded-3xl bg-white p-8 shadow-xl">
-          <Target className="mb-5 h-12 w-12 rounded-xl bg-green-100 p-3 text-green-600" />
+        <div className="rounded-3xl  bg-app-cream-dark p-8 shadow-xl">
+          <Target className="mb-5 h-12 w-12 rounded-xl bg-green-100 p-3 text-green-600 outline-4 outline-white" />
 
           <h3 className="text-2xl font-bold">
             Our Mission
@@ -128,8 +128,8 @@ const About = () => {
           </p>
         </div>
 
-        <div className="rounded-3xl bg-white p-8 shadow-xl">
-          <Eye className="mb-5 h-12 w-12 rounded-xl bg-orange-100 p-3 text-orange-500" />
+        <div className="rounded-3xl  bg-app-cream-dark p-8 shadow-xl">
+          <Eye className="mb-5 h-12 w-12 rounded-xl bg-orange-100 p-3 text-orange-500 outline-4 outline-white" />
 
           <h3 className="text-2xl font-bold">
             Our Vision
@@ -146,12 +146,12 @@ const About = () => {
       {/* Stats */}
       <section className="mx-auto max-w-6xl px-6 py-24">
 
-        <div className="grid gap-6 md:grid-cols-4">
+        <div className="grid gap-6 md:grid-cols-4 ">
 
           {stats.map((item) => (
             <div
               key={item.label}
-              className="rounded-3xl bg-white p-8 text-center shadow-lg transition hover:-translate-y-2 outline outline-gray-200"
+              className="rounded-3xl  bg-app-cream-dark p-8 text-center shadow-lg transition hover:-translate-y-2 outline outline-gray-200"
             >
              
               <h2 className="text-4xl font-bold text-green-600">
@@ -183,14 +183,14 @@ const About = () => {
 
         </div>
 
-        <div className="mt-14 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-14 grid gap-8 md:grid-cols-2 lg:grid-cols-4 ">
 
           {features.map((feature) => (
             <div
               key={feature.title}
-              className="rounded-3xl bg-white p-8 shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
+              className="rounded-3xl p-8 shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl  bg-app-cream-dark"
             >
-              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100">
+              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100 outline-4 outline-white">
                 {feature.icon}
               </div>
 
@@ -211,7 +211,7 @@ const About = () => {
       {/* CTA */}
       <section className="pb-24 px-6">
 
-        <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[40px]  px-8 py-20 text-center  shadow-2xl outline outline-gray-100">
+        <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[40px]  px-8 py-20 text-center  shadow-2xl outline outline-gray-100  bg-app-cream-dark">
 
           <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-white/10 blur-3xl"></div>
 
@@ -228,7 +228,7 @@ const About = () => {
 
           <Link
             to="/products">
-            <buttton className="mt-10 inline-flex items-center gap-2 rounded-xl bg-gray-200 px-8 py-4 font-semibold text-green-700 transition-transform duration-150 active:scale-90">
+            <buttton className="mt-10 inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 font-semibold text-green-700 transition-transform duration-150 active:scale-90">
             Start Shopping
             <ArrowRight size={18} />
             </buttton>
