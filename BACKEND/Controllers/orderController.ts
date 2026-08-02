@@ -66,7 +66,7 @@ export const createOrder=async(req:Request,res:Response)=>{
 
             const session = await stripe.checkout.sessions.create({
             success_url: `${req.header.origin}/orders?clearCart=true`,
-            cancle_url:`${req.header.origin}/checkout`
+            cancle_url:`${req.header.origin}/checkout`,
             line_items: [
                 {
                 price_data: {
