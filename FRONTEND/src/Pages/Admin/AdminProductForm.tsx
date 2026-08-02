@@ -5,13 +5,15 @@ import { categoriesData, dummyProducts } from "../../assets/assets";
 // import Loading from "../../Components/Loading";
 import api from "../../config/api"
 import toast from "react-hot-toast";
+import { useLoading } from "../../Context/LoadingContext";
 
 export default function AdminProductForm() {
     const { id } = useParams();
     const isEdit = Boolean(id);
     const navigate=useNavigate()
+    const {setLoading}=useLoading();
 
-    const [loading, setLoading] = useState(isEdit);
+    // const [loading, setLoading] = useState(isEdit);
     const [saving, setSaving] = useState(false);
     const [imageFile, setImageFile] = useState<File | null>(null);
     
@@ -112,9 +114,9 @@ export default function AdminProductForm() {
                     </Link>
                     <h2 className="text-xl font-semibold text-zinc-900">{isEdit ? "Edit Product" : "New Product"}</h2>
                 </div>
-                {loading ? (
+                {/* {loading ? (
                      <Loading /> 
-                 ) : 
+                 ) :  */}
                  (
                     <form onSubmit={handleSubmit} className="p-6 space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -172,7 +174,8 @@ export default function AdminProductForm() {
                             </button>
                         </div>
                     </form>
-                 )} 
+                 )
+                 {/* }  */}
             </div>
         </>
     );

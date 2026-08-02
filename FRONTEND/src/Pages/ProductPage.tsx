@@ -34,7 +34,7 @@ const ProductPage = () => {
 
   useEffect(()=>{
     setLoading(true,"content")
-    window.scrollTo(0,0);
+    window.scrollTo({top:0,behavior:"smooth"});
     const fetchData=async()=>{
        try{
       const productRes=await api.get(`/products/${id}`)

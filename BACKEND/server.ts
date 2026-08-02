@@ -10,9 +10,12 @@ import { inngest, functions } from "./Inngest/index.js"
 import addressRoute from "./Routes/addressRoutes.js";
 import adminRouter from "./Routes/adminRouters.js";
 import deliveryPartnerRouter from "./Routes/deliveryPartnerRoutes.js";
+import { stripewebhook } from "./Controllers/webhook.js";
 
 
 const app = express();
+
+app.post("/api/stripe", express.raw({ type: "application/json" }),stripewebhook);
 
 // Middlewares
 app.use(cors());

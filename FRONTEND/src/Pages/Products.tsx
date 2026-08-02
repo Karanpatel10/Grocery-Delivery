@@ -6,19 +6,17 @@ import {useSearchParams } from 'react-router-dom'
 import api from '../config/api'
 import toast from 'react-hot-toast';
 import { SlidersHorizontal } from "lucide-react";
-// import Loading from '../Components/Loading'
 import { useLoading } from "../Context/LoadingContext";
 
 const Products = () => {
   const [products,setProducts]=useState<Product[]>([])
-  // const [loading,setLoading]=useState(true);
   const {setLoading}=useLoading();
 
   useEffect(()=>{
     setLoading(true)
+    window.scrollTo(0,0);
     api.get('/products').then((res)=>{
       setProducts(res.data.products||[])
-      console.log(res.data.products);
     }).catch((error)=>{
       toast.error(error.response.data.message||error?.message)
     }).finally(()=>setLoading(false))
@@ -76,22 +74,15 @@ const Products = () => {
                 ? {}
                 : { category: cat.slug }   
             );
-              window.scrollTo({
-                  top:0,
-                  behavior:"smooth"
-                });
+              window.scrollTo({top:0,behavior:"smooth"});
             }}
           className={`
             w-full flex items-center justify-between rounded-xl px-4 py-2.5
             text-sm font-medium transition-all duration-200
             ${
-              ((!category && cat.slug === "All Categories") ||
-              cat.slug === category)
-                ? "bg-orange-100 text-orange-600"
-                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-            }
-          `}
-        >
+              ((!category && cat.slug === "All Categories") ||cat.slug === category)
+                ? "bg-orange-100 text-orange-600": "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+            }`}>
           {cat.name}
 
           {((!category && cat.slug === "All Categories") ||
@@ -116,12 +107,7 @@ const Products = () => {
             Minimum
           </label>
 
-          <input
-            type="number"
-            value={priceRange.min}
-            onChange={(e) =>
-              setPriceRange((prev) => ({...prev,min: Number(e.target.value),}))
-            }
+          <input type="number" value={priceRange.min} onChange={(e) =>setPriceRange((prev) => ({...prev,min: Number(e.target.value),}))}
             className="w-full rounded-lg border border-gray-200 px-3 py-2 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
           />
         </div>
@@ -132,14 +118,9 @@ const Products = () => {
             Maximum
           </label>
 
-          <input
-            type="number"
-            value={priceRange.max}
+          <input type="number" value={priceRange.max}
             onChange={(e) =>
-              setPriceRange((prev) => ({
-                ...prev,
-                max: Number(e.target.value),
-              }))
+              setPriceRange((prev) => ({...prev,max: Number(e.target.value),}))
             }
             className="w-full rounded-lg border border-gray-200 px-3 py-2 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
           />
@@ -149,10 +130,7 @@ const Products = () => {
 
       {/* Clear Button */}
       <button
-        onClick={() => {
-          setPriceRange({min: 0,max: 500,});
-          setSearchParams({});
-        }}
+        onClick={() => {setPriceRange({min: 0,max: 500,});setSearchParams({});}}
         className="mt-5 w-full rounded-xl bg-app-green py-3 text-sm font-semibold text-white transition-transform duration-150 active:scale-90 active:bg-app-green-light"
       >
         Clear Filters
@@ -193,11 +171,8 @@ const Products = () => {
           className="
             appearance-none rounded-xl border border-gray-200 
             bg-white px-5 py-3 pr-10 text-sm font-medium text-gray-700
-            shadow-sm cursor-pointer outline-none
-            transition hover:border-orange-300
-            focus:border-orange-400 focus:ring-4 focus:ring-orange-100
-          "
-        >
+            shadow-sm cursor-pointer outline-none transition hover:border-orange-300
+            focus:border-orange-400 focus:ring-4 focus:ring-orange-100">
           <option value="Newest">
             Newest Arrivals
           </option>
@@ -226,11 +201,7 @@ const Products = () => {
 
     <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-8">
       {sortProduct.map((prod) => (
-        <ProductsCard
-          key={prod.id}
-          prod={prod}
-          showDiscountTag={true}
-        />
+        <ProductsCard key={prod.id} prod={prod} showDiscountTag={true}/>
       ))}
     </div>
 

@@ -7,7 +7,7 @@
     "start": "tsx server.ts",
     "postinstall": "npx prisma generate",
     "server": "nodemon --exec tsx server.ts",
-    "seed":"tsx seed.ts",
+    "seed": "tsx seed.ts",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -40,6 +40,7 @@
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.2.0",
     "nodemailer": "^9.0.1",
+    "stripe": "^22.4.0",
     "ts-node": "^10.9.2"
   }
 }

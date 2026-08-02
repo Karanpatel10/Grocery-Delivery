@@ -1,0 +1,100 @@
+import {Request,Response} from 'express'
+import Stripe from 'stripe'
+import {prisma} from '../Config/prisma.js'
+import { inngest } from '../Inngest/index.js';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
+
+export const stripewebhook=async(request:Request,response:Response)=>{
+
+  let event: Stripe.Event;
+  if (endpointSecret) {
+    // Get the signature sent by Stripe
+    const signature = request.headers['stripe-signature'];
+    try {
+      event = stripe.webhooks.constructEvent(
+        request.body,
+        signature as string,
+        endpointSecret
+      );
+    } catch (error:any) {
+      console.log(`⚠️ Webhook signature verification failed.`, error.message);
+      return response.sendStatus(400);
+    }
+
+  // Handle the event
+  try{
+      switch (event.type) {
+        case 'payment_intent.succeeded':
+            const paymentIntent = event.data.object as Stripe.PaymentIntent;
+            const paymentIntentId=paymentIntent.id;
+
+            // Getting Session Metadata
+            const session=await stripe.checkout.sessions.list({
+                payment_intent:paymentIntentId
+            })
+           
+            const checkoutSession = session.data[0];
+
+            if (!checkoutSession?.metadata?.orderId) {
+              return response.status(400).json({
+                message: "Order ID not found in metadata"
+              });
+            }
+
+            const orderId = checkoutSession.metadata.orderId;
+
+            // Mark Payment as Paid
+            const paidOrder=await prisma.order.update({where:{id:orderId},data:{isPaid:true}})
+
+            // Decrease stock from DB
+            const orderItems=(Array.isArray(paidOrder.items))?paidOrder.items:[] as any[];
+            for(const item of orderItems){
+                await prisma.product.update({
+                    where:{id:item.product},
+                    data:{stock:{decrement:item.quantity}}
+                })
+            }
+
+            if(paidOrder){
+                await inngest.send({name:'order/placed',data:{orderId}})
+            }
+
+            // Send Inngest Event
+              for(const item of orderItems){
+                    await inngest.send({name:"inventory/stock.updated",data:{productId:item.product}})
+                }
+                  
+          break;
+      case 'payment_intent.canceled':
+      case 'payment_intent.payment_failed':{
+            const paymentIntentFailure = event.data.object as Stripe.PaymentIntent;
+            const paymentIntentFailureId=paymentIntentFailure.id;
+
+            // Getting Session Metadata
+            const sessionFailure=await stripe.checkout.sessions.list({
+                payment_intent:paymentIntentFailureId
+            })
+          
+            const failureOrderId=(sessionFailure.data[0].metadata as any)?.orderId;
+              if(failureOrderId){
+                  await prisma.order.delete({where:{id:failureOrderId}})
+              }
+          }
+      break;
+    
+      default:
+            console.log(`Unhandled event type ${event.type}`);
+    }
+    // Return a response to acknowledge receipt of the event
+   return response.json({ received: true });
+  }catch(error){
+    console.error(error);
+    return response.status(500).json({
+        message: "Webhook processing failed"
+    });
+  }
+}
+}
+
