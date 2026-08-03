@@ -85,6 +85,10 @@ export const createOrder=async(req:Request,res:Response)=>{
             }
             });
             return res.json({url:session.url})
+            console.log("Stripe session created:", session.url);    
+            console.log("Order created with card payment:", order);
+            console.log("Order ID:", order.id);
+            console.log("session:", session);
     }
 
     res.status(201).json({message:"Order created successfully",order})
