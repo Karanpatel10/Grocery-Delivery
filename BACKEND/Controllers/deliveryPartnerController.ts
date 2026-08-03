@@ -113,7 +113,8 @@ export const updateDeliveryStatus=async(req:Request,res:Response)=>{
     const allowedStatus=["Delivered","Out for Delivery"];
 
     if(!allowedStatus.includes(status)){
-        res.status(400).json({message:"invalid status update"})
+        res.status(400).json({message:"invalid status update"});
+        return;
     }
     const order=await prisma.order.findFirst({where:{id:req.params.id as string,deliveryPartnerId:req.partner!.id}});
 
