@@ -155,7 +155,7 @@ const autoAssignOrders=inngest.createFunction({
     const {orderId}=event.data;
 
     // wait  minutes berfore attempting assignmnet
-    await step.sleep("wait-5-minutes","5m");
+    await step.sleep("wait-3-minutes","3m");
 
     const result=await step.run("assign-rider",async()=>{
         const order=await prisma.order.findUnique({where:{id:orderId}})

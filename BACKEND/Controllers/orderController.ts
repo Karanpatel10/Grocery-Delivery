@@ -81,14 +81,15 @@ export const createOrder=async(req:Request,res:Response)=>{
             ],
             mode: 'payment',
             metadata:{
-                orderId:order.id
+                orderId:order.id    
             }
             });
-            return res.json({url:session.url})
             console.log("Stripe session created:", session.url);    
             console.log("Order created with card payment:", order);
             console.log("Order ID:", order.id);
             console.log("session:", session);
+            return res.json({url:session.url})
+            
     }
 
     res.status(201).json({message:"Order created successfully",order})
@@ -96,10 +97,7 @@ export const createOrder=async(req:Request,res:Response)=>{
     // Decrease stock of products
 
     for(const item of items){
-        await prisma.product.update({
-            where:{id:item.product},
-            data:{stock:{decrement:item.quantity}}
-        })
+        await prisma.product.update({where:{id:item.product},data:{stock:{decrement:item.quantity}}})
     }
 
     // send stock update events for each product in the order
@@ -108,10 +106,10 @@ export const createOrder=async(req:Request,res:Response)=>{
         await inngest.send({name:"inventory/stock.updated",data:{productId:item.product}})
     }
         try{
-            await inngest.send({name:'order/placed',data:{orderId:order.id}})
+            const result=await inngest.send({name:'order/placed',data:{orderId:order.id}})
             console.log("Inngest send result:", result);
-        } catch (err) {
-        console.error("Inngest send failed:", err);
+        } catch (error) {
+             console.error("Inngest send failed:", error);
         }
 }
 
