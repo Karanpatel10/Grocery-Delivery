@@ -63,7 +63,7 @@ export const createOrder=async(req:Request,res:Response)=>{
 
     if(paymentMethod==="card"){
         const stripe =new Stripe(process.env.STRIPE_SECRET_KEY as string)
-
+        try{
             const session = await stripe.checkout.sessions.create({
             success_url: `${req.headers.origin}/orders?clearCart=true`,
             cancel_url:`${req.headers.origin}/checkout`,
@@ -89,6 +89,10 @@ export const createOrder=async(req:Request,res:Response)=>{
             console.log("Order ID:", order.id);
             console.log("session:", session);
             return res.json({url:session.url})
+        } catch (error) {
+            console.error("Error creating Stripe session:", error);
+            return res.status(500).json({message:"Failed to create Stripe session",error});
+        }
             
     }
 
