@@ -65,8 +65,8 @@ export const createOrder=async(req:Request,res:Response)=>{
         const stripe =new Stripe(process.env.STRIPE_SECRET_KEY as string)
 
             const session = await stripe.checkout.sessions.create({
-            success_url: `${req.header.origin}/orders?clearCart=true`,
-            cancle_url:`${req.header.origin}/checkout`,
+            success_url: `${req.headers.origin}/orders?clearCart=true`,
+            cancel_url:`${req.headers.origin}/checkout`,
             line_items: [
                 {
                 price_data: {
@@ -76,12 +76,12 @@ export const createOrder=async(req:Request,res:Response)=>{
                     },
                     unit_amount:Math.round(total*100)
                 },
-                quantity: 2,
+                quantity:1,
                 },
             ],
             mode: 'payment',
             metadata:{
-                ordrtId:order.id
+                orderId:order.id
             }
             });
             return res.json({url:session.url})
