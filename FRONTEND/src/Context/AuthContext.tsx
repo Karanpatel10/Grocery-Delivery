@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 interface AuthContextType{
     user:User |null;
     token:string|null;
+    loading:boolean;
     login:(email:string,password:string) => void;
     register:(name:string,email:string,password:string) => void;
     logout:() => void;
@@ -20,6 +21,7 @@ export function AuthProvider({children}:{children:ReactNode}){
     const navigate=useNavigate();
     const [user,setUser]=useState<User | null>(null);
     const [token,setToken]=useState<string|null>(null);
+    const [loading,setLoading]=useState(true);
 
     useEffect(()=>{
        const savedToken=localStorage.getItem("auth_token");
@@ -29,6 +31,7 @@ export function AuthProvider({children}:{children:ReactNode}){
             setToken(savedToken);
             setUser(JSON.parse(savedUser));
        }
+       setLoading(false);
     },[])
     
 // login control
@@ -83,7 +86,7 @@ export function AuthProvider({children}:{children:ReactNode}){
     }
 
     return(
-        <AuthContext.Provider value={{user,token,login,register,logout,updateUser}}>
+        <AuthContext.Provider value={{user,token,login,register,logout,updateUser,loading}}>
             {children}
         </AuthContext.Provider>
     )

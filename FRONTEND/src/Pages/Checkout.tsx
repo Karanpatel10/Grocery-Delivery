@@ -1,8 +1,7 @@
 import { MoveLeft,MapPin,CreditCard,Check,ChevronRight} from 'lucide-react';
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {useCart} from '../Context/CartContext'
-import {dummyAddressData} from '../assets/assets'
 import type { LucideIcon } from 'lucide-react';
 import CheckoutAddress from '../Checkout/CheckoutAddress';
 import CheckoutPayment from '../Checkout/CheckoutPayment';
@@ -18,7 +17,7 @@ const Checkout = () => {
   const currency=import.meta.env.VITE_CURRENCY_SYMBOL||'$';
 
   const {items,cartTotal,clearCart}=useCart();
-  const {user}=useAuth();
+  const {user,loading}=useAuth();
 
   const [address,setAddress]=useState<Address>({
     id:"",label:"Home",address:"",city:"",state:"",zip:"",isDefault:false,lat:0,lng:0
@@ -56,18 +55,19 @@ const Checkout = () => {
       }
       clearCart();
       toast.success("Order Placed Successfully");
-    }catch(error){
+      navigate('/orders');
+    }catch(error:any){
       toast.error(error.response?.data?.message||error.message);
     }
-    navigate('/orders')
+    
   }
 
-  useState(()=>{
+  useEffect(()=>{
     if(user?.addresses?.length){
       const defAddr=user.addresses.find((a)=>a.isDefault)||setAddress(user.addresses[0]);
         setAddress({id:defAddr?.id,label:defAddr?.label,address:defAddr?.address,city:defAddr?.city,state:defAddr?.state,zip:defAddr?.zip,isDefault:defAddr?.isDefault,lat:defAddr?.lat,lng:defAddr?.lng})
     }
-  })
+  },[user])
 
   return (
     <div className='bg-app-cream min-h-screen py-25'>
@@ -102,7 +102,7 @@ const Checkout = () => {
               <div>
               {activeStep ==='address' && <CheckoutAddress address={address} setAddress={setAddress} setStep={setActiveStep} user={user}/>}
               {activeStep ==='payment' && <CheckoutPayment paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} setStep={setActiveStep}/>}
-              {activeStep ==='review' && <CheckoutReview address={address} items={items} handlePlaceOrder={handlePlaceOrder} total={Total}/>}
+              {activeStep ==='review' && <CheckoutReview address={address} items={items} handlePlaceOrder={handlePlaceOrder} total={Total} loading={loading}/>}
               </div>
 
               {/* Order Summary Sidebar */}

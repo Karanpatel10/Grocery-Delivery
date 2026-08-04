@@ -53,7 +53,7 @@ const ProductPage = () => {
   // if(loading) return <Loading/>
 
   return (
-    <div className='max-w-7xl mx-auto py-35'>
+    <div className='max-w-7xl mx-auto py-35 bg-app-cream px-4 lg:px-8'>
       <button onClick={()=>navigate(-1)} className='flex gap-5 hover:text-app-green hover:scale-95 pb-10'>
         <MoveLeft />Back
        </button> 
@@ -119,33 +119,23 @@ const ProductPage = () => {
         </div>
         </div>
           
-          
           <Swiper
                   modules={[Navigation]}
                   navigation={{
                     prevEl: ".category-prev",
                     nextEl: ".category-next",
                   }}
-                  slidesPerView={4}
-                  spaceBetween={25}
-                  grabCursor={true}
-                  breakpoints={{
-                    320: { slidesPerView: 2, spaceBetween: 16 },
-                    640: { slidesPerView: 3, spaceBetween: 18 },
-                    768: { slidesPerView: 4, spaceBetween: 20 },
-                    1024: { slidesPerView: 5, spaceBetween: 30 },
-                  }}
-        
-                >
+                   slidesPerView="auto"
+                   spaceBetween={25}>
                 {relatedProducts.slice(0, 10).map((prod) => (
-                  <SwiperSlide key={prod.id}  className='py-10'>
+                  <SwiperSlide key={prod.id}   className="!w-[250px] py-5">
                     <ProductsCard
                       prod={prod}
                       showDiscountTag={false}
                     />
                   </SwiperSlide>
                 ))}
-              </Swiper>
+           </Swiper>
 
         </div>
     </div>

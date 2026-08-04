@@ -31,7 +31,7 @@ const {setLoading}=useLoading();
         <h1 className='font-extrabold text-3xl flex gap-5 items-center'><ZapIcon className='fill-white'/>Flash Deals<ZapIcon className='fill-white'/></h1>
         <p className='max-w-md max-auto leading-relaxed'>Limited time offers on your favorite products. Grab them before they are gone !</p>
        </div> 
-       <div className='flex flex-wrap gap-10 justify-center items-center container mx-auto py-20'>
+       <div className='flex flex-wrap gap-10 justify-center items-center container mx-auto py-20 bg-app-cream px-4 lg:px-8'>
        {
           products.map((prod)=> <ProductsCard prod={prod} showDiscountTag={false} key={prod.id}/>)
       }

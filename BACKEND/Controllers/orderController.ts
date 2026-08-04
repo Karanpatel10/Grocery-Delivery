@@ -65,7 +65,7 @@ export const createOrder=async(req:Request,res:Response)=>{
         const stripe =new Stripe(process.env.STRIPE_SECRET_KEY as string)
         try{
             const session = await stripe.checkout.sessions.create({
-            success_url: `${req.headers.origin}/orders?clearCart=true`,
+            success_url: `${req.headers.origin}/orders`,
             cancel_url:`${req.headers.origin}/checkout`,
             line_items: [
                 {

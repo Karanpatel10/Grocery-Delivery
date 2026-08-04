@@ -49,8 +49,8 @@ const Products = () => {
   //  if(loading) return <Loading/>
 
   return (
-    <div className="min-h-screen bg-gray-50 py-16">
-      <div className="mx-auto flex max-w-[1600px] flex-col gap-8 px-4 lg:flex-row lg:px-8">
+    <div className="min-h-screen bg-app-cream py-16">
+      <div className="mx-auto flex max-w-[1600px] flex-col flex-wrap gap-8 px-4 lg:flex-row lg:px-8">
       {/* Filter for Desktop view */}
       <aside className="hidden xl:block w-72 shrink-0 py-17">
   <div className="sticky top-25 rounded-2xl border border-gray-100 bg-white shadow-sm">

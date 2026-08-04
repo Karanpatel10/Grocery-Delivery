@@ -5,7 +5,15 @@ import {useAuth} from "../Context/AuthContext"
 const ProtectedRoute = () => {
     const {user,loading}=useAuth()
 
-    if(!user) return <Navigate to='/login' replace/>
+    if (loading) {
+    return <div>Loading...</div>;
+}
+ // or a loading spinner
+
+    if(!user){
+      console.log("User not logged in, redirecting to login page");
+       return <Navigate to='/login' replace/>
+    }
   return (
     <Outlet/>
   )
