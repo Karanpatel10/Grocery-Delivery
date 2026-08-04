@@ -51,8 +51,11 @@ const Checkout = () => {
       console.log(data);
       if(data.url){
         window.location.href=data.url;
+        console.log("Redirecting to Stripe checkout:", data.url);
         return;
       }
+
+      // For non-card payments, clear the cart and navigate to orders page
       clearCart();
       toast.success("Order Placed Successfully");
       navigate('/orders');
