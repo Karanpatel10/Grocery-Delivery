@@ -10,7 +10,7 @@ import { useLoading } from "../Context/LoadingContext";
 const Addresses = () => {
   
   const {setLoading}=useLoading();
-  // const [loading,setLoading]=useState(true);
+  const [loading,setloading]=useState(false);
   const [address, setAddress] = useState<Address[]>([]);
   const [showForm,setShowForm]=useState(false)
   const [editId,setEditId]=useState<string|null>(null)
@@ -64,19 +64,20 @@ const Addresses = () => {
   // Edit and new Address added
   const handleSubmit=async(e:React.SubmitEvent)=>{
     e.preventDefault();
-
+    
     if(!editId && address.length>=4){
             toast.error("Max limit 4 Address Reach.");
             return;
        }
 
     if(form.label === "Home"||form.label ==="Work"){
-      const exists = address.some((item) => item.label === form.label);
+      const exists = address.some((item) => item.label === form.label && item.id !== editId);
         if(exists){
           toast.error(`${form.label} already address exits`)
           return;
         }
     }
+    setloading(true);
     try{
        const coords=await getLocation()??null;
       const payload={...form,...coords};
@@ -95,21 +96,20 @@ const Addresses = () => {
       resetForm();
     }catch(error:any){
         toast.error(error.response?.data?.message||error.message||"Failed")
+    }finally{
+      setloading(false);
     }
   }
 
   const handleDelete=async(id:string)=>{
-    setLoading(true,"content");
     try{
       console.log(id);
           const {data}=await api.delete(`/addresses/${id}`) 
           setAddress(data.addressess || []);
            updateUser({ addresses: data.addressess });
           toast.success("Deleted Address Successfully")
-    }catch(error){
+    }catch(error:any){
      toast.error(error.response?.data?.message||error.message||"Failed")
-    }finally{
-      setLoading(false);
     }
   }
 
@@ -122,7 +122,6 @@ const Addresses = () => {
     }).finally(()=>setLoading(false))     
   },[])
 
-  // if(loading) return <Loading/>;
 
   return (
     <div className='min-h-screen bg-app-cream'>
@@ -138,7 +137,7 @@ const Addresses = () => {
           showForm && ( 
           <>
           <div className='fixed inset-0 bg-black/40 z-50 items-center justify-center' />
-          <div className='fixed inset-0 flex items-center justify-center p-4 z-50 ' onClick={()=>setShowForm(false)}>
+          <div className='fixed inset-0 flex items-center justify-center p-4 z-50 ' onClick={resetForm}>
            <form  onSubmit={handleSubmit} onClick={(e) => e.stopPropagation()} className='max-w-lg rounded-2xl bg-white w-full p-8 space-y-5'>
             <div> 
               <X className='ml-auto cursor-pointer' onClick={()=>{setShowForm(false); resetForm()}}/>
@@ -186,26 +185,55 @@ const Addresses = () => {
          )}
 
         {/* Address list */}
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-15'>
-          {address.map((addr)=>(
-            <div key={addr.id} className='flex flex-row shadow-lg gap-5 bg-white p-5 rounded-lg text-md outline outline-gray-200'>
-              <MapPin/>
-              <div className='flex flex-col'>
-                  <p className='space-x-5 flex items-center'><span className='text-app-green font-bold text-lg'>{addr.label}</span>{(addr.isDefault) && <span className='bg-app-green text-white py-1 px-3 rounded-md inline-flex items-center gap-2 text-sm'><Check className='w-4 h-4'/> Default</span>}</p>
-                  <span>{addr.address}&nbsp;{addr.city}</span>
-                  <span>{addr.state}&nbsp;{addr.zip}</span>
-              </div>
-                <div className='ml-auto flex items-center justify-center gap-10'>
-                  <button className='rounded-full hover:bg-yellow-600 hover:text-white transition-color p-2' onClick={()=>{setEditId(addr.id); setShowForm(true); setForm(addr);}}>
-                    <Pencil/>
-                  </button>
-                  <button className='text-app-error rounded-full hover:bg-app-error hover:text-white transition-color p-2' onClick={()=>handleDelete(addr.id)}>
-                    <Trash2/>
-                  </button>
-                </div>
-             </div> 
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
+  {address.map((addr) => (
+    <div key={addr.id} className="group relative flex gap-4 p-5 rounded-xl border border-gray-200 bg-white hover:border-app-green/40 hover:shadow-md transition-all duration-200">
+      {/* Icon */}
+      <div className="shrink-0 w-11 h-11 rounded-full bg-app-green/10 text-app-green flex items-center justify-center">
+        <MapPin className="w-5 h-5" />
+      </div>
+
+      {/* Address Info */}
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center gap-2 mb-2">
+          <h3 className="text-lg font-semibold text-gray-800">
+            {addr.label}
+          </h3>
+
+          {addr.isDefault && (
+            <span className="bg-app-green/10 text-app-green px-2.5 py-1 rounded-full inline-flex items-center gap-1.5 text-xs font-semibold">
+              <Check className="w-3.5 h-3.5" />
+              Default
+            </span>
+          )}
         </div>
+
+        <p className="text-gray-600 text-sm leading-6">
+          {addr.address}
+        </p>
+
+        <p className="text-gray-500 text-sm">
+          {addr.city}, {addr.state} {addr.zip}
+        </p>
+      </div>
+
+      {/* Actions */}
+      <div className="shrink-0 flex items-start gap-1">
+        <button
+          type="button"
+          aria-label="Edit address"
+          className="p-2.5 rounded-full text-gray-500 hover:text-yellow-600 hover:bg-yellow-50 transition-colors"
+          onClick={() => {setEditId(addr.id);setShowForm(true);setForm(addr);}}>
+          <Pencil className="w-4 h-4" />
+        </button>
+
+        <button type="button" aria-label="Delete address" className="p-2.5 rounded-full text-app-error hover:bg-red-50 transition-colors" onClick={() => handleDelete(addr.id)}>
+          <Trash2 className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
 
       </div>
     </div>

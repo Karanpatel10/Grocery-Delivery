@@ -24,6 +24,7 @@ import DeliveryDashboard from "./Pages/Delivery/DeliveryDashboard"
 import FAQ from "./Pages/FAQ"
 import ContactUs from "./Pages/ContactUs"
 import About from "./Pages/About"
+import Profile from "./Pages/Profile"
 
 const App = () => {
   return (
@@ -40,6 +41,7 @@ const App = () => {
             <Route path="products" element={<Products />} />
             <Route path="products/:id" element={<ProductPage />} />
             <Route path="search" element={<SearchResults />} />
+            <Route path='profile' element={<Profile/>}/>
             <Route path="deals" element={<FlashDeals/>} />
             <Route path="FAQ" element={<FAQ/>}/>
             <Route path="Contact" element={<ContactUs/>}/>

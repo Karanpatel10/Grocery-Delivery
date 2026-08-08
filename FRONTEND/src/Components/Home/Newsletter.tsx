@@ -46,46 +46,12 @@ const Newsletter = () => {
 
 
           {/* Input Box */}
-          <form
-            className="
-              mt-10
-              flex w-full max-w-2xl
-              rounded-full
-              border border-gray-200
-              bg-white
-              p-2
-              shadow-md
-              flex-col
-              sm:flex-row
-            "
-          >
+          <form className="mt-10 flex   md:w-full md:max-w-2xl rounded-full border border-gray-200 bg-white p-2 shadow-md flex-row">
 
-            <input
-              type="email"
-              placeholder="Enter your email address"
-              className="
-                flex-1
-                rounded-full
-                px-6 py-4
-                text-gray-700
-                outline-none
-              "
-            />
+            <input type="email" placeholder="Enter your email address" className="flex-1 rounded-full px-6 py-4 text-gray-700 outline-none"/>
 
 
-            <button
-              className="
-                flex items-center justify-center
-                gap-2
-                rounded-full
-                bg-green-800
-                px-8 py-4
-                font-semibold
-                text-white
-                transition
-                hover:bg-app-green-light
-              "
-            >
+            <button className="flex items-center justify-center gap-2 rounded-full bg-green-800 px-3 py-1 md:px-8 md:py-4 font-semibold text-white transition hover:bg-app-green-light">
               Subscribe
               <Send size={19}/>
             </button>

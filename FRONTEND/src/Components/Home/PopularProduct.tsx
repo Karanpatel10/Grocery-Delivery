@@ -51,14 +51,20 @@ const PopularProduct = () => {
 
         {/* Products */}
         {products.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
-            {products.slice(0, 8).map((prod) => (
-              <ProductsCard
-                key={prod.id}
-                prod={prod}
-                showDiscountTag={false}
-              />
-            ))}
+          <div>
+           {/* Mobile / sm */}
+              <div className="grid justify-items-center grid-cols-1 sm:grid-cols-4 gap-6 md:hidden">
+                {products.slice(0, 4).map((prod) => (
+                  <ProductsCard key={prod.id} prod={prod} showDiscountTag={false} />
+                ))}
+              </div>
+
+              {/* md+ */}
+              <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {products.slice(0, 8).map((prod) => (
+                  <ProductsCard key={prod.id} prod={prod} showDiscountTag={false} />
+                ))}
+              </div>
           </div>
         ) : (
           <div className="flex justify-center items-center py-20">

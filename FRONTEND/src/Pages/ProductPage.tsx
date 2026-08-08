@@ -53,7 +53,7 @@ const ProductPage = () => {
   // if(loading) return <Loading/>
 
   return (
-    <div className='max-w-7xl mx-auto py-35 bg-app-cream px-4 lg:px-8'>
+    <div className='max-w-7xl mx-auto py-35 bg-app-cream sm:px-6 md:px-10 lg:px-20'>
       <button onClick={()=>navigate(-1)} className='flex gap-5 hover:text-app-green hover:scale-95 pb-10'>
         <MoveLeft />Back
        </button> 
@@ -63,7 +63,7 @@ const ProductPage = () => {
             {/* left side */}
             <div className='bg-white relative'>
               {product?.discount > 0 && <div className='inline-flex gap-3 bg-app-orange text-white py-1 px-2 rounded-xl text-sm absolute left-4 top-4'>{product?.discount}% OFF</div>}
-              {product?.isOrganic == true && <div className='inline-flex gap-3 bg-app-green text-white py-1 px-2 rounded-xl text-sm absolute left-22 top-4'><Leaf className='size-5'/>Organic</div>}
+              {product?.isOrganic == true && <div className='inline-flex gap-3 bg-app-green text-white py-1 px-2 rounded-xl text-sm absolute left-22 top-4 ml-1'><Leaf className='size-5'/>Organic</div>}
               <img src={product?.image} alt={product?.name} className='mx-auto hover:scale-110 transition-transform duration-300'/>
             </div>
             {/* Right side */}
@@ -84,14 +84,14 @@ const ProductPage = () => {
                     <p className='text-sm text-app-text-light'>{product?.description}</p>
                     <div>
                       {
-                        product?.stock>0?(<span className='text-sm text-app-success'>✓ In Stock {product?.stock} Available</span>):(<span className='text-sm text-app-error'>Out of Stock</span>)
+                        product?.stock>0?(<span className='text-sm text-app-success'>✓ In Stock {product?.stock} Available</span>):(<span className='text-2xl font-lightbold text-app-error'>Out of Stock</span>)
                       }
                      </div> 
                      <div className="flex items-center gap-5">
-                               {cartItem?.quantity>0 &&<div className='bg-white inline-flex justify-center items-center gap-5 p-2 rounded-full shadow-2xl outline outline-gray-300 '><button className='bg-gray-200 p-2 rounded-full transition-all duration-200 active:scale-95 active:bg-gray-300' onClick={(e)=> {e.stopPropagation();updateQuantity(cartItem.product.id,cartItem.quantity-1)}}><Minus/></button>
+                               {cartItem?.quantity>0 && (<><div className='bg-white inline-flex justify-center items-center gap-5 p-2 rounded-full shadow-2xl outline outline-gray-300 '><button className='bg-gray-200 p-2 rounded-full transition-all duration-200 active:scale-95 active:bg-gray-300' onClick={(e)=> {e.stopPropagation();updateQuantity(cartItem.product.id,cartItem.quantity-1)}}><Minus/></button>
                                 <span className="font-medium">{cartItem?.quantity}</span>
-                                <button className='bg-gray-200 p-2 rounded-full transition-all duration-200 active:scale-85 active:bg-gray-300' onClick={(e)=> {e.stopPropagation();updateQuantity(cartItem.product.id,cartItem.quantity+1)}} ><Plus/></button></div>}
-                                <button className='bg-app-orange flex text-white py-3 px-7 gap-7 rounded-md transition-all duration-200 active:scale-85 active:bg-app-orange-dark' onClick={()=>{cartItem?setIsCartOpen(!isCartOpen):addToCart(product!)}}>{cartItem?(`Go to Cart`):(<><ShoppingCart /> Add to Cart</>)}</button>
+                                <button className='bg-gray-200 p-2 rounded-full transition-all duration-200 active:scale-85 active:bg-gray-300' onClick={(e)=> {e.stopPropagation();updateQuantity(cartItem.product.id,cartItem.quantity+1)}} ><Plus/></button></div>
+                                <button className='bg-app-orange flex text-white py-3 px-7 gap-7 rounded-md transition-all duration-200 active:scale-85 active:bg-app-orange-dark' onClick={()=>{cartItem?setIsCartOpen(!isCartOpen):addToCart(product!)}}>{cartItem?(`Go to Cart`):(<><ShoppingCart /> Add to Cart</>)}</button></>)}
                       </div>
             </div>
            

@@ -1,14 +1,15 @@
-import { ArrowRight, BikeIcon, MapPin, Menu, Package, SearchIcon, Shield, ShoppingCartIcon, SquareArrowRightExit } from "lucide-react";
-import React, { useEffect, useState} from "react";
+import { ArrowRight, BikeIcon, MapPin, Menu, Package, SearchIcon, Shield, ShoppingCartIcon, SquareArrowRightExit,UserPen} from "lucide-react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "../Context/CartContext";
 import {useAuth} from "../Context/AuthContext"
 
 const Navbar =()    => {
+    const menuRef=useRef(null)
      const {user,logout}=useAuth();
      const  {cartCount,isCartOpen,setIsCartOpen} = useCart();
      const [seachQuary,setSearchQuery] = useState('');
-     const [userMenuOpen,setUserMenuOpen] = useState(false);
+     const [userMenuOpen,setUserMenuOpen] = useState<"mobile"|"user"|null>(null);
      const [scrolled,setScrolled]=useState(false);
      const isHomePage = useLocation().pathname === '/';   
      
@@ -24,7 +25,7 @@ const Navbar =()    => {
 
      const handleLogout=()=>{
         logout();
-        setUserMenuOpen(false);
+        setUserMenuOpen(null);
         navigate('/');
      }
 
@@ -37,6 +38,7 @@ const Navbar =()    => {
      ];
 
      const subMenuData = [
+        {name:'My Account',path:'/profile',icon:<UserPen/>},
         {name:'My Orders',path:'/orders',icon:<Package/>},
         {name:'Addresses',path:'/addresses',icon:<MapPin/>},
         {name:'Products',path:'/products',icon:<Package/>},
@@ -57,6 +59,24 @@ const Navbar =()    => {
         };
      },[])
      
+
+     useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+        if (
+        menuRef.current &&
+        !(menuRef.current as HTMLElement).contains(e.target as Node)
+        ) {
+        setUserMenuOpen(null);
+        }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
 
     return (
         <nav className={`w-full h-16 flex items-center justify-between px-6  fixed top-0 z-50   ${isHomePage && !scrolled ?  "bg-transparent text-white":"bg-white text-gray-800 border-b border-app-border shadow-md"} transition-colors`}>
@@ -85,7 +105,7 @@ const Navbar =()    => {
             
 
             
-            <div className="flex items-center space-x-5">
+            <div className="flex items-center space-x-5" ref={menuRef}>
                 {/* Search */}
                 <form className="hidden md:flex gap-3 items-center" onSubmit={handleSearch}>
                     <SearchIcon className="size-6"/>
@@ -110,8 +130,8 @@ const Navbar =()    => {
 
                 {/* Mobile view - Menu */}
                  <div className="md:hidden">
-                                <Menu className="size-6 text-gray-600 cursor-pointer" onClick={()=>setUserMenuOpen(!userMenuOpen)}/>
-                            { userMenuOpen && (
+                                <Menu className="size-6 text-gray-600 cursor-pointer" onClick={()=>setUserMenuOpen(userMenuOpen === "mobile" ? null : "mobile")}/>
+                             {userMenuOpen === "mobile" && (
                                     <div className="absolute top-16 left-0 right-0 bg-white shadow-lg py-4">
                                         {linkData.map((link) => (
                                             <Link to={link.path} key={link.name}>
@@ -125,7 +145,8 @@ const Navbar =()    => {
                     {/* User */}
                     <div className="relative">
                     {user ? (
-                       <button className="flex items-center bg-app-green text-white px-4 py-2 rounded-full hover:bg-green-700 transition-colors shrink-0" onClick={()=>setUserMenuOpen(!userMenuOpen)}>
+                       <button className="flex items-center bg-app-green text-white px-4 py-2 rounded-full hover:bg-green-700 transition-colors shrink-0" onClick={() =>setUserMenuOpen(userMenuOpen === "user" ? null : "user")}
+>
                             <div className="flex items-center font-bold">
                                 {user.name.charAt(0).toUpperCase()}
                             </div>
@@ -137,8 +158,8 @@ const Navbar =()    => {
                     )}
 
                      {
-                        user && userMenuOpen && (
-                            <div className="absolute right-0 top-14 z-50 w-64 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl animate-in fade-in zoom-in-95 duration-200" onClick={(e)=>{e.stopPropagation(); setUserMenuOpen(false)}}>
+                        user && userMenuOpen === "user" && (
+                            <div className="absolute right-0 top-14 z-50 w-64 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl animate-in fade-in zoom-in-95 duration-200" onClick={(e)=>{e.stopPropagation(); setUserMenuOpen(userMenuOpen === "user" ? null : "user")}}>
                                 <div className="border-b border-gray-100 bg-gradient-to-r from-orange-50 to-white p-5">
                                 <div className="flex items-center gap-3">
                                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-500 text-lg font-bold text-white">

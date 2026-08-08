@@ -15,7 +15,7 @@ const Checkout = () => {
 
   const navigate=useNavigate()
   const currency=import.meta.env.VITE_CURRENCY_SYMBOL||'$';
-
+  
   const {items,cartTotal,clearCart}=useCart();
   const {user,loading}=useAuth();
 
@@ -70,7 +70,7 @@ const Checkout = () => {
       const defAddr=user.addresses.find((a)=>a.isDefault)||setAddress(user.addresses[0]);
         setAddress({id:defAddr?.id,label:defAddr?.label,address:defAddr?.address,city:defAddr?.city,state:defAddr?.state,zip:defAddr?.zip,isDefault:defAddr?.isDefault,lat:defAddr?.lat,lng:defAddr?.lng})
     }
-  },[user])
+     },[user])
 
   return (
     <div className='bg-app-cream min-h-screen py-25'>

@@ -54,13 +54,13 @@ const ProductsCard = ({prod,showDiscountTag}:{prod:Product;showDiscountTag:boole
     {showDiscountTag && (
       <div className="absolute -top-8 right-4 bg-white rounded-full shadow-lg p-1 flex justify-center item-center">
         {quantity === 0 ? (
-          <button
+          <button disabled={prod.stock === 0}
             onClick={(e) => {
               e.stopPropagation();
               addToCart(prod, 1);
             }}
           >
-            <CirclePlus className="size-8 text-white fill-app-orange transition-all duration-200 active:scale-95 active:fill-app-orange-dark" />
+            <CirclePlus className={`size-8 text-white  transition-all duration-200  ${prod.stock ===0 ?'fill-gray-400':'fill-app-orange active:scale-95 active:fill-app-orange-dark'}`} />
           </button>
         ) : (
           <div className="flex items-center justify-center gap-2 bg-white rounded-full px-2 py-1 shadow">

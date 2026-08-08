@@ -1,18 +1,22 @@
 import {useState,useEffect} from 'react'
-import { Link } from "react-router-dom";
+import { Link,useSearchParams,useNavigate} from "react-router-dom";
 import type {Order} from "../types";
 import {dummyDashboardOrdersData,statusColors} from '../assets/assets'
 import { Package,Calendar1,ChevronRight} from 'lucide-react';
 import api from '../config/api';
 // import Loading from '../Components/Loading';
 import { useLoading } from "../Context/LoadingContext";
+import { useCart } from "../Context/CartContext";
 
 const MyOrder = () => {
 
   const currency=import.meta.env.VITE_CURRENCY_SYMBOL||"$";
   const [orders,setOrders] = useState<Order[]>([]);
   const [activeTab,setActiveTab]=useState('all');
+  const [searchParams]=useSearchParams();
 //   const [loading,setLoading]=useState(true);
+const navigate=useNavigate()
+const {clearCart}=useCart();
 const {setLoading}=useLoading()
 
   const fetchOrders = async () => {
@@ -28,14 +32,22 @@ const {setLoading}=useLoading()
     }
   };
 
-  useEffect(() => {
+useEffect(()=>{
     fetchOrders();
-  },[]);
+},[])
 
-//   if(loading) return <Loading/>
+  useEffect(() => {
+     if(searchParams.get('payment')==='success'){
+      clearCart();
+      navigate("/orders", { replace: true });
+     }
+    
+  },[searchParams]);
+
+
 
   return (
-    <div className='bg-app-cream py-25 min-h-screen'>
+    <div className='bg-app-cream py-25 min-h-screen px-4 sm:px-6 md:px-10 lg:px-20'>
        <div className='mx-auto max-w-7xl'>
         <h1 className="text-3xl font-bold text-app-green">My Orders</h1>
         <div className="mt-6">
