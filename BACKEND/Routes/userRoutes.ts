@@ -1,9 +1,10 @@
 import express from 'express'
 import auth from '../middleware/auth.js';
-import { getUSerInfo } from '../Controllers/userController.js';
+import { getUserInfo, updateUserInfo } from '../Controllers/userController.js';
 
 const userRoute=express.Router();
 
-userRoute.get("/",auth,getUSerInfo);
+userRoute.get("/",auth,getUserInfo);
+userRoute.patch("/",auth,updateUserInfo);
 
 export default userRoute

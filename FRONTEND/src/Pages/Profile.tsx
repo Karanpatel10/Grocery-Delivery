@@ -1,21 +1,44 @@
 import { Camera, Mail, MapPin, Pencil, Phone, User } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import api from "../config/api";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const [profile, setProfile] = useState({
-    name: "John Doe",
-    email: "john@example.com",
-    phone: "+1 234 567 890",
-  });
+  const [profile, setProfile] = useState({});
+
+  const fetchUser=async()=>{
+    try{
+        const {data}=await api.get("/user");
+        console.log(data)
+        setProfile(data.user)
+    }catch(error:any){
+        console.log(error.message);
+        toast.error(error.message);
+    }
+  }
+
+  const updateProfile = async() => {
+    try{
+        const {data}=await api.patch('/user',profile);
+         setProfile(data.user);
+        toast.success("Profile updated successfully");
+    }catch(error:any){
+        console.log(error.message);
+        toast.error(error.response?.data?.message || "Failed to update profile");
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setProfile({
-      ...profile,
-      [e.target.name]: e.target.value,
-    });
-  };
+        setProfile({...profile,[e.target.name]: e.target.value,
+        });
+    };
+
+
+  useEffect(()=>{
+    fetchUser();
+  },[])
 
   return (
     <section className="min-h-screen bg-app-cream py-50 px-5">
