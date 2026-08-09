@@ -7,7 +7,7 @@ export const getUserInfo=async(req:Request,res:Response)=>{
             if (!userId) {
                 return res.status(401).json({message: "Unauthorized"});
             }
-            const user=await prisma.user.findUnique({where: {id: userId,},select: {id: true,name: true,email: true,phone: true,createdAt: true,Addresses:true},});
+            const user=await prisma.user.findUnique({where: {id: userId,},select: {id: true,name: true,email: true,phone: true,createdAt: true,addresses:true},});
             if (!user) {
                 return res.status(404).json({message: "User not found",});
             }
