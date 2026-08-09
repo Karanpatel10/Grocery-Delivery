@@ -7,7 +7,7 @@ export const getUserInfo=async(req:Request,res:Response)=>{
             if (!userId) {
                 return res.status(401).json({message: "Unauthorized"});
             }
-            const user=await prisma.user.findUnique({where: {id: userId,},select: {id: true,name: true,email: true,phone: true,createdAt: true,},});
+            const user=await prisma.user.findUnique({where: {id: userId,},select: {id: true,name: true,email: true,phone: true,createdAt: true,Addresses:true},});
             if (!user) {
                 return res.status(404).json({message: "User not found",});
             }
@@ -18,7 +18,7 @@ export const getUserInfo=async(req:Request,res:Response)=>{
 // PUT/api/user
 
 export const updateUserInfo=async(req:Request,res:Response)=>{
-    const {name,email,phone}=req.body;
+    const {name,phone}=req.body;
     const userId=req.user?.id;
     if (!userId) {
                 return res.status(401).json({message: "Unauthorized"});

@@ -2,16 +2,18 @@ import { Camera, Mail, MapPin, Pencil, Phone, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import api from "../config/api";
+import { useAuth } from "../Context/AuthContext";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
-
   const [profile, setProfile] = useState({});
+  const {updateUser}=useAuth();
 
   const fetchUser=async()=>{
     try{
         const {data}=await api.get("/user");
         console.log(data)
+        updateUser(data.user);
         setProfile(data.user)
     }catch(error:any){
         console.log(error.message);
@@ -21,8 +23,9 @@ const Profile = () => {
 
   const updateProfile = async() => {
     try{
-        const {data}=await api.patch('/user',profile);
+        const {data}=await api.patch('/user',profile);       
          setProfile(data.user);
+          updateUser(data.user);
         toast.success("Profile updated successfully");
     }catch(error:any){
         console.log(error.message);
@@ -83,7 +86,7 @@ const Profile = () => {
               <button
                 type="button"
                 onClick={() => setIsEditing(!isEditing)}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-2 px-5 py-2.5  rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors active:scale-95 duration-200"
               >
                 <Pencil className="w-4 h-4" />
                 {isEditing ? "Cancel" : "Edit Profile"}
@@ -141,20 +144,12 @@ const Profile = () => {
                   </span>
                 </div>
 
-                {isEditing ? (
-                  <input
-                    type="email"
-                    name="email"
-                    value={profile.email}
-                    onChange={handleChange}
-                    className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-app-green focus:ring-2 focus:ring-app-green/10"
-                  />
-                ) : (
+               <div>
                   <p className="font-medium text-gray-800 break-all">
                     {profile.email}
                   </p>
-                )}
-              </div>
+                </div>
+              </div> 
 
               {/* Phone */}
               <div className="p-5 rounded-xl bg-gray-50 border border-gray-100">
@@ -207,7 +202,7 @@ const Profile = () => {
               <div className="flex justify-end mt-6">
                 <button
                   type="button"
-                  onClick={() => setIsEditing(false)}
+                  onClick={() => {setIsEditing(false);updateProfile()}}
                   className="px-6 py-2.5 rounded-lg bg-app-green text-white font-medium hover:bg-green-700 transition-colors"
                 >
                   Save Changes
