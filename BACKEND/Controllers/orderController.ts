@@ -84,10 +84,6 @@ export const createOrder=async(req:Request,res:Response)=>{
                 orderId:order.id    
             }
             });
-            console.log("Stripe session created:", session.url);    
-            console.log("Order created with card payment:", order);
-            console.log("Order ID:", order.id);
-            console.log("session:", session);
             return res.json({url:session.url})
         } catch (error) {
             console.error("Error creating Stripe session:", error);
@@ -110,8 +106,7 @@ export const createOrder=async(req:Request,res:Response)=>{
         await inngest.send({name:"inventory/stock.updated",data:{productId:item.product}})
     }
         try{
-            const result=await inngest.send({name:'order/placed',data:{orderId:order.id}})
-            console.log("Inngest send result:", result);
+            await inngest.send({name:'order/placed',data:{orderId:order.id}})
         } catch (error) {
              console.error("Inngest send failed:", error);
         }
@@ -122,17 +117,12 @@ export const createOrder=async(req:Request,res:Response)=>{
 
 export const getUserOrders=async(req:Request,res:Response)=>{
    try{
-    console.log("Step 1");
-    console.log(req.user);
     const {status}=req.query;
         const where:any={userId:req.user!.id,NOT:[{paymentMethod:"card",isPaid:false}]};
-    console.log("Step 2", where);
         if(status && status!=="all"){
             where.status=status;
         }
- 
         const orders=await prisma.order.findMany({where,include:{deliveryPartner:{select:{name:true,phone:true}}},orderBy:{createdAt:"desc"}});
-    console.log("Step 3", orders);
         res.status(200).json({message:"User orders fetched successfully",orders})
    }catch(error){
     console.log(error);

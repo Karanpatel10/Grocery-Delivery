@@ -207,11 +207,11 @@ const sendPaymentReceipt=inngest.createFunction({
         reason: "Order not found",
       };
     }
-console.log(order);
+console.log("Receipt order data",order);
     const orderItems = Array.isArray(order.items)
   ? order.items
   : [];
- console.log(orderItems);
+ console.log("Receipt item data:",orderItems);
     // await step.run("send-receipt", async () => {
     //   await sendEmail({
     //     to: order.email, // adjust to your actual field
@@ -401,10 +401,10 @@ console.log(order);
     //   });
     // });
 
-    return {
-      sent: true,
-      orderId,
-    };
+    // return {
+    //   sent: true,
+    //   orderId,
+    // };
 })
 
 export const functions = [checkLowStock,sendMonthlyOffer,autoAssignOrders,sendPaymentReceipt];
