@@ -188,4 +188,222 @@ const autoAssignOrders=inngest.createFunction({
     return result
 })
 
-export const functions = [checkLowStock,sendMonthlyOffer,autoAssignOrders];
+
+// Send Payment Receipt
+const sendPaymentReceipt=inngest.createFunction({
+    id: "send-order-receipt",
+    name: "Send order receipt",
+    triggers: [{ event: "order/placed" }],
+   
+},async({event,step})=>{
+    const {orderId}=event.data;
+    const order = await step.run("fetch-order", async () => {
+      return prisma.order.findUnique({where: { id: orderId },});
+    });
+
+    if (!order) {
+      return {
+        skipped: true,
+        reason: "Order not found",
+      };
+    }
+console.log(order);
+    const orderItems = Array.isArray(order.items)
+  ? order.items
+  : [];
+ console.log(orderItems);
+    // await step.run("send-receipt", async () => {
+    //   await sendEmail({
+    //     to: order.email, // adjust to your actual field
+    //     subject: `Payment Receipt - Order #${order.id}`,
+    //     body: `
+    //     <!DOCTYPE html>
+    //     <html>
+    //     <head>
+    //     <meta charset="UTF-8" />
+    //     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    //     <title>Payment Receipt</title>
+    //     </head>
+
+    //     <body style="margin: 0;padding: 0;background-color: #f3f4f6;font-family: Arial, Helvetica, sans-serif;color: #111827;">
+
+    //     <div style="width: 100%;padding: 40px 16px;box-sizing: border-box;">
+
+    //         <div style="max-width: 620px;margin: 0 auto;background: #ffffff;border-radius: 18px;overflow: hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
+
+    //         <!-- Header -->
+    //         <div style="background: linear-gradient(135deg, #16a34a, #22c55e);padding: 34px 30px;text-align: center;">
+
+    //             <div style="width: 58px;height: 58px;margin: 0 auto 16px;background: rgba(255,255,255,0.18);border-radius: 50%;line-height: 58px;font-size: 28px;color: #ffffff;">
+    //             ✓
+    //             </div>
+
+    //             <h1 style="margin: 0;color: #ffffff;font-size: 25px;font-weight: 700;">
+    //             Payment Successful
+    //             </h1>
+
+    //             <p style="margin: 10px 0 0;color: rgba(255,255,255,0.9);font-size: 14px;">
+    //             Thank you for your order!
+    //             </p>
+
+    //         </div>
+
+
+    //         <!-- Receipt Content -->
+    //         <div style="padding: 32px 30px;">
+
+    //             <!-- Order Info -->
+    //             <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px;">
+    //                 <tr>
+    //                     <td style="width: 50%;vertical-align: top;">
+    //                     <p style="margin: 0 0 6px;color: #9ca3af;font-size: 12px;text-transform: uppercase;letter-spacing: 0.5px;">
+    //                         Order Number
+    //                     </p>
+    //                     <p style="margin: 0;color: #111827;font-size: 15px;font-weight: 700;">
+    //                         #${order.id}
+    //                     </p>
+    //                     </td>
+    //                     <td style="width: 50%;text-align: right;vertical-align: top;">
+    //                     <p style="margin: 0 0 6px;color: #9ca3af;font-size: 12px;text-transform: uppercase;letter-spacing: 0.5px;">
+    //                         Payment Status
+    //                     </p>
+    //                     <span style="display: inline-block;background: #dcfce7;color: #15803d;padding: 6px 12px;border-radius: 20px;font-size: 12px;font-weight: 700;">
+    //                         PAID
+    //                     </span>
+    //                     </td>
+    //                 </tr>
+    //             </table>
+
+
+    //             <!-- Divider -->
+    //             <div style="height: 1px;background: #e5e7eb;margin-bottom: 24px;"></div>
+
+
+    //             <!-- Items -->
+    //             <h3 style="margin: 0 0 16px;color: #111827;font-size: 17px;">
+    //             Order Summary
+    //             </h3>
+
+
+    //             ${orderItems.map((item: any) => `
+    //             <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 16px;">
+    //                 <tr>
+    //                 <td style="width: 52px;vertical-align: middle;">
+    //                     ${
+    //                     item.image
+    //                         ? `<img src="${item.image}"width="48" height="48" style="display: block;border-radius: 10px;object-fit: cover;"/>`:
+    //                          `<div style="width: 48px;height: 48px;background: #f3f4f6;border-radius: 10px;text-align: center;line-height: 48px;font-size: 20px;">
+    //                             🛒
+    //                         </div>`
+    //                     }
+    //                 </td>
+    //                 <td style="padding-left: 12px;vertical-align: middle;">
+    //                     <p style="margin: 0 0 4px;color: #111827;font-size: 14px;font-weight: 600;">
+    //                     ${item.name}
+    //                     </p>
+    //                     <p style="margin: 0;color: #9ca3af;font-size: 12px;">
+    //                     Qty: ${item.quantity}
+    //                     </p>
+    //                 </td>
+    //                 <td style="text-align: right;vertical-align: middle;font-size: 14px;font-weight: 700;color: #111827;">
+    //                     $${(item.price * item.quantity).toFixed(2)}
+    //                 </td>
+    //                 </tr>
+    //             </table>
+    //             `).join("")}
+
+
+    //             <!-- Divider -->
+    //             <div style="height: 1px;background: #e5e7eb;margin: 24px 0;"></div>
+
+
+    //             <!-- Totals -->
+    //             <table width="100%" cellpadding="0" cellspacing="0">
+    //                 <tr>
+    //                     <td style="padding: 6px 0;color: #6b7280;font-size: 14px;">
+    //                     Subtotal
+    //                     </td>
+    //                     <td style="padding: 6px 0;text-align: right;color: #374151;font-size: 14px;">
+    //                     $${order.subtotal?.toFixed(2) ?? "0.00"}
+    //                     </td>
+    //                 </tr>
+    //                 <tr>
+    //                     <td style="padding: 6px 0;color: #6b7280;font-size: 14px;">
+    //                     Delivery
+    //                     </td>
+    //                     <td style="padding: 6px 0;text-align: right;color: #374151;font-size: 14px;">
+    //                     $${order.deliveryFee?.toFixed(2) ?? "0.00"}
+    //                     </td>
+    //                 </tr>
+    //                 <tr>
+    //                     <td colspan="2">
+    //                     <div style="height: 1px;background: #e5e7eb;margin: 12px 0;"></div>
+    //                     </td>
+    //                 </tr>
+    //                 <tr>
+    //                     <td style="padding: 4px 0;color: #111827;font-size: 18px;font-weight: 700;">
+    //                     Total Paid
+    //                     </td>
+    //                     <td style="padding: 4px 0;text-align: right;color: #16a34a;font-size: 21px;font-weight: 700;">
+    //                     $${order.total?.toFixed(2) ?? "0.00"}
+    //                     </td>
+    //                 </tr>
+    //             </table>
+
+
+    //             <!-- Payment Info -->
+    //             <div style="margin-top: 28px;background: #f9fafb;border-radius: 12px;padding: 18px;">
+    //                 <p style="margin: 0 0 8px;color: #374151;font-size: 13px;font-weight: 600;">
+    //                     Payment Information
+    //                 </p>
+    //                 <p style="margin: 4px 0;color: #6b7280;font-size: 12px;">
+    //                     Payment method: Card
+    //                 </p>
+    //                 <p style="margin: 4px 0;color: #6b7280;font-size: 12px;">
+    //                     Payment status:
+    //                     <span style="color: #16a34a; font-weight: 600;">
+    //                     Successful
+    //                     </span>
+    //                 </p>
+    //             </div>
+
+
+    //             <!-- Thank You -->
+    //             <div style="text-align: center;margin-top: 32px;">
+    //                 <p style="margin: 0;color: #374151;font-size: 14px;">
+    //                     Thank you for shopping with us! 💚
+    //                 </p>
+    //                 <p style="margin: 8px 0 0;color: #9ca3af;font-size: 12px;line-height: 1.5;">
+    //                     Your order has been confirmed and is being prepared.
+    //                 </p>
+    //             </div>
+
+    //         </div>
+
+
+    //         <!-- Footer -->
+    //         <div style="background: #f9fafb;padding: 22px 30px;text-align: center;border-top: 1px solid #e5e7eb;">
+    //             <p style="margin: 0;color: #6b7280;font-size: 12px;">
+    //             This is your payment receipt.
+    //             </p>
+    //             <p style="margin: 6px 0 0;color: #9ca3af;font-size: 11px;">
+    //             © ${new Date().getFullYear()} Your Store. All rights reserved.
+    //             </p>
+    //         </div>
+
+    //         </div>
+
+    //     </div>
+
+    //     </body>
+    //     </html>
+    //     `,
+    //   });
+    // });
+
+    return {
+      sent: true,
+      orderId,
+    };
+}
+export const functions = [checkLowStock,sendMonthlyOffer,autoAssignOrders,sendPaymentReceipt];

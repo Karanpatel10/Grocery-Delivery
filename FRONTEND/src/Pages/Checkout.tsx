@@ -17,8 +17,8 @@ const Checkout = () => {
   const currency=import.meta.env.VITE_CURRENCY_SYMBOL||'$';
   
   const {items,cartTotal,clearCart}=useCart();
-  const {user,loading}=useAuth();
-
+  const {user}=useAuth();
+  const [loading,setLoading]=useState(false);
   const [address,setAddress]=useState<Address>({
     id:"",label:"Home",address:"",city:"",state:"",zip:"",isDefault:false,lat:0,lng:0
   });
@@ -37,6 +37,7 @@ const Checkout = () => {
   ]
 
   const handlePlaceOrder=async()=>{
+    setLoading(true);
     try{
       const orderData={
         items:items.map((item)=>({
@@ -62,7 +63,6 @@ const Checkout = () => {
     }catch(error:any){
       toast.error(error.response?.data?.message||error.message);
     }
-    
   }
 
   useEffect(()=>{
@@ -73,7 +73,7 @@ const Checkout = () => {
      },[user])
 
   return (
-    <div className='bg-app-cream min-h-screen py-25'>
+    <div className='bg-app-cream min-h-screen py-25 px-5 md:px-20'>
       <div className='max-w-7xl mx-auto'>
         {items.length<=0?
           <div className='flex flex-col justify-center items-center gap-2'>

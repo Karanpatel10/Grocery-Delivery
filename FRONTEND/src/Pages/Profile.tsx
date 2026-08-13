@@ -1,4 +1,4 @@
-import { Camera, Mail, MapPin, Pencil, Phone} from "lucide-react";
+import { Camera, Mail, MapPin, Pencil, Phone,User2} from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import api from "../config/api";
@@ -74,7 +74,7 @@ const Profile = () => {
               <div className="relative">
                 <div className="w-28 h-28 rounded-full bg-white p-1 shadow-md">
                   <div className="w-full h-full rounded-full bg-app-green/10 flex items-center justify-center text-app-green">
-                    {/* <User className="w-12 h-12" /> */}
+                    <User2 className="w-12 h-12" />
                   </div>
                 </div>
 
@@ -113,7 +113,7 @@ const Profile = () => {
               <div className="p-5 rounded-xl bg-gray-50 border border-gray-100">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-9 h-9 rounded-lg bg-app-green/10 text-app-green flex items-center justify-center">
-                    {/* <User className="w-4 h-4" /> */}
+                    <User2 className="w-4 h-4" />
                   </div>
 
                   <span className="text-sm text-gray-500">
