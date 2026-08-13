@@ -56,7 +56,7 @@ const checkLowStock = inngest.createFunction(
 
 // Month offer Email (1st of every month-payday)
 
-const sendMonthlyOffer=inngest.createFunction({id:"send-monthly offers",name:"monthly payday offer",triggers:[{cron:"0 10 1 * *"}]
+const sendMonthlyOffer=inngest.createFunction({id:"send-monthly-offers",name:"monthly payday offer",triggers:[{cron:"0 10 1 * *"}]
 },async({step})=> {
     const {users,deals}=await step.run("fetch-deals-and-users",async()=>{
       // Get top discounted products as featured deals
