@@ -405,5 +405,6 @@ console.log(order);
       sent: true,
       orderId,
     };
-}
+})
+
 export const functions = [checkLowStock,sendMonthlyOffer,autoAssignOrders,sendPaymentReceipt];
