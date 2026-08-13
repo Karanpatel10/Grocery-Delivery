@@ -23,6 +23,6 @@ export const updateUserInfo=async(req:Request,res:Response)=>{
     if (!userId) {
                 return res.status(401).json({message: "Unauthorized"});
     }
-    const user=await prisma.user.update({where:{id:userId},data:{name,email,phone},select:{id:true,name:true,email:true,phone:true}})
+    const user=await prisma.user.update({where:{id:userId},data:{name,phone},select:{id:true,name:true,email:true,phone:true,createdAt:true,addresses:true}})
     return res.status(200).json({message:'Profile update Successfully',user})
 }

@@ -34,12 +34,12 @@ const Newsletter = () => {
 
           {/* Title */}
           <h2
-            className="mt-8 text-3xl md:text-5xl font-medium text-gray-800">
+            className="mt-8 text-2xl md:text-5xl font-medium text-gray-800">
             Subscribe to Our Newsletter
           </h2>
 
 
-          <p className="mt-5 max-w-xl text-lg text-gray-600 leading-relaxed">
+          <p className="mt-5 max-w-xl text-sm md:text-lg text-gray-600 leading-relaxed">
             Stay updated with fresh arrivals, seasonal offers,
             exclusive discounts, and healthy grocery tips.
           </p>
@@ -51,7 +51,7 @@ const Newsletter = () => {
             <input type="email" placeholder="Enter your email address" className="flex-1 rounded-full px-6 py-4 text-gray-700 outline-none"/>
 
 
-            <button className="flex items-center justify-center gap-2 rounded-full bg-green-800 px-3 py-1 md:px-8 md:py-4 font-semibold text-white transition hover:bg-app-green-light">
+            <button className="flex items-center justify-center gap-2 rounded-full bg-green-800 px-1 py-1 md:px-8 md:py-4 font-semibold text-white transition hover:bg-app-green-light">
               Subscribe
               <Send size={19}/>
             </button>

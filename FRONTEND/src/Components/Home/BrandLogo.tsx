@@ -1,69 +1,91 @@
 import { brandLogo } from "../../assets/assets"
+import { motion } from "motion/react";
 
 
 const BrandLogo=()=>{
+
+    // Container animation
+     const containerVariants = { hidden: {}, visible: { transition: { staggerChildren: 0.08, }, }, }; 
+    // Individual logo animation 
+     const logoVariants = { hidden: { opacity: 0, y: 25, scale: 0.9, }, visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1], }, }, };
+
+     const brands = [ { name: "Maggi", logo: brandLogo.maggiLogo }, 
+                    { name: "India Gate", logo: brandLogo.indiaGatelogo }, 
+                    { name: "Lays", logo: brandLogo.laysLogo }, 
+                    { name: "Himalaya", logo: brandLogo.himalayalogo }, 
+                    { name: "Pepsi", logo: brandLogo.pepsilogo }, 
+                    { name: "Amul", logo: brandLogo.amullogo }, 
+                    { name: "Godrej", logo: brandLogo.Godrejlogo }, 
+                    { name: "Balaji", logo: brandLogo.balajilogo }, 
+                    { name: "Britannia", logo: brandLogo.britannialogo }, 
+                    { name: "Nestle", logo: brandLogo.nestlelogo }, 
+                    { name: "Parle", logo: brandLogo.parlelogo }, 
+                    { name: "Surf Excel", logo: brandLogo.surfExcellogo }, 
+                    { name: "Bikaji", logo: brandLogo.bikajilogo }, 
+                    { name: "Wagh Bakri", logo: brandLogo.waghBakrilogo }, 
+                    { name: "Ching's", logo: brandLogo.chinglogo }, ];
+
     return(
         <section className="bg-white py-20">
-        <div className="text-center pb-20">
-            <span className="inline-block rounded-full bg-orange-100 px-4 py-2 text-sm font-semibold text-orange-600">
+        <motion.div className="text-center pb-20" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], }}>
+            <motion.span className="inline-block rounded-full bg-orange-100 px-4 py-2 text-sm font-semibold text-orange-600" whileHover={{ scale: 1.05, }}>
                 Trusted Brands
-            </span>
+            </motion.span>
 
-            <h2 className="mt-5 text-4xl font-bold text-gray-900">
+            <h2 className="mt-5 text-2xl md:text-4xl font-bold text-gray-900">
                 Shop from Top Grocery Brands
             </h2>
 
             <p className="mt-3 text-gray-500 max-w-2xl mx-auto">
                 Bringing you premium quality products from the most trusted brands worldwide.
             </p>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mt-16 w-max mx-auto">
-            <div className="hover:bg-green-50 flex items-center justify-center h-16 w-44 sm:w-60 sm:h-20 border border-slate-300 border-t-0 border-l-0">
-                <img src={brandLogo.maggiLogo} alt="logo" className="w-35 h-20 p-3"/>
-            </div>
-            <div className="hover:bg-green-50 flex items-center justify-center h-16 w-44 sm:w-60 sm:h-20 border border-slate-300 border-t-0 border-x-0 md:border-r">
-                <img src={brandLogo.indiaGatelogo} alt="logo" className="w-35 h-20 p-3"/>
-            </div>
-            <div className="hover:bg-green-50 flex items-center justify-center h-16 w-44 sm:w-60 sm:h-20 border border-slate-300 hidden md:flex md:border-t-0 md:border-x-0 lg:border-r">
-                <img src={brandLogo.laysLogo} alt="logo" className="w-35 h-20 p-3"/>
-            </div>
-            <div className="hover:bg-green-50 flex items-center justify-center h-16 w-44 sm:w-60 sm:h-20 border border-slate-300 hidden lg:flex lg:border-x-0 lg:border-t-0">
-                <img src={brandLogo.himalayalogo} alt="logo" className="w-35 h-20 p-3"/>
-            </div>
-            <div className="hover:bg-green-50 flex items-center justify-center h-30 w-44 sm:w-60 sm:h-20 border border-slate-300 hidden xl:flex xl:border-t-0 xl:border-r-0">
-                <img src={brandLogo.pepsilogo} alt="logo" className="w-35 h-20 p-3"/>
-            </div>
-            <div className="hover:bg-green-50 flex items-center justify-center h-30 w-44 sm:w-60 sm:h-30 border border-slate-300 border-y-0 border-x-0 border-r md:hidden lg:flex lg:border-b">
-                <img src={brandLogo.amullogo} alt="logo" className="w-35 h-20 p-3"/>
-            </div>
-            <div className="hover:bg-green-50 flex items-center justify-center h-30 w-44 sm:w-60 sm:h-30 border border-slate-300 border-y-0 border-x-0 md:border-r md:border-b">
-                <img src={brandLogo.Godrejlogo} alt="logo" className="w-35 h-20 p-3"/>
-            </div>
-            <div className="hover:bg-green-50 flex items-center justify-center h-30 w-44 sm:w-60 sm:h-30 border border-slate-300 border-x-0 border-r md:border-t-0">          
-                <img src={brandLogo.balajilogo} alt="logo" className="w-35 h-20 p-3"/>
-            </div>
-            <div className="hover:bg-green-50 flex items-center justify-center h-30 w-44 sm:w-60 sm:h-30 border border-slate-300 border-x-0 md:border-t-0">
-                <img src={brandLogo.britannialogo} alt="logo" className="w-35 h-20 p-3  "/>
-            </div>
-            <div className="hover:bg-green-50 flex items-center justify-center h-30 w-44 sm:w-60 sm:h-30 border border-slate-300 hidden xl:flex xl:border-t-0 xl:border-r-0">
-                <img src={brandLogo.nestlelogo} alt="logo" className="w-35 h-20 p-3"/>
-            </div>
-            <div className="hover:bg-green-50 flex items-center justify-center h-16 w-44 sm:w-60 sm:h-20 border border-slate-300 hidden xl:flex xl:border-y-0 xl:border-l-0">
-                <img src={brandLogo.parlelogo} alt="logo" className="w-35 h-20 p-3"/>
-            </div>
-            <div className="hover:bg-green-50 flex items-center justify-center h-16 w-44 sm:w-60 sm:h-20 border border-slate-300 hidden lg:flex lg:border-y-0 lg:border-l-0">
-                <img src={brandLogo.surfExcellogo} alt="logo" className="w-35 h-20 p-3"/>
-            </div>
-            <div className="hover:bg-green-50 flex items-center justify-center h-16 w-44 sm:w-60 sm:h-20 border border-slate-300 hidden md:flex md:border-l-0 md:border-y-0">
-                <img src={brandLogo.bikajilogo} alt="logo" className="w-35 h-20 p-3"/>
-            </div>
-            <div className="hover:bg-green-50 flex items-center justify-center h-16 w-44 sm:w-60 sm:h-20 border border-slate-300 border-x-0 border-y-0 border-r xl:border-r-0">
-                <img src={brandLogo.waghBakrilogo} alt="logo" className="w-35 h-20 p-3"/>
-            </div>
-            <div className="hover:bg-green-50 flex items-center justify-center h-16 w-44 sm:w-60 sm:h-20 border border-slate-300 border-x-0 border-y-0 xl:border-l">
-                <img src={brandLogo.chinglogo} alt="logo" className="w-35 h-20 p-3"/>
-            </div>
-        </div>
+        </motion.div>
+       <motion.div
+  className="grid grid-cols-3 md:grid-cols-5 mt-16 w-max mx-auto"
+  variants={containerVariants}
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true, amount: 0.2 }}
+>
+  {brands.map((brand, index) => (
+    <motion.div
+  key={brand.name}
+  variants={logoVariants}
+  className={`
+    group flex h-28 items-center justify-center
+    border-b border-r border-slate-200
+    bg-white
+    transition-colors duration-300
+    hover:bg-green-50
+    sm:h-32
+
+    /* Mobile: 3 columns */
+    max-md:[&:nth-child(3n)]:border-r-0
+    max-md:[&:nth-child(n+7)]:border-b-0
+
+    /* md: 5 columns */
+    md:[&:nth-child(3n)]:border-r
+    md:[&:nth-child(5n)]:border-r-0
+    md:[&:nth-last-child(-n+5)]:border-b-0
+
+    /* Hide 10+ on mobile, show all at md */
+    ${index >= 9 ? "hidden md:flex" : ""}
+  `}
+  whileHover={{
+    scale: 1.03,
+    zIndex: 10,
+    boxShadow: "0 10px 25px rgba(0,0,0,0.08)",
+  }}
+>
+      <motion.img
+        src={brand.logo}
+        alt={`${brand.name} logo`}
+        className="h-20 w-36 object-contain p-3 grayscale-[20%] transition-all duration-300 group-hover:grayscale-0"
+        whileHover={{ scale: 1.08 }}
+      />
+    </motion.div>
+  ))}
+</motion.div>
         </section>
     )
 }

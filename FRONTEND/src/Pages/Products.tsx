@@ -5,8 +5,8 @@ import {categoriesData} from '../assets/assets'
 import {useSearchParams } from 'react-router-dom'
 import api from '../config/api'
 import toast from 'react-hot-toast';
-import { SlidersHorizontal } from "lucide-react";
 import { useLoading } from "../Context/LoadingContext";
+import { motion} from "motion/react";
 
 const Products = () => {
   const [products,setProducts]=useState<Product[]>([])
@@ -50,9 +50,9 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-app-cream py-16">
-      <div className="mx-auto flex max-w-[1600px] flex-col flex-wrap gap-8 px-4 lg:flex-row lg:px-8">
+      <div className="mx-auto flex max-w-[1600px] flex-col flex-wrap gap-8 lg:flex-row lg:px-8">
       {/* Filter for Desktop view */}
-      <aside className="hidden xl:block w-72 shrink-0 py-17">
+      <motion.aside className="hidden xl:block w-72 shrink-0 py-17" initial={{ opacity: 0, x: -30, }} animate={{ opacity: 1, x: 0, }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], }}>
   <div className="sticky top-25 rounded-2xl border border-gray-100 bg-white shadow-sm">
 
     {/* Header */}
@@ -66,7 +66,13 @@ const Products = () => {
     {/* Categories */}
     <div className="p-5 space-y-2">
       {categoriesWithAll.map((cat) => (
-        <button
+        <motion.button   whileHover={{ x: 3 }}
+  whileTap={{ scale: 0.98 }}
+  transition={{
+    type: "spring",
+    stiffness: 400,
+    damping: 25,}}
+
           key={cat.slug}
           onClick={() =>
             {setSearchParams(
@@ -89,7 +95,7 @@ const Products = () => {
             cat.slug === category) && (
             <span className="h-2 w-2 rounded-full bg-orange-500" />
           )}
-        </button>
+        </motion.button>
       ))}
     </div>
 
@@ -139,7 +145,7 @@ const Products = () => {
     </div>
 
   </div>
-</aside>
+</motion.aside>
 
 
 
@@ -155,9 +161,12 @@ const Products = () => {
     {category?.toUpperCase() || "All Products"}
   </h1>
 
-  <span className="rounded-full bg-orange-100 px-3 py-1 text-sm font-semibold text-orange-600">
+  <motion.span className="rounded-full bg-orange-100 px-3 py-1 text-sm font-semibold text-orange-600"  key={filterProduct.length}
+  initial={{ opacity: 0, scale: 0.6 }}
+  animate={{ opacity: 1, scale: 1 }}
+  transition={{type: "spring",stiffness: 500,damping: 25,}}>
     {filterProduct.length}
-  </span>
+  </motion.span>
 </div>
 
 
@@ -199,11 +208,15 @@ const Products = () => {
   {/* Products */}
   {filterProduct.length > 0 ? (
 
-    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-8">
-      {sortProduct.map((prod) => (
-        <ProductsCard key={prod.id} prod={prod} showDiscountTag={true}/>
+    <motion.div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-3 gap-y-7 md:gap-8" >
+      {/* <AnimatePresence mode="popLayout"> */}
+      {sortProduct.map((prod,index) => (
+        <motion.div key={prod.id}  initial={{ opacity: 0, y: 30, scale: 0.95, }} animate={{ opacity: 1, y: 0, scale: 1, }} exit={{ opacity: 0, scale: 0.9, }} transition={{ duration: 0.45, delay: Math.min(index * 0.04, 0.4), ease: [0.22, 1, 0.36, 1], }} >
+        <ProductsCard  prod={prod} showDiscountTag={true} />
+        </motion.div>
       ))}
-    </div>
+      {/* </AnimatePresence> */}
+    </motion.div>
 
   ) : (
 

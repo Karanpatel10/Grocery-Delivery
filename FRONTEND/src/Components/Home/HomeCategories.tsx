@@ -8,12 +8,12 @@ import "swiper/css";
 const HomeCategories = () => {
   return (
     <section className="my-20">
-      <div className="max-w-7xl mx-auto p-4">
+      <div className="max-w-7xl mx-auto md:p-4">
 
         {/* Heading */}
         <div className="mb-10 flex justify-between">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
               Browse Categories
             </h2>
             <p className="mt-2 text-gray-500">
@@ -78,7 +78,7 @@ const HomeCategories = () => {
 
                   {/* Text */}
                   <div className="mt-3 text-center">
-                    <h3 className="text-lg font-semibold text-gray-800 transition-colors group-hover:text-orange-500">
+                    <h3 className="text-lg font-semibold text-gray-800 transition-colors group-hover:text-orange-500 whitespace-nowrap">
                       {category.name}
                     </h3>
 

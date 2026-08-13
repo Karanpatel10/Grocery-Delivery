@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { Product } from '../types';
 import { Link, useSearchParams } from 'react-router-dom';
-import {dummyProducts } from '../assets/assets';
 import ProductsCard from '../Components/ProductsCard';
 import { useLoading } from '../Context/LoadingContext';
 import api from '../config/api';

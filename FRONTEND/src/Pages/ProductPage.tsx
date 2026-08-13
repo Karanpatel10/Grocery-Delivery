@@ -54,12 +54,12 @@ const ProductPage = () => {
 
   return (
     <div className='max-w-7xl mx-auto py-35 bg-app-cream sm:px-6 md:px-10 lg:px-20'>
-      <button onClick={()=>navigate(-1)} className='flex gap-5 hover:text-app-green hover:scale-95 pb-10'>
-        <MoveLeft />Back
+      <button onClick={()=>navigate(-1)} className='flex gap-5 hover:text-app-green hover:scale-95 p-5 md:pb-10'>
+        <MoveLeft/>Back
        </button> 
 
        {/* Prouduct Details */}
-       <div className='grid grid-cols-2 gap-10'>
+       <div className='grid grid-rows-2 md:grid-rows-1 md:grid-cols-2 gap-10 p-10 md:p-0'>
             {/* left side */}
             <div className='bg-white relative'>
               {product?.discount > 0 && <div className='inline-flex gap-3 bg-app-orange text-white py-1 px-2 rounded-xl text-sm absolute left-4 top-4'>{product?.discount}% OFF</div>}
@@ -88,9 +88,13 @@ const ProductPage = () => {
                       }
                      </div> 
                      <div className="flex items-center gap-5">
-                               {cartItem?.quantity>0 && (<><div className='bg-white inline-flex justify-center items-center gap-5 p-2 rounded-full shadow-2xl outline outline-gray-300 '><button className='bg-gray-200 p-2 rounded-full transition-all duration-200 active:scale-95 active:bg-gray-300' onClick={(e)=> {e.stopPropagation();updateQuantity(cartItem.product.id,cartItem.quantity-1)}}><Minus/></button>
+                               {product?.stock>0 && (<>
+                               {cartItem?.quantity>0 &&(
+                               <div className='bg-white inline-flex justify-center items-center gap-5 p-2 rounded-full shadow-2xl outline outline-gray-300 '>
+                                <button className='bg-gray-200 p-2 rounded-full transition-all duration-200 active:scale-95 active:bg-gray-300' onClick={(e)=> {e.stopPropagation();updateQuantity(cartItem.product.id,cartItem.quantity-1)}}><Minus/></button>
                                 <span className="font-medium">{cartItem?.quantity}</span>
-                                <button className='bg-gray-200 p-2 rounded-full transition-all duration-200 active:scale-85 active:bg-gray-300' onClick={(e)=> {e.stopPropagation();updateQuantity(cartItem.product.id,cartItem.quantity+1)}} ><Plus/></button></div>
+                                <button className='bg-gray-200 p-2 rounded-full transition-all duration-200 active:scale-85 active:bg-gray-300' onClick={(e)=> {e.stopPropagation();updateQuantity(cartItem.product.id,cartItem.quantity+1)}} ><Plus/></button>
+                                </div>)}
                                 <button className='bg-app-orange flex text-white py-3 px-7 gap-7 rounded-md transition-all duration-200 active:scale-85 active:bg-app-orange-dark' onClick={()=>{cartItem?setIsCartOpen(!isCartOpen):addToCart(product!)}}>{cartItem?(`Go to Cart`):(<><ShoppingCart /> Add to Cart</>)}</button></>)}
                       </div>
             </div>
@@ -102,7 +106,7 @@ const ProductPage = () => {
           } 
        {/* Related Products section */}
        <div className='py-10'>
-        <div className='flex justify-between py-10'>
+        <div className='flex justify-between p-3 md:py-10'>
             <div>
               <h1 className='font-bold'>Related Products</h1>
               <p className='text-sm text-app-text-light'>More Product from {product?.category}</p>
@@ -116,7 +120,7 @@ const ProductPage = () => {
               <button className="category-next flex h-11 w-11 items-center justify-center rounded-full border text-orange-500 bg-white active:scale-85 transition">
                 <MoveRight/>
               </button>
-        </div>
+          </div>
         </div>
           
           <Swiper
@@ -128,7 +132,7 @@ const ProductPage = () => {
                    slidesPerView="auto"
                    spaceBetween={25}>
                 {relatedProducts.slice(0, 10).map((prod) => (
-                  <SwiperSlide key={prod.id}   className="!w-[250px] py-5">
+                  <SwiperSlide key={prod.id}   className="!w-[250px] p-3 md:py-5">
                     <ProductsCard
                       prod={prod}
                       showDiscountTag={false}

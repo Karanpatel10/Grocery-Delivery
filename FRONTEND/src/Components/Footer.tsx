@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className='bg-app-text text-white px-10 md:px-25 py-3'>
+    <footer className='bg-app-text text-white px-5 md:px-25 py-3'>
         
             {/* Top Section */}
             <div className='flex flex-row flex-wrap gap-15 py-10 justify-between'>
@@ -27,12 +27,12 @@ const Footer = () => {
                 <div className='inline-flex flex-1 md:flex-2 flex-row  gap-10 md:gap-0 md:justify-around'>
                     {
                         footerData.sections.map((section,idx)=>(
-                            <div key={idx} className='flex flex-col gap-1 min-w-25'>
+                            <div  className='flex flex-col gap-1 min-w-25'>
                                 
                             <h1>{section.title}</h1>
                                 {
                                     section.links.map((sdata)=>(
-                                        <ul>
+                                        <ul key={idx}>
                                             <Link to={sdata.to}><li className='text-white/60 hover:text-white cursor-pointer'>{sdata.label}</li></Link>
                                         </ul>    
                                     ))
@@ -62,7 +62,7 @@ const Footer = () => {
             <hr className='border-white/20'/>
 
             {/* Bottom Section */}
-            <div className='flex justify-between p-2 text-white/60'>
+            <div className='flex flex-col md:flex-row items-center md:justify-between p-2 text-white/60'>
                 
                 <p>{footerData.bottom.copyright}</p>
                 <div>

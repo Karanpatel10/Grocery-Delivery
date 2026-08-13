@@ -17,7 +17,7 @@ const ContactUs = () => {
         Contact Us
       </span>
 
-      <h1 className="mb-6 text-5xl font-bold leading-tight text-gray-900">
+      <h1 className="mb-6 text-4xl md:text-5xl font-bold leading-tight text-gray-900">
         We'd love to hear
         <span className="block bg-gradient-to-r from-green-600 to-orange-500 bg-clip-text text-transparent">
           from you.

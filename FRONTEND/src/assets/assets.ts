@@ -69,13 +69,13 @@ export const deliveryPartnerLoginImage = "https://images.unsplash.com/photo-1610
 
 export const appPromoBannerData = {
     title: "Get fresh groceries in minutes",
-    description: "Download the Instacart app for exclusive deals, real-time tracking, and the freshest selection delivered right to your door.",
+    description: "Download the Freshcart app for exclusive deals, real-time tracking, and the freshest selection delivered right to your door.",
     googleapp,appleapp
 };
 
 export const footerData = {
     brand: {
-        name: "Instacart",
+        name: "Freshcart",
         description: "Bringing fresh, organic groceries straight from local farms to your doorstep. Nourish your home with Earth's finest.",
         socials: [
             { icon: SiFacebook, link: "#" },
@@ -97,22 +97,22 @@ export const footerData = {
         {
             title: "Customer Service",
             links: [
-                { label: "My Account", to: "#" },
+                { label: "My Account", to: "/profile" },
                 { label: "FAQ's", to: "/FAQ" },
                 { label: "Addresses", to: "/addresses" },
-                { label: "Help Center", href: "#" },
+                { label: "Help Center", to: "/contact" },
             ],
         },
     ],
 
     contact: [
-        { icon: MapPinIcon, text: "123 Green Valley Rd, Portland" },
-        { icon: PhoneIcon, text: "+1 (111) 123-4567" },
-        { icon: MailIcon, text: "hello@example.com" },
+        { icon: MapPinIcon, text: "256 Green Valley Rd, Greensboro" },
+        { icon: PhoneIcon, text: "+1 (875) 564-5412" },
+        { icon: MailIcon, text: "freshcart@example.com" },
     ],
 
     bottom: {
-        copyright: "© 2026 Greatstack. All rights reserved.",
+        copyright: "© 2026 KP_info. All rights reserved.",
         links: [
             { label: "Privacy Policy", href: "#" },
             { label: "Terms of Service", href: "#" },

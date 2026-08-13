@@ -41,13 +41,13 @@ const App = () => {
             <Route path="products" element={<Products />} />
             <Route path="products/:id" element={<ProductPage />} />
             <Route path="search" element={<SearchResults />} />
-            <Route path='profile' element={<Profile/>}/>
             <Route path="deals" element={<FlashDeals/>} />
             <Route path="FAQ" element={<FAQ/>}/>
             <Route path="Contact" element={<ContactUs/>}/>
             <Route path='About' element={<About/>}/>
 
             <Route element={<ProtectedRoute/>}>
+              <Route path='profile' element={<Profile/>}/>
               <Route path='checkout' element={<Checkout/>}/>
               <Route path='orders' element={<MyOrder/>}/>
               <Route path='orders/:id' element={<OrderTracking/>}/>

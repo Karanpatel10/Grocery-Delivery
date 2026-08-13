@@ -1,6 +1,6 @@
 import { ArrowRight, BikeIcon, MapPin, Menu, Package, SearchIcon, Shield, ShoppingCartIcon, SquareArrowRightExit,UserPen} from "lucide-react";
 import React, { useEffect, useState, useRef } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "../Context/CartContext";
 import {useAuth} from "../Context/AuthContext"
 
@@ -86,7 +86,7 @@ const Navbar =()    => {
                 <div className="flex items-center gap-2 text-2xl font-bold">
                     <BikeIcon className="size-8 text-green-600"/>
                     <span className="bg-gradient-to-r from-green-600 to-orange-500 bg-clip-text text-transparent">
-                    InstaCart
+                    FreshCart
                     </span>
                 </div>
             </Link>
@@ -94,11 +94,9 @@ const Navbar =()    => {
             {/* Destop view - Menu */}
             <ul className="hidden md:flex space-x-10">
                {linkData.map((link) => (
-                    <li key={link.name}>
-                         <Link to={link.path} className="cursor-pointer outline-none transition-colors hover:text-green-400 ">
-                             {link.name}
-                        </Link>
-                    </li>
+                    <NavLink to={link.path} key={link.name} className={({ isActive }) => `cursor-pointer outline-none transition-colors ${isActive ? "text-green-400" : isHomePage && !scrolled  ? "hover:text-white/80" : "hover:text-gray-400"}`}>
+                            {link.name}
+                    </NavLink>
                 ))}
             </ul>
 
@@ -134,9 +132,9 @@ const Navbar =()    => {
                              {userMenuOpen === "mobile" && (
                                     <div className="absolute top-16 left-0 right-0 bg-white shadow-lg py-4">
                                         {linkData.map((link) => (
-                                            <Link to={link.path} key={link.name}>
+                                            <NavLink to={link.path} key={link.name} className="text-gray-600 hover:text-green-600 cursor-pointer py-4 px-6">
                                                 <li className="text-gray-600 hover:text-green-600 cursor-pointer py-4 px-6">{link.name}</li>
-                                            </Link>
+                                            </NavLink>
                                         ))}
                                     </div>
                                 )}
@@ -179,11 +177,11 @@ const Navbar =()    => {
                                 </div>
                                 {subMenuData.map((item) => (
                                     item.onClick ? (
-                                        <button key={item.name} className=" transition-all duration-200 gap-3 items-center flex flex-row py-3 px-5 hover:bg-gray-100 text-gray-600 hover:text-red-600 cursor-pointer w-full" onClick={item.onClick}>
+                                        <button key={item.name} className=" transition-all duration-200 gap-3 items-center flex flex-row py-3 px-5 hover:bg-gray-100 text-gray-500 hover:text-red-600 hover:font-bold outline-none cursor-pointer w-full" onClick={item.onClick}>
                                             {item.icon} {item.name}
                                         </button>
                                     ):(
-                                        <Link to={item.path || '#'} key={item.name} className="transition-all duration-200 gap-3 items-center flex flex-row py-3 px-5 hover:bg-gray-100 text-gray-600 hover:text-orange-600 cursor-pointer">
+                                        <Link to={item.path || '#'} key={item.name} className="transition-all duration-200 gap-3 items-center flex flex-row py-3 px-5 hover:bg-gray-100 text-gray-500 hover:text-orange-600 hover:font-bold outline-none cursor-pointer">
                                             {item.icon} {item.name}
                                         </Link>
                                     )

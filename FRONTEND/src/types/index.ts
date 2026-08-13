@@ -1,5 +1,5 @@
 export interface User {
-    _id: string;
+    id: string;
     name: string;
     email: string;
     phone: string;
@@ -10,8 +10,10 @@ export interface User {
     updatedAt: string;
 }
 
+
+
 export interface Address {
-    _id: string;
+    id: string;
     label: string;
     address: string;
     city: string;
@@ -60,7 +62,7 @@ export interface OrderItem {
 }
 
 export interface DeliveryPartner {
-    _id: string;
+    id: string;
     name: string;
     email: string;
     phone: string;
@@ -72,7 +74,7 @@ export interface DeliveryPartner {
 
 export interface Order {
     id: string;
-    user: string | { _id: string; name: string; email: string; phone?: string };
+    user: string | { id: string; name: string; email: string; phone?: string };
     items: OrderItem[];
     shippingAddress: Omit<Address, "id" | "isDefault">;
     paymentMethod: string;

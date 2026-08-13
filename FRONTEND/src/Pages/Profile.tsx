@@ -1,18 +1,20 @@
-import { Camera, Mail, MapPin, Pencil, Phone, User } from "lucide-react";
+import { Camera, Mail, MapPin, Pencil, Phone} from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import api from "../config/api";
 import { useAuth } from "../Context/AuthContext";
+import type { User, Address } from "../types/index";
+
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [profile, setProfile] = useState({});
+  const [profile, setProfile] = useState<User>({} as User);
   const {updateUser}=useAuth();
+  const home = profile?.addresses?.find(address => address?.label === 'Home');
 
   const fetchUser=async()=>{
     try{
         const {data}=await api.get("/user");
-        console.log(data)
         updateUser(data.user);
         setProfile(data.user)
     }catch(error:any){
@@ -23,7 +25,8 @@ const Profile = () => {
 
   const updateProfile = async() => {
     try{
-        const {data}=await api.patch('/user',profile);       
+        const {data}=await api.patch('/user',profile);  
+        console.log(data);     
          setProfile(data.user);
           updateUser(data.user);
         toast.success("Profile updated successfully");
@@ -71,7 +74,7 @@ const Profile = () => {
               <div className="relative">
                 <div className="w-28 h-28 rounded-full bg-white p-1 shadow-md">
                   <div className="w-full h-full rounded-full bg-app-green/10 flex items-center justify-center text-app-green">
-                    <User className="w-12 h-12" />
+                    {/* <User className="w-12 h-12" /> */}
                   </div>
                 </div>
 
@@ -96,7 +99,7 @@ const Profile = () => {
             {/* Name */}
             <div className="mb-8">
               <h2 className="text-2xl font-bold text-gray-900">
-                {profile.name}
+                {profile?.name}
               </h2>
               <p className="text-gray-500 text-sm mt-1">
                 Customer
@@ -110,7 +113,7 @@ const Profile = () => {
               <div className="p-5 rounded-xl bg-gray-50 border border-gray-100">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-9 h-9 rounded-lg bg-app-green/10 text-app-green flex items-center justify-center">
-                    <User className="w-4 h-4" />
+                    {/* <User className="w-4 h-4" /> */}
                   </div>
 
                   <span className="text-sm text-gray-500">
@@ -121,13 +124,13 @@ const Profile = () => {
                 {isEditing ? (
                   <input
                     name="name"
-                    value={profile.name}
+                    value={profile?.name}
                     onChange={handleChange}
                     className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-app-green focus:ring-2 focus:ring-app-green/10"
                   />
                 ) : (
                   <p className="font-medium text-gray-800">
-                    {profile.name}
+                    {profile?.name}
                   </p>
                 )}
               </div>
@@ -146,7 +149,7 @@ const Profile = () => {
 
                <div>
                   <p className="font-medium text-gray-800 break-all">
-                    {profile.email}
+                    {profile?.email}
                   </p>
                 </div>
               </div> 
@@ -167,13 +170,13 @@ const Profile = () => {
                   <input
                     type="tel"
                     name="phone"
-                    value={profile.phone}
+                    value={profile?.phone}
                     onChange={handleChange}
                     className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-app-green focus:ring-2 focus:ring-app-green/10"
                   />
                 ) : (
                   <p className="font-medium text-gray-800">
-                    {profile.phone}
+                    {profile?.phone}
                   </p>
                 )}
               </div>
@@ -191,7 +194,7 @@ const Profile = () => {
                 </div>
 
                 <p className="font-medium text-gray-800">
-                  123 Main Street, New York, NY 10001
+                  {home ? `${home.address} ${home.city} ${home.state}` : ''}
                 </p>
               </div>
 

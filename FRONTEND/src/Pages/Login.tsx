@@ -39,11 +39,11 @@ const Login = () => {
     <div className="min-h-screen flex flex-col lg:flex-row">
       
       {/* Left Side */}
-        <div className='lg:w-1/2 bg-app-green relative flex flex-col justify-center items-center text-white'>
+        <div className='py-15 md:p-0 lg:w-1/2 bg-app-green relative flex flex-col justify-center items-center text-white'>
           <img src={heroSectionData.hero_image} alt='Login Image' className="absolute bg-center object-cover w-full h-full opacity-10" />
           <div className="lg:absolute text-center px-12 gap-4 flex flex-col">
-            <h2 className="text-4xl font-semibold">Welcome back to InstraCart</h2>
-            <p className="text-xl font-extralight mx-auto max-w-sm">Fresh groceries and organic products Delivered to your doorstep.</p>
+            <h2 className="text-4xl font-semibold">Welcome back to FreshCart</h2>
+            <p className="text-md md:text-xl font-extralight mx-auto md:max-w-sm">Fresh groceries and organic products Delivered to your doorstep.</p>
           </div>
         </div>
 
@@ -51,12 +51,12 @@ const Login = () => {
         <div className='mx-6 md:mx-12 lg:w-1/2 lg:flex flex-col justify-center items-center'>
          <div className="py-10 text-center">
           <Link to='/' className="inline-flex gap-5 items-center">
-            <BikeIcon className="text-app-green size-10"/><span className='text-4xl font-bold text-app-green'>InstraCart</span>
+            <BikeIcon className="text-app-green size-10"/><span className='text-4xl font-bold text-app-green'>FreshCart</span>
           </Link>
          </div>
 
          {/* login form */}
-          <div className="flex flex-col w-full max-w-lg  p-15 bg-white rounded-2xl shadow-xl ring-2 ring-app-green/10">
+          <div className="flex flex-col w-full max-w-lg p-10 md:p-15 bg-white rounded-2xl shadow-xl ring-2 ring-app-green/10">
             <h1 className="text-2xl font-semibold text-app-green mb-1">{isLoginState ? "Sign in to your account" : "Create your account"}</h1>
             <p className="text-sm text-app-text-light mb-8">{isLoginState ? "Don't have an account?" : "Already have an account?"}<button onClick={()=>setIsLoginState(!isLoginState)} className='text-orange-500 font-semibold hover:text-orange-600 transition-colors px-2'>{isLoginState?'Create one':'Sign in'}</button></p>
             <form className="flex flex-col gap-5" onSubmit={handleSubmit}>

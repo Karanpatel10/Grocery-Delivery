@@ -52,7 +52,7 @@ const About = () => {
             About InstaCart
           </span>
 
-          <h1 className="mt-8 text-5xl font-bold leading-tight md:text-6xl">
+          <h1 className="mt-8 text-4xl font-bold leading-tight md:text-6xl">
             Fresh Groceries.<br />
             Delivered Faster.
           </h1>

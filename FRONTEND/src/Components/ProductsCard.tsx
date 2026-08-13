@@ -18,7 +18,7 @@ const ProductsCard = ({prod,showDiscountTag}:{prod:Product;showDiscountTag:boole
        
   <div key={prod.id}
   onClick={() => navigate(`/products/${prod.id}`)}
-  className="relative group w-64 rounded-2xl bg-white shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer overflow-hidden border border-gray-300">
+  className="relative group w-48 md:w-64 rounded-2xl bg-white shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer overflow-hidden border border-gray-300">
   {/* Discount Badge */}
   
     <div className="absolute top-3 left-3 z-20 inline-flex flex-row gap-2">
@@ -39,7 +39,7 @@ const ProductsCard = ({prod,showDiscountTag}:{prod:Product;showDiscountTag:boole
   
 
   {/* Image */}
-  <div className="h-56 bg-gray-100 flex items-center justify-center p-5">
+  <div className="h-45 md:h-56 bg-gray-100 flex items-center justify-center p-5">
     <img
       src={prod.image}
       alt={prod.name}

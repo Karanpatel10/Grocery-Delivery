@@ -20,8 +20,7 @@ const Testimonial = () => {
   const renderCard = (testimonial, index) => (
   <div
     key={index}
-    className="w-[360px] shrink-0 rounded-3xl border border-gray-200 bg-white/90 backdrop-blur-md p-7 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
-  >
+    className="w-[360px] shrink-0 rounded-3xl border border-gray-200 bg-white/90 backdrop-blur-md p-7 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
     {/* Quote */}
     <div className="text-5xl leading-none text-orange-300">“</div>
 
@@ -76,7 +75,7 @@ const Testimonial = () => {
     ⭐ Customer Reviews
   </span>
 
-  <h2 className="mt-6 text-5xl font-bold text-gray-900">
+  <h2 className="mt-6 text-4xl md:text-5xl font-bold text-gray-900">
     Loved by Thousands of
     <span className="text-app-orange"> Happy Customers</span>
   </h2>
