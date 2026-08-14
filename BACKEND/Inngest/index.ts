@@ -197,8 +197,11 @@ const sendPaymentReceipt=inngest.createFunction({
    
 },async({event,step})=>{
     const {orderId}=event.data;
+    console.log("orderid:",orderId);
     const order = await step.run("fetch-order", async () => {
-      return prisma.order.findUnique({where: { id: orderId },});
+      return prisma.order.findUnique({where: { id: orderId },include: {
+      user: true,
+    },});
     });
 
     if (!order) {
