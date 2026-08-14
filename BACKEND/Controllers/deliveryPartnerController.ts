@@ -31,10 +31,8 @@ export const loginPartner=async(req:Request,res:Response)=>{
         }
 
         const token=generateToken(partner.id);
-        console.log('console token',token);
         const {password:_,...partnerData}=partner;
         res.json({partner:partnerData,token})    
-        console.log('console partner',partner);
 }
 
 // Get assigned deliveries
@@ -69,9 +67,7 @@ export const getDeliveryDetail=async(req:Request,res:Response)=>{
 
 export const completeDelivery=async(req:Request,res:Response)=>{
     const {otp}=req.body;
-    console.log("from otp from frontend",otp)
     const order=await prisma.order.findFirst({where:{id:req.params.id as string,deliveryPartnerId:req.partner!.id}})
-    console.log("find order and otp",order)
     if(!order || order.status === "Canclled" || order.status === "Delivered"){
         return res.status(400).json({message:"Invalid Request"})
     }

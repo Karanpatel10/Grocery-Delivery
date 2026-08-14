@@ -109,7 +109,7 @@ const sendMonthlyOffer=inngest.createFunction({id:"send-monthly offers",name:"mo
                                             (p: any) => `
                                             <td style="width: 33%; padding: 8px; vertical-align: top;">
                                                 <div style="border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; text-align: center;">
-                                                    ${p.image ? `<img src="${p.image}" alt="${p.name}" style="width: 100%; height: 100px; object-fit: cover;" />` : ""}
+                                                    ${p.image ? `<img src="${p.image}" alt="${p.name}" style="width: 100%; height: 100px; object-fit: cover; margin-left: 10px;" />` : ""}
                                                     <div style="padding: 10px;">
                                                         <p style="margin: 0; font-size: 13px; font-weight: 600; color: #111827;">
                                                             ${p.name}
@@ -215,7 +215,7 @@ const sendPaymentReceipt=inngest.createFunction({
     await step.run("send-receipt", async () => {
       await sendEmail({
         to: order.user.email, // adjust to your actual field
-        subject: `Payment Receipt - Order #${order.id}`,
+        subject: `Payment Receipt - Order #${order.id.slice(-8).toUpperCase()}`,
         body: `
         <!DOCTYPE html>
         <html>
@@ -233,13 +233,11 @@ const sendPaymentReceipt=inngest.createFunction({
 
                 <!-- Header -->
                 <div style="background: linear-gradient(135deg, #16a34a, #22c55e);padding: 34px 30px;text-align: center;">
-
                     <div style="width: 58px;height: 58px;margin: 0 auto 16px;background: rgba(255,255,255,0.18);border-radius: 50%;line-height: 58px;font-size: 28px;color: #ffffff;">
                     ✓
                     </div>
                     <h1 style="margin: 0;color: #ffffff;font-size: 25px;font-weight: 700;">Payment Successful</h1>
                     <p style="margin: 10px 0 0;color: rgba(255,255,255,0.9);font-size: 14px;">Thank you for your order!</p>
-
                 </div>
 
 
@@ -250,20 +248,20 @@ const sendPaymentReceipt=inngest.createFunction({
                     <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px;">
                         <tr>
                             <td style="width: 50%;vertical-align: top;">
-                            <p style="margin: 0 0 6px;color: #9ca3af;font-size: 12px;text-transform: uppercase;letter-spacing: 0.5px;">
-                                Order Number
-                            </p>
-                            <p style="margin: 0;color: #111827;font-size: 15px;font-weight: 700;">
-                                #${order.id}
-                            </p>
-                            </td>
-                            <td style="width: 50%;text-align: right;vertical-align: top;">
-                            <p style="margin: 0 0 6px;color: #9ca3af;font-size: 12px;text-transform: uppercase;letter-spacing: 0.5px;">
-                                Payment Status
-                            </p>
-                            <span style="display: inline-block;background: #dcfce7;color: #15803d;padding: 6px 12px;border-radius: 20px;font-size: 12px;font-weight: 700;">
-                                PAID
-                            </span>
+                                <p style="margin: 0 0 6px;color: #9ca3af;font-size: 12px;text-transform: uppercase;letter-spacing: 0.5px;">
+                                    Order Number
+                                </p>
+                                <p style="margin: 0;color: #111827;font-size: 15px;font-weight: 700;">
+                                    #${order.id.slice(-8).toUpperCase()}
+                                </p>
+                                </td>
+                                <td style="width: 50%;text-align: right;vertical-align: top;">
+                                <p style="margin: 0 0 6px;color: #9ca3af;font-size: 12px;text-transform: uppercase;letter-spacing: 0.5px;">
+                                    Payment Status
+                                </p>
+                                <span style="display: inline-block;background: #dcfce7; ${order.isPaid ? 'color: #15803d;' : 'color: #dc2626;'}padding: 6px 12px;border-radius: 20px;font-size: 12px;font-weight: 700;">
+                                        ${order.isPaid?'PAID':'Cash on Delivery'}
+                                </span>
                             </td>
                         </tr>
                     </table>
