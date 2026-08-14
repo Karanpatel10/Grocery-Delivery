@@ -236,7 +236,7 @@ const sendPaymentReceipt=inngest.createFunction({
                     <div style="width: 58px;height: 58px;margin: 0 auto 16px;background: rgba(255,255,255,0.18);border-radius: 50%;line-height: 58px;font-size: 28px;color: #ffffff;">
                     ✓
                     </div>
-                    <h1 style="margin: 0;color: #ffffff;font-size: 25px;font-weight: 700;">{order.isPaid ? 'Payment Successful' : 'Payment Pending'}</h1>
+                    <h1 style="margin: 0;color: #ffffff;font-size: 25px;font-weight: 700;">${order.isPaid ? 'Payment Successful' : 'Payment Pending'}</h1>
                     <p style="margin: 10px 0 0;color: rgba(255,255,255,0.9);font-size: 14px;">Thank you for your order!</p>
                 </div>
 
@@ -330,9 +330,9 @@ const sendPaymentReceipt=inngest.createFunction({
                         </tr>
                         <tr>
                             <td style="padding: 4px 0;color: #111827;font-size: 18px;font-weight: 700;">
-                            Total Paid
+                            {order.isPaid ? 'Total Paid' : 'Total Pending'}
                             </td>
-                            <td style="padding: 4px 0;text-align: right;color: #16a34a;font-size: 21px;font-weight: 700;">
+                            <td style="padding: 4px 0;text-align: right;${order.isPaid ? 'color: #16a34a;' : 'color: #dc2626;'}font-size: 21px;font-weight: 700;">
                             $${order.total?.toFixed(2) ?? "0.00"}
                             </td>
                         </tr>
@@ -349,9 +349,7 @@ const sendPaymentReceipt=inngest.createFunction({
                         </p>
                         <p style="margin: 4px 0;color: #6b7280;font-size: 12px;">
                             Payment status:
-                            <span style="color: #16a34a; font-weight: 600;">
-                            Successful
-                            </span>
+                            ${order.isPaid ? '<span style="color: #16a34a; font-weight: 600;">Successful</span>' : '<span style="color: #dc2626; font-weight: 600;">Pending</span>'}      
                         </p>
                     </div>
 
