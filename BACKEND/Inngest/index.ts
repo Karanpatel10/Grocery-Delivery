@@ -232,11 +232,11 @@ const sendPaymentReceipt=inngest.createFunction({
                 <div style="max-width: 620px;margin: 0 auto;background: #ffffff;border-radius: 18px;overflow: hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
 
                 <!-- Header -->
-                <div style="background: linear-gradient(135deg, #16a34a, #22c55e);padding: 34px 30px;text-align: center;">
+                <div style="${order.isPaid ? 'background: linear-gradient(135deg, #16a34a, #22c55e);' : 'background: linear-gradient(135deg, #b33e3e, #db5c5c);'}padding: 34px 30px;text-align: center;">
                     <div style="width: 58px;height: 58px;margin: 0 auto 16px;background: rgba(255,255,255,0.18);border-radius: 50%;line-height: 58px;font-size: 28px;color: #ffffff;">
                     ✓
                     </div>
-                    <h1 style="margin: 0;color: #ffffff;font-size: 25px;font-weight: 700;">Payment Successful</h1>
+                    <h1 style="margin: 0;color: #ffffff;font-size: 25px;font-weight: 700;">{order.isPaid ? 'Payment Successful' : 'Payment Pending'}</h1>
                     <p style="margin: 10px 0 0;color: rgba(255,255,255,0.9);font-size: 14px;">Thank you for your order!</p>
                 </div>
 
@@ -259,7 +259,7 @@ const sendPaymentReceipt=inngest.createFunction({
                                 <p style="margin: 0 0 6px;color: #9ca3af;font-size: 12px;text-transform: uppercase;letter-spacing: 0.5px;">
                                     Payment Status
                                 </p>
-                                <span style="display: inline-block;background: #dcfce7; ${order.isPaid ? 'color: #15803d;' : 'color: #dc2626;'}padding: 6px 12px;border-radius: 20px;font-size: 12px;font-weight: 700;">
+                                <span style="display: inline-block;${order.isPaid ? 'background: #dcfce7; color: #15803d;' : 'background: #fee2e2; color: #dc2626;'}padding: 6px 12px;border-radius: 20px;font-size: 12px;font-weight: 700;">
                                         ${order.isPaid?'PAID':'Cash on Delivery'}
                                 </span>
                             </td>
