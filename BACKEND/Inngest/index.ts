@@ -158,7 +158,7 @@ const autoAssignOrders=inngest.createFunction({
     await step.sleep("wait-3-minutes","3m");
 
     const result=await step.run("assign-rider",async()=>{
-        const order=await prisma.order.findUnique({where:{id:orderId},include: { user: true, items: true }})
+        const order=await prisma.order.findUnique({where:{id:orderId},})
 
         // skipped if order doesn't exits,aleardy assigned or canclled
 
@@ -198,7 +198,7 @@ const sendPaymentReceipt=inngest.createFunction({
 },async({event,step})=>{
     const {orderId}=event.data;
     const order = await step.run("fetch-order", async () => {
-      return prisma.order.findUnique({where: { id: orderId },include: { user: true, items: true }});
+      return prisma.order.findUnique({where: { id: orderId },include: { user: true, }});
     });
 
     if (!order) {
