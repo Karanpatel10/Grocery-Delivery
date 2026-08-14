@@ -3,11 +3,14 @@ import { createTransport } from "nodemailer";
 // Create a transporter using SMTP
 const transporter = createTransport({
   host: "smtp-relay.brevo.com",
-  port: 587,
+   port: 2525,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 20000,
 });
 
 const sendEmail=async({to,subject,body}:{to:string,subject:string,body:string})=>{
