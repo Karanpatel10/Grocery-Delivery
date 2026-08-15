@@ -330,9 +330,9 @@ const sendPaymentReceipt=inngest.createFunction({
                         </tr>
                         <tr>
                             <td style="padding: 4px 0;color: #111827;font-size: 18px;font-weight: 700;">
-                            {order.isPaid ? 'Total Paid' : 'Total Pending'}
+                            ${order.isPaid ? 'Total Paid' : 'Total Pending'}
                             </td>
-                            <td style="padding: 4px 0;text-align: right;${order.isPaid ? 'color: #16a34a;' : 'color: #dc2626;'}font-size: 21px;font-weight: 700;">
+                            <td style="padding: 4px 0;text-align: right;${order.isPaid ? 'color: #16a34a;' : 'color: #dc2626;'};font-size: 21px;font-weight: 700;">
                             $${order.total?.toFixed(2) ?? "0.00"}
                             </td>
                         </tr>
