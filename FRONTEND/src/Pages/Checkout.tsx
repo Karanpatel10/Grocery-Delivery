@@ -88,7 +88,7 @@ const Checkout = () => {
             </button> 
             <h1 className='text-2xl font-semibold text-app-green'>Checkout</h1>
             {/* Steps */}
-            <div className="flex  flex-row">
+            <div className="flex flex-col md:flex-row">
               {steps.map((step,i) => (
                 <div key={step.key} >
                   <button  onClick={() => setActiveStep(step.key)} className={`flex flex-row items-center gap-3  ${activeStep === step.key ?"bg-app-green text-white" :" bg-white text-black"} outline-1 outline-gray-300 py-4 px-7 rounded-sm w-64`}>
@@ -101,7 +101,7 @@ const Checkout = () => {
             </div>  
 
             {/* Main Form */}
-            <div className='grid grid-cols-2 gap-20 mt-15'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-20 mt-15'>
               <div>
               {activeStep ==='address' && <CheckoutAddress address={address} setAddress={setAddress} setStep={setActiveStep} user={user}/>}
               {activeStep ==='payment' && <CheckoutPayment paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} setStep={setActiveStep}/>}

@@ -154,7 +154,7 @@ const Products = () => {
   {/* Header */}
   <div className="mb-10">
 
-    <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-row items-center justify-between">
 
       <div className="flex items-center gap-3">
   <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
@@ -171,15 +171,15 @@ const Products = () => {
 
 
       {/* Sort */}
-      <div className="flex items-center gap-3">
+      <div className="flex flex items-center gap-3">
 
             
         <select
           value={sortOption}
           onChange={(e) => setSortOption(e.target.value)}
           className="
-            appearance-none rounded-xl border border-gray-200 
-            bg-white px-5 py-3 pr-10 text-sm font-medium text-gray-700
+            appearance-none rounded-md md:rounded-xl border border-gray-200 
+            bg-white px-2 md:px-5 py-2 md:py-3 md:pr-10 text-sm font-medium text-gray-700
             shadow-sm cursor-pointer outline-none transition hover:border-orange-300
             focus:border-orange-400 focus:ring-4 focus:ring-orange-100">
           <option value="Newest">
@@ -208,7 +208,7 @@ const Products = () => {
   {/* Products */}
   {filterProduct.length > 0 ? (
 
-    <motion.div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-3 gap-y-7 md:gap-8" >
+    <motion.div className="flex flex-row flex-wrap gap-y-7 md:gap-8 lg:justify-start justify-between" >
       {/* <AnimatePresence mode="popLayout"> */}
       {sortProduct.map((prod,index) => (
         <motion.div key={prod.id}  initial={{ opacity: 0, y: 30, scale: 0.95, }} animate={{ opacity: 1, y: 0, scale: 1, }} exit={{ opacity: 0, scale: 0.9, }} transition={{ duration: 0.45, delay: Math.min(index * 0.04, 0.4), ease: [0.22, 1, 0.36, 1], }} >

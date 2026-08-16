@@ -42,10 +42,10 @@ const PopularProduct = () => {
 
           <Link
             to="/products"
-            className="group  flex-flex-nowrap items-center gap-2 border border-orange-500 text-orange-500 px-6 py-3 rounded-2xl md:rounded-full hover:bg-orange-500 hover:text-white transition-transform duration-150 active:scale-90"
+            className="group whitespace-nowrap  flex-flex-nowrap items-center gap-5 border border-orange-500 text-orange-500 px-6 py-3 rounded-2xl md:rounded-full hover:bg-orange-500 hover:text-white transition-transform duration-150 active:scale-90"
           >
             View All
-            <MoveRightIcon className="transition-transform group-hover:translate-x-1 hidden md:block" />
+            <MoveRightIcon className="transition-transform group-hover:translate-x-1 hidden md:inline-block ml-3" />
           </Link>
         </div>
 

@@ -62,7 +62,7 @@ export default function DummyReviewsSection({ product }: { product: Product }) {
 
     return (
         <section className="mt-10 ">
-            <h2 className="text-2xl font-semibold text-app-green mb-6">Customer Reviews</h2>
+            <h2 className="text-2xl font-semibold text-app-green mb-6 px-6 md:px-0">Customer Reviews</h2>
 
             <div className="bg-white/50 rounded-2xl p-6 md:p-8">
                 {/* Summary row */}

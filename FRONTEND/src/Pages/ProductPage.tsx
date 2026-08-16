@@ -130,9 +130,14 @@ const ProductPage = () => {
                     nextEl: ".category-next",
                   }}
                    slidesPerView="auto"
-                   spaceBetween={25}>
+                    breakpoints={{
+                      768: {
+                        spaceBetween:75,
+                      },
+                    }}
+                   >
                 {relatedProducts.slice(0, 10).map((prod) => (
-                  <SwiperSlide key={prod.id}   className="!w-[250px] p-3 md:py-5">
+                  <SwiperSlide key={prod.id}   className="!w-[200px] p-3 md:py-5">
                     <ProductsCard
                       prod={prod}
                       showDiscountTag={false}

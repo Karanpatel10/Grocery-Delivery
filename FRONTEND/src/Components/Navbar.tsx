@@ -1,8 +1,9 @@
-import { ArrowRight, BikeIcon, MapPin, Menu, Package, SearchIcon, Shield, ShoppingCartIcon, SquareArrowRightExit,UserPen} from "lucide-react";
+import { ArrowRight, BikeIcon, MapPin, Menu, Package, SearchIcon, Shield, ShoppingCartIcon, SquareArrowRightExit,UserPen,X} from "lucide-react";
 import React, { useEffect, useState, useRef } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "../Context/CartContext";
 import {useAuth} from "../Context/AuthContext"
+import { motion, AnimatePresence } from "framer-motion"; 
 
 const Navbar =()    => {
     const menuRef=useRef(null)
@@ -46,6 +47,10 @@ const Navbar =()    => {
         ...(user?.isAdmin?[{name:'Admin Panel',path:'/admin',icon:<Shield/>}]:[]),
         {name:'Logout',path:'#',icon:<SquareArrowRightExit/>,onClick:handleLogout}
      ];
+
+     useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [location.pathname]);
 
      useEffect(()=>{
         const handlescroll=()=>{
@@ -128,16 +133,27 @@ const Navbar =()    => {
 
                 {/* Mobile view - Menu */}
                  <div className="md:hidden">
-                                <Menu className="size-6 text-gray-600 cursor-pointer" onClick={()=>setUserMenuOpen(userMenuOpen === "mobile" ? null : "mobile")}/>
+                                <Menu className={`size-6  cursor-pointer ${isHomePage && !scrolled ?  "bg-transparent text-white":null}`}  onClick={()=>setUserMenuOpen(userMenuOpen === "mobile" ? null : "mobile")}/>
+                             <AnimatePresence>
                              {userMenuOpen === "mobile" && (
-                                    <div className="absolute top-16 left-0 right-0 bg-white shadow-lg py-4">
+                                    <motion.div initial={{ x: "100%" }}
+        animate={{ x: 0 }}
+        exit={{ x: "100%" }}
+       transition={{
+        type: "spring",
+        stiffness: 260,
+        damping: 28,
+        mass: 0.8,
+      }} className="fixed inset-0 top-0 left-0 bottom-0 bg-white shadow-lg py-4 z-99">
+                                        <X className="absolute top-4 right-4 cursor-pointer text-black" onClick={()=>setUserMenuOpen(null)}/>
                                         {linkData.map((link) => (
-                                            <NavLink to={link.path} key={link.name} className="text-gray-600 hover:text-green-600 cursor-pointer py-4 px-6">
+                                            <NavLink to={link.path} key={link.name} className="text-gray-600 hover:text-green-600 cursor-pointer py-4 px-6" onClick={()=>setUserMenuOpen(null)}>
                                                 <li className="text-gray-600 hover:text-green-600 cursor-pointer py-4 px-6">{link.name}</li>
                                             </NavLink>
                                         ))}
-                                    </div>
+                                    </motion.div>
                                 )}
+                                </AnimatePresence>
                             </div>
                 
                     {/* User */}

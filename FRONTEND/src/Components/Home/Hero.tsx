@@ -6,13 +6,25 @@ import { motion } from "motion/react";
 const Hero = () => {
   return (
      <section className="relative flex items-center min-h-screen">
-   <motion.img
-        src={assets.groceryMain} alt="Fresh Grocery"
-        className="absolute inset-0 h-full w-full object-cover"
-        initial={{ scale: 1.12 }} animate={{ scale: 1 }}
-        transition={{duration: 1.8,ease: [0.22, 1, 0.36, 1],}}
-      />
+   {/* Desktop */}
+<motion.img
+  src={assets.groceryMain}
+  alt="Fresh Grocery"
+  className="hidden md:block absolute inset-0 h-full w-full object-cover"
+  initial={{ scale: 1.12 }}
+  animate={{ scale: 1 }}
+  transition={{
+    duration: 1.8,
+    ease: [0.22, 1, 0.36, 1],
+  }}
+/>
 
+{/* Mobile */}
+<img
+  src={assets.groceryMain}
+  alt="Fresh Grocery"
+  className="block md:hidden absolute inset-0 h-full w-full object-cover"
+/>
   {/* Dark Overlay */}
   <motion.div className="absolute inset-0 bg-gradient-to-r  from-black/80 via-black/50 via-40% to-transparent" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}></motion.div>
 
@@ -60,7 +72,7 @@ const Hero = () => {
     </motion.div>
   </motion.div>
    {/* Bottom Fade */}
-//       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/30 to-transparent" />
+     {/* <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/30 to-transparent" /> */}
 </section>
   )
 }

@@ -28,7 +28,7 @@ const BrandLogo=()=>{
     return(
         <section className="bg-white py-20">
         <motion.div className="text-center pb-20" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], }}>
-            <motion.span className="inline-block rounded-full bg-orange-100 px-4 py-2 text-sm font-semibold text-orange-600" whileHover={{ scale: 1.05, }}>
+            <motion.span className="rounded-full bg-orange-100 px-4 py-2 text-sm font-semibold text-orange-600" whileHover={{ scale: 1.05, }}>
                 Trusted Brands
             </motion.span>
 
@@ -41,7 +41,7 @@ const BrandLogo=()=>{
             </p>
         </motion.div>
        <motion.div
-  className="grid grid-cols-3 md:grid-cols-5 mt-16 w-max mx-auto"
+  className="grid grid-cols-3 md:grid-cols-5 md:mt-16 w-max mx-auto"
   variants={containerVariants}
   initial="hidden"
   whileInView="visible"
@@ -80,7 +80,7 @@ const BrandLogo=()=>{
       <motion.img
         src={brand.logo}
         alt={`${brand.name} logo`}
-        className="h-20 w-36 object-contain p-3 grayscale-[20%] transition-all duration-300 group-hover:grayscale-0"
+        className="h-20 w-30 md:w-36 object-contain p-3 grayscale-[20%] transition-all duration-300 group-hover:grayscale-0"
         whileHover={{ scale: 1.08 }}
       />
     </motion.div>
