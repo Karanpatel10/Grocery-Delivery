@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { PackageIcon, NavigationIcon, Dot } from "lucide-react";
-import OtpModal from "../../components/DeliveryTracking/OtpModal";
-import CancelModal from "../../components/DeliveryTracking/CancelModal";
-import DeliveryOrderCard from "../../components/DeliveryTracking/DeliveryOrderCard";
+import OtpModal from "../../Components/DeliveryTracking/OtpModal";
+import CancelModal from "../../Components/DeliveryTracking/CancelModal";
+import DeliveryOrderCard from "../../Components/DeliveryTracking/DeliveryOrderCard";
 // import Loading from "../../components/Loading";
 import type { Order } from "../../types";
 import { dummyDashboardOrdersData } from "../../assets/assets";
