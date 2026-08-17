@@ -1,4 +1,3 @@
-import React from 'react'
 import { footerData } from '../assets/assets'
 import { BikeIcon } from 'lucide-react'
 import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded';
@@ -9,6 +8,30 @@ import { Link } from 'react-router-dom';
 
 
 const Footer = () => {
+
+    const socialLinks = [
+  {
+    Icon: FacebookRoundedIcon,
+    color: "hover:text-blue-500",
+    link: "https://www.facebook.com/",
+  },
+  {
+    Icon: InstagramIcon,
+    color: "hover:text-pink-500",
+    link: "https://www.instagram.com/?hl=en",
+  },
+  {
+    Icon: XIcon,
+    color: "hover:text-black",
+    link: "https://x.com/",
+  },
+  {
+    Icon: YouTubeIcon,
+    color: "hover:text-red-500",
+    link: "https://www.youtube.com/",
+  },
+];
+
   return (
     <footer className='bg-app-text text-white px-5 md:px-25 py-3'>
         
@@ -18,9 +41,13 @@ const Footer = () => {
                     <h1 className='flex flex-row gap-3 text-3xl items-center'><BikeIcon className='size-10'/>{footerData.brand.name}</h1>
                     <p className='text-white/60'>{footerData.brand.description}</p>
                     <div className='flex flex-row gap-3'>
-                        {[[FacebookRoundedIcon,"hover:text-blue-500","https://www.facebook.com/"],[InstagramIcon,"hover:text-pink-500","https://www.instagram.com/?hl=en"],[XIcon,"hover:text-black","https://x.com/"],[YouTubeIcon,"hover:text-red-500","https://www.youtube.com/"]].map(([Icons,colors,link],idx)=>(
-                        <a href={link} target='_blank' key={idx}><span  className={`inline-flex p-2 bg-white/10 cursor-pointer hover:scale-110 hover:bg-white transition-all duration-200 ${colors}`}><Icons/></span></a>
-                    ))}
+                        {socialLinks.map(({ Icon, color, link }) => (
+                            <a href={link} target="_blank" rel="noreferrer" key={link}>
+                                <span className={`inline-flex p-2 bg-white/10 cursor-pointer hover:scale-110 hover:bg-white transition-all duration-200 ${color}`}>
+                                <Icon />
+                                </span>
+                            </a>
+                            ))}
                     </div>
                 </div>
 

@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom"
 import { useCart } from "../Context/CartContext"
 import { MinusIcon, PlusIcon, ShoppingBagIcon, Trash2Icon, XIcon , MoveRight} from "lucide-react"
-import ProductPage from "../Pages/ProductPage";
+
 
 const CardSidebar=()=>{
 
     const currency=import.meta.env.VITE_CURRENCY_SYMBOL||"$"
-    const {items,addToCart,removeFromCart,updateQuantity,clearCart,cartCount,cartTotal,isCartOpen,setIsCartOpen}=useCart()
+    const {items,removeFromCart,updateQuantity,cartCount,cartTotal,isCartOpen,setIsCartOpen}=useCart()
     const navigate=useNavigate();
 
     if(!isCartOpen) return null;

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { assets, heroSectionData} from "../../assets/assets";
-import { Leaf, MoveRight,Van } from "lucide-react";
+import { assets} from "../../assets/assets";
+import { MoveRight,Van } from "lucide-react";
 import { motion } from "motion/react";
 
 const Hero = () => {

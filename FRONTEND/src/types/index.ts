@@ -45,6 +45,7 @@ export interface Product {
     reviewCount: number;
     discount: number;
     createdAt: string;
+    discountPercentage?: number;
 }
 
 export interface CartItem {

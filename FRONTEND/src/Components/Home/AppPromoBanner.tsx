@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 const AppPromoBanner = () => {
 
   const containerVariants = { hidden: {}, visible: { transition: { staggerChildren: 0.15, }, }, }; 
-  const fadeUp = { hidden: { opacity: 0, y: 30, }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1], }, }, };
+  const fadeUp = { hidden: { opacity: 0, y: 30, }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const, }, }, };
 
   return (
     <section className="relative overflow-hidden max-w-7xl mx-auto my-24 rounded-3xl bg-app-green px-8 py-12 md:px-16 md:py-20">
@@ -56,7 +56,7 @@ const AppPromoBanner = () => {
         </motion.div>
 
         {/* Right */}
-        <motion.div className="flex justify-center" initial={{ opacity: 0, x: 80, scale: 0.9, }} whileInView={{ opacity: 1, x: 0, scale: 1, }} viewport={{ once: true, amount: 0.3, }} transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], }}>
+        <motion.div className="flex justify-center" initial={{ opacity: 0, x: 80, scale: 0.9, }} whileInView={{ opacity: 1, x: 0, scale: 1, }} viewport={{ once: true, amount: 0.3, }} transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] as const, }}>
           <motion.img
             src={assets.delivery_truck}
             alt="Delivery Truck"
