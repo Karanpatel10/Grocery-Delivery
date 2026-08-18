@@ -47,9 +47,9 @@ useEffect(()=>{
 
 
   return (
-    <div className='bg-app-cream py-25 min-h-screen px-4 sm:px-6 md:px-10 lg:px-20'>
+    <div className='bg-app-cream py-25 md:py-40 min-h-screen px-4 sm:px-6 md:px-10 lg:px-20'>
        <div className='mx-auto max-w-7xl'>
-        <h1 className="text-3xl font-bold text-app-green">My Orders</h1>
+        <h1 className="text-2xl font-medium md:text-3xl md:font-bold text-app-green">My Orders</h1>
         <div className="mt-6">
             
                 {/* Tab */}

@@ -47,12 +47,12 @@ const Profile = () => {
   },[])
 
   return (
-    <section className="min-h-screen bg-app-cream py-50 px-5">
+    <section className="min-h-screen bg-app-cream py-30 md:py-40 px-5">
       <div className="max-w-5xl mx-auto">
 
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl md:text-3xl font-medium md:font-bold text-gray-900">
             My Profile
           </h1>
           <p className="text-gray-500 mt-1">

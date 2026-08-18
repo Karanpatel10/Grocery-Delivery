@@ -73,7 +73,7 @@ const Checkout = () => {
      },[user])
 
   return (
-    <div className='bg-app-cream min-h-screen py-25 px-5 md:px-20'>
+    <div className='bg-app-cream min-h-screen py-24 px-4 sm:px-6 md:px-20'>
       <div className='max-w-7xl mx-auto'>
         {items.length<=0?
           <div className='flex flex-col justify-center items-center gap-2'>
@@ -88,20 +88,24 @@ const Checkout = () => {
             </button> 
             <h1 className='text-2xl font-semibold text-app-green'>Checkout</h1>
             {/* Steps */}
-            <div className="flex flex-col md:flex-row">
-              {steps.map((step,i) => (
-                <div key={step.key} >
-                  <button  onClick={() => setActiveStep(step.key)} className={`flex flex-row items-center gap-3  ${activeStep === step.key ?"bg-app-green text-white" :" bg-white text-black"} outline-1 outline-gray-300 py-4 px-7 rounded-sm w-64`}>
-                    <step.icon size={18} />
-                    {step.label}
-                     {i !== steps.length-1 && <ChevronRight className='ml-auto'/>}
-                  </button>
-                </div>
-              ))}
-            </div>  
+            <div className="flex flex-row items-center gap-1 md:gap-3">
+                {steps.map((step, i) => (
+                  <div key={step.key} className="flex-1">
+                    <button onClick={() => setActiveStep(step.key)} className={`flex flex-row items-center gap-2
+                        ${activeStep === step.key? "bg-app-green text-white": "bg-white text-black"} outline-1 outline-gray-300 py-3 px-2 md:py-4 md:px-7 rounded-sm w-full text-sm md:text-base`}>
+                      <step.icon size={18} />
+                      <span>{step.label}</span>
+                      {i !== steps.length - 1 && (
+                        <ChevronRight className="ml-auto size-4 md:size-5" />
+                      )}
+                    </button>
+                  </div>
+                ))}
+              </div>
+ 
 
             {/* Main Form */}
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-20 mt-15'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-20 mt-8 md:mt-15'>
               <div>
               {activeStep ==='address' && <CheckoutAddress address={address} setAddress={setAddress} setStep={setActiveStep} user={user}/>}
               {activeStep ==='payment' && <CheckoutPayment paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} setStep={setActiveStep}/>}
@@ -109,7 +113,7 @@ const Checkout = () => {
               </div>
 
               {/* Order Summary Sidebar */}
-              <div className='grid grid-cols-1 bg-white rounded-2xl p-5 h-fit sticky top-24'>
+              <div className='grid grid-cols-1 bg-white rounded-2xl p-5 h-fit md:sticky md:top-24'>
               <h3>Order Summary</h3>
               
               <div className='border-t border-gray-300 mt-4 pt-4'>

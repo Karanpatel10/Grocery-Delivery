@@ -1,4 +1,4 @@
-import { ArrowRight, BikeIcon, MapPin, Menu, Package, SearchIcon, Shield, ShoppingCartIcon, SquareArrowRightExit,UserPen,X} from "lucide-react";
+import { ArrowRight, BikeIcon, UserRound, MapPin, Menu, Package, SearchIcon, Shield, ShoppingCartIcon, SquareArrowRightExit,UserPen,X} from "lucide-react";
 import React, { useEffect, useState, useRef } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "../Context/CartContext";
@@ -84,17 +84,39 @@ const Navbar =()    => {
 
 
     return (
-        <nav className={`w-full h-16 flex items-center justify-between px-6  fixed top-0 z-50   ${isHomePage && !scrolled ?  "bg-transparent text-white":"bg-white text-gray-800 border-b border-app-border shadow-md"} transition-colors`}>
+        <nav className={`w-full h-16 flex items-center justify-between px-2 md:px-6  fixed top-0 z-50   ${isHomePage && !scrolled ?  "bg-transparent text-white":"bg-white text-gray-800 border-b border-app-border shadow-md"} transition-colors`}>
 
-            {/* Logo */}
-           <Link to="/">
-                <div className="flex items-center gap-2 text-2xl font-bold">
-                    <BikeIcon className="size-8 text-green-600"/>
-                    <span className="bg-gradient-to-r from-green-600 to-orange-500 bg-clip-text text-transparent">
-                    FreshCart
-                    </span>
-                </div>
-            </Link>
+            <div className="flex gap-3">
+                {/* Mobile view - Menu */}
+                                <div className="md:hidden">
+                                                <Menu className={`size-8  cursor-pointer ${isHomePage && !scrolled ?  "bg-transparent text-white":null}`}  onClick={()=>setUserMenuOpen(userMenuOpen === "mobile" ? null : "mobile")}/>
+                                            <AnimatePresence>
+                                            {userMenuOpen === "mobile" && (
+                                                    <motion.div initial={{ x: "-100%" }}
+                                                    animate={{ x: 0 }}
+                                                    exit={{ x:"-100%" }}
+                                                transition={{type: "spring",stiffness: 260,damping: 28,mass: 0.8,}} className="fixed inset-0 top-0 left-0 bottom-0 bg-white shadow-lg py-10 z-99">
+                                                        <X className="absolute top-4 right-4 cursor-pointer text-black" onClick={()=>setUserMenuOpen(null)}/>
+                                                        {linkData.map((link) => (
+                                                            <NavLink to={link.path} key={link.name}  onClick={()=>setUserMenuOpen(null)} className={({ isActive }) =>`block cursor-pointer px-6 py-4 transition-colors ${isActive? "text-green-600 font-semibold": "text-gray-600 hover:text-green-600"}`}>
+                                                                {link.name}
+                                                            </NavLink>
+                                                        ))}
+                                                    </motion.div>
+                                                )}
+                                                </AnimatePresence>
+                                            </div>
+
+                            {/* Logo */}
+                        <Link to="/">
+                                <div className="flex items-center gap-2 text-2xl font-bold">
+                                    <BikeIcon className="size-8 text-green-600"/>
+                                    <span className="bg-gradient-to-r from-green-600 to-orange-500 bg-clip-text text-transparent">
+                                    FreshCart
+                                    </span>
+                                </div>
+                            </Link>
+            </div>
 
             {/* Destop view - Menu */}
             <ul className="hidden md:flex space-x-10">
@@ -113,12 +135,10 @@ const Navbar =()    => {
                 <form className="hidden md:flex gap-3 items-center" onSubmit={handleSearch}>
                     <SearchIcon className="size-6"/>
                     <input
-                        type="text"
-                        placeholder="Search for groceries..."
+                        type="text" placeholder="Search for groceries..."
                         className="bg-gray-100 text-gray-600 placeholder:text-gray-400 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 rounded-lg px-3 py-2"
                         value={seachQuary}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                    />
+                        onChange={(e) => setSearchQuery(e.target.value)}/>
                 </form>
 
                 {/* Cart */}
@@ -131,43 +151,20 @@ const Navbar =()    => {
                     </div>
                 </button>
 
-                {/* Mobile view - Menu */}
-                 <div className="md:hidden">
-                                <Menu className={`size-6  cursor-pointer ${isHomePage && !scrolled ?  "bg-transparent text-white":null}`}  onClick={()=>setUserMenuOpen(userMenuOpen === "mobile" ? null : "mobile")}/>
-                             <AnimatePresence>
-                             {userMenuOpen === "mobile" && (
-                                    <motion.div initial={{ x: "100%" }}
-        animate={{ x: 0 }}
-        exit={{ x: "100%" }}
-       transition={{
-        type: "spring",
-        stiffness: 260,
-        damping: 28,
-        mass: 0.8,
-      }} className="fixed inset-0 top-0 left-0 bottom-0 bg-white shadow-lg py-4 z-99">
-                                        <X className="absolute top-4 right-4 cursor-pointer text-black" onClick={()=>setUserMenuOpen(null)}/>
-                                        {linkData.map((link) => (
-                                            <NavLink to={link.path} key={link.name} className="text-gray-600 hover:text-green-600 cursor-pointer py-4 px-6" onClick={()=>setUserMenuOpen(null)}>
-                                                <li className="text-gray-600 hover:text-green-600 cursor-pointer py-4 px-6">{link.name}</li>
-                                            </NavLink>
-                                        ))}
-                                    </motion.div>
-                                )}
-                                </AnimatePresence>
-                            </div>
+                
                 
                     {/* User */}
                     <div className="relative">
                     {user ? (
-                       <button className="flex items-center bg-app-green text-white px-4 py-2 rounded-full hover:bg-green-700 transition-colors shrink-0" onClick={() =>setUserMenuOpen(userMenuOpen === "user" ? null : "user")}
->
+                       <button className="flex items-center bg-app-green text-white px-4 py-2 rounded-full hover:bg-green-700 transition-colors shrink-0" onClick={() =>setUserMenuOpen(userMenuOpen === "user" ? null : "user")}>
                             <div className="flex items-center font-bold">
                                 {user.name.charAt(0).toUpperCase()}
                             </div>
                        </button>
                     ) : (
                         <Link to="/login">
-                            <button className="bg-app-green text-white active:scale-90 duration-150 transition-transform px-4 py-2 rounded hover:bg-green-700 transition-colors">Login</button>
+                            <UserRound className="bg-app-green text-white rounded-full p-2 md:hidden size-10"/>
+                            <button className="hidden md:block bg-app-green text-white active:scale-90 duration-150 transition-transform px-4 py-2 rounded hover:bg-green-700 transition-colors">Login</button>
                         </Link>
                     )}
 

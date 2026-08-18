@@ -1,10 +1,11 @@
 import {useState} from 'react'
 import { NavLink, Outlet,Navigate } from "react-router-dom";
-import { PlusIcon, PackageSearchIcon, ShoppingBagIcon, LogOutIcon, BarChart3Icon, ShieldIcon, Truck } from "lucide-react";
+import { PlusIcon, PackageSearchIcon, ShoppingBagIcon, LogOutIcon, BarChart3Icon, ShieldIcon, Truck,ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import Navbar from "../../Components/Navbar";
 import {useAuth} from "../../Context/AuthContext"
 import {useLoading} from "../../Context/LoadingContext"
 import Loading from "../../Components/Loading"
+
 
 export default function AdminLayout() {
     const {user}=useAuth();
@@ -29,40 +30,60 @@ export default function AdminLayout() {
             </div>
             <div className="flex flex-col h-full lg:flex-row gap-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-25 animate-fade-in">
                 {/* Admin Sidebar */}
-                <aside className="w-full lg:w-64 shrink-0 h-fit bg-white rounded-2xl p-4 border border-app-border z-90">
-                    <button className="md:hidden mb-4"onClick={() => setMenuOpen(!menuOpen)}>
-                        <h2 className="text-lg font-semibold text-app-green flex items-center gap-2">
-                        <ShieldIcon className="size-7 text-green-900" />
-                        Admin Panel
-                        </h2>
-                    </button>
+                
+                <aside className="w-full lg:w-64 shrink-0 h-fit bg-white rounded-2xl p-3 sm:p-4 border border-app-border z-90">
 
-                        {/* Desktop heading */}
-                        <div className="hidden md:block pb-4 mb-4 border-b border-app-border">
-                            <h2 className="text-lg font-semibold text-app-green flex items-center gap-2">
+                    {/* Mobile Header */}
+                    <button className="md:hidden w-full flex items-center justify-between" onClick={() => setMenuOpen(!menuOpen)}>
+                        <h2 className="text-lg font-semibold text-app-green flex items-center gap-2">
                             <ShieldIcon className="size-7 text-green-900" />
                             Admin Panel
-                            </h2>
-                        </div>
+                        </h2>
 
+                        <span className="text-xl text-app-green">
+                            {menuOpen ? (<ChevronUpIcon className="size-5" />) : (<ChevronDownIcon className="size-5" />)}
+                        </span>
+                    </button>
 
-                     <nav className={`${menuOpen ? "block" : "hidden"} md:flex flex-col gap-1.5`}>
+                    {/* Desktop heading */}
+                    <div className="hidden md:block pb-4 mb-4 border-b border-app-border">
+                        <h2 className="text-lg font-semibold text-app-green flex items-center gap-2">
+                            <ShieldIcon className="size-7 text-green-900" />
+                            Admin Panel
+                        </h2>
+                    </div>
 
+                    {/* Navigation */}
+                    <nav
+                        className={`
+                            ${menuOpen ? "flex" : "hidden"}
+                            md:flex flex-col gap-1.5
+                            mt-3 md:mt-0
+                            pt-3 md:pt-0
+                            border-t md:border-t-0 border-app-border
+                        `}
+                    >
                         {AdminLinkData.map((link) => (
                             <NavLink
                                 key={link.to}
                                 to={link.to}
                                 end={true}
-                                className={({ isActive }) => `flex items-center gap-3 p-2.5 rounded-md text-md transition-colors ${isActive
-                                    ? "bg-app-green text-white"
-                                    : "text-app-text-light hover:bg-orange-50 hover:text-zinc-900"
-                                    }`}
+                                onClick={() => setMenuOpen(false)}
+                                className={({ isActive }) =>
+                                    `flex items-center gap-3 p-3 rounded-md text-md transition-colors ${
+                                        isActive
+                                            ? "bg-app-green text-white"
+                                            : "text-app-text-light hover:bg-orange-50 hover:text-zinc-900"
+                                    }`
+                                }
                             >
-                                <link.icon className="size-4" /> {link.label}
+                                <link.icon className="size-5" />
+                                {link.label}
                             </NavLink>
                         ))}
                     </nav>
                 </aside>
+
                 <main className="flex-1 overflow-y-auto no-scrollbar pb-20">
                     {loading && <Loading variant="content"/>}
                     <Outlet />

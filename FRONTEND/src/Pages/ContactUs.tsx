@@ -9,7 +9,7 @@ const ContactUs = () => {
             `}</style>
             
           
-  <div className="mx-auto grid max-w-7xl grid-cols-1 gap-25 lg:grid-cols-2 py-40 bg-app-cream px-4 lg:px-8">
+  <div className="mx-auto grid max-w-7xl grid-cols-1 gap-25 lg:grid-cols-2 py-25 md:py-40 bg-app-cream px-4 lg:px-8">
 
     {/* Left */}
     <div className="flex flex-col justify-center">
